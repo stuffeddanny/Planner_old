@@ -8,17 +8,29 @@
 
 /* Begin PBXBuildFile section */
 		BBAAD6A62931240800D78380 /* PlannerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAAD6A52931240800D78380 /* PlannerApp.swift */; };
-		BBAAD6A82931240800D78380 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAAD6A72931240800D78380 /* ContentView.swift */; };
+		BBAAD6A82931240800D78380 /* MainScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAAD6A72931240800D78380 /* MainScreenView.swift */; };
 		BBAAD6AA2931240900D78380 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BBAAD6A92931240900D78380 /* Assets.xcassets */; };
 		BBAAD6AD2931240900D78380 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BBAAD6AC2931240900D78380 /* Preview Assets.xcassets */; };
+		BBAAD6B52931256000D78380 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BBAAD6B42931256000D78380 /* Launch Screen.storyboard */; };
+		BBAAD6B7293127B100D78380 /* LaunchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAAD6B6293127B100D78380 /* LaunchView.swift */; };
+		BBAAD6BA2931281900D78380 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAAD6B92931281900D78380 /* Color.swift */; };
+		BBAAD6BC2931438600D78380 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAAD6BB2931438600D78380 /* CalendarView.swift */; };
+		BBAAD6BE293143D100D78380 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAAD6BD293143D100D78380 /* Date.swift */; };
+		BBAAD6C029316A7B00D78380 /* DayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAAD6BF29316A7B00D78380 /* DayView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		BBAAD6A22931240800D78380 /* Planner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Planner.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBAAD6A52931240800D78380 /* PlannerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlannerApp.swift; sourceTree = "<group>"; };
-		BBAAD6A72931240800D78380 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		BBAAD6A72931240800D78380 /* MainScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainScreenView.swift; sourceTree = "<group>"; };
 		BBAAD6A92931240900D78380 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BBAAD6AC2931240900D78380 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		BBAAD6B42931256000D78380 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		BBAAD6B6293127B100D78380 /* LaunchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchView.swift; sourceTree = "<group>"; };
+		BBAAD6B92931281900D78380 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		BBAAD6BB2931438600D78380 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
+		BBAAD6BD293143D100D78380 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
+		BBAAD6BF29316A7B00D78380 /* DayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,7 +64,11 @@
 			isa = PBXGroup;
 			children = (
 				BBAAD6A52931240800D78380 /* PlannerApp.swift */,
-				BBAAD6A72931240800D78380 /* ContentView.swift */,
+				BBAAD6A72931240800D78380 /* MainScreenView.swift */,
+				BBAAD6BB2931438600D78380 /* CalendarView.swift */,
+				BBAAD6BF29316A7B00D78380 /* DayView.swift */,
+				BBAAD6B82931280A00D78380 /* Extensions */,
+				BBAAD6B32931255600D78380 /* Launch */,
 				BBAAD6A92931240900D78380 /* Assets.xcassets */,
 				BBAAD6AB2931240900D78380 /* Preview Content */,
 			);
@@ -65,6 +81,24 @@
 				BBAAD6AC2931240900D78380 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		BBAAD6B32931255600D78380 /* Launch */ = {
+			isa = PBXGroup;
+			children = (
+				BBAAD6B42931256000D78380 /* Launch Screen.storyboard */,
+				BBAAD6B6293127B100D78380 /* LaunchView.swift */,
+			);
+			path = Launch;
+			sourceTree = "<group>";
+		};
+		BBAAD6B82931280A00D78380 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				BBAAD6B92931281900D78380 /* Color.swift */,
+				BBAAD6BD293143D100D78380 /* Date.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -125,6 +159,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BBAAD6B52931256000D78380 /* Launch Screen.storyboard in Resources */,
 				BBAAD6AD2931240900D78380 /* Preview Assets.xcassets in Resources */,
 				BBAAD6AA2931240900D78380 /* Assets.xcassets in Resources */,
 			);
@@ -137,8 +172,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BBAAD6A82931240800D78380 /* ContentView.swift in Sources */,
+				BBAAD6C029316A7B00D78380 /* DayView.swift in Sources */,
+				BBAAD6A82931240800D78380 /* MainScreenView.swift in Sources */,
+				BBAAD6BE293143D100D78380 /* Date.swift in Sources */,
+				BBAAD6BA2931281900D78380 /* Color.swift in Sources */,
+				BBAAD6B7293127B100D78380 /* LaunchView.swift in Sources */,
 				BBAAD6A62931240800D78380 /* PlannerApp.swift in Sources */,
+				BBAAD6BC2931438600D78380 /* CalendarView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -273,8 +313,9 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -282,9 +323,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = stuffeddanny.Planner;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -302,8 +346,9 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -311,9 +356,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = stuffeddanny.Planner;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
