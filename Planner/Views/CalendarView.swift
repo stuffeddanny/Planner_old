@@ -7,65 +7,39 @@
 
 import SwiftUI
 
-struct DayModel: Identifiable {
-    let id: Date
-    let secondary: Bool
-    
-    init(id: Date, secondary: Bool = false) {
-        self.id = id
-        self.secondary = secondary
-    }
-}
-
 struct CalendarView: View {
     
     @EnvironmentObject private var mainVm: MainScreenViewModel
     
-    private let monthName: String
-    private let yearName: String
-    private let days: [DayModel]
+    @ObservedObject private var vm: CalendarViewModel
     
     init(for date: Date) {
-        monthName = date.month
-        yearName = date.year
-        var result: [DayModel] = []
-        
-        let dayDurationInSeconds: TimeInterval = 60*60*24
-        
-        let firstWeekDay = Calendar.current.component(.weekday, from: date.startOfMonth)
-        
-        var previousMonthDays: [Date] = []
-        
-        for day in stride(from: date.monthAgo()!.startOfMonth, to: date.monthAgo()!.endOfMonth, by: dayDurationInSeconds) {
-            previousMonthDays.append(day)
-        }
-        
-        previousMonthDays.removeFirst(previousMonthDays.count - (firstWeekDay - 1))
-        
-        for day in previousMonthDays {
-            result.append(DayModel(id: day, secondary: true))
-        }
-        
-        for day in stride(from: date.startOfMonth, to: date.endOfMonth, by: dayDurationInSeconds) {
-            result.append(DayModel(id: day))
-        }
-        
-        days = result
+        _vm = .init(wrappedValue: CalendarViewModel(for: date))
     }
     
     var body: some View {
         VStack(spacing: 10) {
             HStack {
-                Text(monthName)
+                Text(vm.monthName)
                     .font(.largeTitle)
                     .fontWeight(.semibold)
                     .foregroundColor(.red)
                     .padding(.leading)
-                    
+                    .contextMenu {
+                        ForEach(Calendar.current.monthSymbols, id: \.self) { monthName in
+                            Button(monthName) {
+                                let form = DateFormatter()
+                                form.dateFormat = "MMMM"
+
+                                mainVm.goTo(Calendar.current.date(from: DateComponents(year: Calendar.current.component(.year, from: mainVm.dateOnTheScreen), month: Calendar.current.component(.month, from: form.date(from: monthName)!)))!)
+
+                            }
+                        }
+                    }
                 
                 Spacer(minLength: 0)
                 
-                Text(yearName)
+                Text(vm.yearName)
                     .font(.title)
                     .fontWeight(.semibold)
                     .foregroundColor(.red)
@@ -81,10 +55,10 @@ struct CalendarView: View {
                 .padding(.bottom)
                 
                 
-                ForEach(days) { day in
-                    DayView(for: day, isSelected: mainVm.isDaySelected(day))
+                ForEach(vm.days) { day in
+                    DayView(for: day, isSelected: vm.isDaySelected(day))
                         .onTapGesture {
-                            day.secondary ? mainVm.previous() : mainVm.select(day.id)
+                            day.secondary ? mainVm.goTo(day.id) : vm.isDaySelected(day) ? vm.unselect(day) : vm.select(day)
                         }
                         .frame(width: 40, height: 40)
                 }
@@ -93,6 +67,7 @@ struct CalendarView: View {
             Spacer(minLength: 0)
         }
     }
+
 }
 
 struct CalendarView_Previews: PreviewProvider {
