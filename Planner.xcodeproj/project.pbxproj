@@ -13,10 +13,10 @@
 		BBAAD6AD2931240900D78380 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BBAAD6AC2931240900D78380 /* Preview Assets.xcassets */; };
 		BBAAD6B52931256000D78380 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BBAAD6B42931256000D78380 /* Launch Screen.storyboard */; };
 		BBAAD6B7293127B100D78380 /* LaunchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAAD6B6293127B100D78380 /* LaunchView.swift */; };
-		BBAAD6BA2931281900D78380 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAAD6B92931281900D78380 /* Color.swift */; };
 		BBAAD6BC2931438600D78380 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAAD6BB2931438600D78380 /* CalendarView.swift */; };
 		BBAAD6BE293143D100D78380 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAAD6BD293143D100D78380 /* Date.swift */; };
 		BBAAD6C029316A7B00D78380 /* DayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAAD6BF29316A7B00D78380 /* DayView.swift */; };
+		BBAAD6C2293272CD00D78380 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAAD6C1293272CD00D78380 /* Color.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,10 +27,10 @@
 		BBAAD6AC2931240900D78380 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		BBAAD6B42931256000D78380 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		BBAAD6B6293127B100D78380 /* LaunchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchView.swift; sourceTree = "<group>"; };
-		BBAAD6B92931281900D78380 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		BBAAD6BB2931438600D78380 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		BBAAD6BD293143D100D78380 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		BBAAD6BF29316A7B00D78380 /* DayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayView.swift; sourceTree = "<group>"; };
+		BBAAD6C1293272CD00D78380 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,8 +95,8 @@
 		BBAAD6B82931280A00D78380 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				BBAAD6B92931281900D78380 /* Color.swift */,
 				BBAAD6BD293143D100D78380 /* Date.swift */,
+				BBAAD6C1293272CD00D78380 /* Color.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -174,8 +174,8 @@
 			files = (
 				BBAAD6C029316A7B00D78380 /* DayView.swift in Sources */,
 				BBAAD6A82931240800D78380 /* MainScreenView.swift in Sources */,
+				BBAAD6C2293272CD00D78380 /* Color.swift in Sources */,
 				BBAAD6BE293143D100D78380 /* Date.swift in Sources */,
-				BBAAD6BA2931281900D78380 /* Color.swift in Sources */,
 				BBAAD6B7293127B100D78380 /* LaunchView.swift in Sources */,
 				BBAAD6A62931240800D78380 /* PlannerApp.swift in Sources */,
 				BBAAD6BC2931438600D78380 /* CalendarView.swift in Sources */,
