@@ -31,7 +31,10 @@ struct CalendarView: View {
                                 let form = DateFormatter()
                                 form.dateFormat = "MMMM"
 
-                                mainVm.goTo(Calendar.current.date(from: DateComponents(year: Calendar.current.component(.year, from: mainVm.dateOnTheScreen), month: Calendar.current.component(.month, from: form.date(from: monthName)!)))!)
+                                mainVm.goTo(Calendar.current.date(from: DateComponents(
+                                    year: Calendar.current.component(.year, from: mainVm.firstDayOfMonthOnTheScreenDate),
+                                    month: Calendar.current.component(.month, from: form.date(from: monthName) ?? .now)
+                                ))!)
 
                             }
                         }

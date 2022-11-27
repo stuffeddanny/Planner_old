@@ -13,14 +13,14 @@ struct MainScreenView: View {
     
     var body: some View {
             VStack {
-                CalendarView(for: vm.dateOnTheScreen)
+                CalendarView(for: vm.firstDayOfMonthOnTheScreenDate)
                     .offset(vm.offset)
                     .opacity(vm.opacity)
                     .environmentObject(vm)
                 
                 HStack {
                     Button {
-                        vm.goTo(vm.dateOnTheScreen.monthAgo() ?? .now)
+                        vm.goTo(vm.firstDayOfMonthOnTheScreenDate.monthAgo())
                     } label: {
                         Text("Previous")
                             .frame(width: 70)
@@ -30,7 +30,7 @@ struct MainScreenView: View {
                     Spacer(minLength: 0)
                     
                     Button {
-                        vm.goTo(vm.dateOnTheScreen.monthFurther() ?? .now)
+                        vm.goTo(vm.firstDayOfMonthOnTheScreenDate.monthFurther())
                     } label: {
                         Text("Next")
                             .frame(width: 70)

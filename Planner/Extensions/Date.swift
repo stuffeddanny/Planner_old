@@ -10,26 +10,25 @@ import Foundation
 extension Date {
     
     func getDays() -> [DayModel] {
+        let calendar = Calendar.current
+
         var result: [DayModel] = []
-        
-        let dayDurationInSeconds: TimeInterval = 60*60*24
-        
-        let firstWeekDay = Calendar.current.component(.weekday, from: self.startOfMonth)
-        
-        var previousMonthDays: [Date] = []
-        
-        for day in stride(from: self.monthAgo()!.startOfMonth, to: self.monthAgo()!.endOfMonth, by: dayDurationInSeconds) {
-            previousMonthDays.append(day)
+
+        let startOfCurrentMonth = self.startOfMonth
+        let startOfPrevMonth = self.monthAgo().startOfMonth
+
+        let firstWeekDay = Calendar.current.component(.weekday, from: startOfCurrentMonth)
+
+        if firstWeekDay > 1 {
+            let lastDayOfPrevMonth = startOfPrevMonth.endOfMonth.startOfDay
+            
+            for index in -(firstWeekDay-2)...0 {
+                result.append(DayModel(id: calendar.date(byAdding: .day, value: index, to: lastDayOfPrevMonth)!, secondary: true))
+            }
         }
         
-        previousMonthDays.removeFirst(previousMonthDays.count - (firstWeekDay - 1))
-        
-        for day in previousMonthDays {
-            result.append(DayModel(id: day, secondary: true))
-        }
-        
-        for day in stride(from: self.startOfMonth, to: self.endOfMonth, by: dayDurationInSeconds) {
-            result.append(DayModel(id: day))
+        for day in Calendar.current.range(of: .day, in: .month, for: startOfCurrentMonth)! {
+            result.append(DayModel(id: calendar.date(byAdding: .day, value: day-1, to: startOfCurrentMonth)!))
         }
         
         return result
@@ -47,10 +46,10 @@ extension Date {
     
     var startOfMonth: Date {
         
-        let calendar = Calendar(identifier: .gregorian)
+        let calendar = Calendar.current
         let components = calendar.dateComponents([.year, .month], from: self)
         
-        return  calendar.date(from: components)!
+        return calendar.date(from: components)!
     }
     
     var endOfDay: Date {
@@ -64,7 +63,7 @@ extension Date {
         var components = DateComponents()
         components.month = 1
         components.second = -1
-        return Calendar(identifier: .gregorian).date(byAdding: components, to: startOfMonth)!
+        return Calendar.current.date(byAdding: components, to: startOfMonth)!
     }
     
     var month: String {
@@ -79,12 +78,12 @@ extension Date {
         return dateFormatter.string(from: self)
     }
     
-    func monthAgo() -> Date? {
-        Calendar.current.date(byAdding: .month, value: -1, to: self)
+    func monthAgo() -> Date {
+        Calendar.current.date(byAdding: .month, value: -1, to: self)!
     }
     
-    func monthFurther() -> Date? {
-        Calendar.current.date(byAdding: .month, value: 1, to: self)
+    func monthFurther() -> Date {
+        Calendar.current.date(byAdding: .month, value: 1, to: self)!
     }
 }
 

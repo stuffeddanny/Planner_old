@@ -9,17 +9,17 @@ import SwiftUI
 
 final class MainScreenViewModel: ObservableObject {
     
-    @Published var dateOnTheScreen: Date
+    @Published var firstDayOfMonthOnTheScreenDate: Date
     @Published var offset = CGSize()
     @Published var opacity: Double = 1
 
     init() {
-        dateOnTheScreen = .now
+        firstDayOfMonthOnTheScreenDate = .now.startOfMonth
     }
     
     func goTo(_ date: Date) {
-        if !Calendar.current.isDate(dateOnTheScreen, equalTo: date, toGranularity: .month) {
-            if date < dateOnTheScreen {
+        if !Calendar.current.isDate(firstDayOfMonthOnTheScreenDate, equalTo: date, toGranularity: .month) {
+            if date < firstDayOfMonthOnTheScreenDate {
                 withAnimation(DevPrefs.monthSlidingAnimation) {
                     offset = CGSize(width: UIScreen.main.bounds.size.width, height: 0)
                 }
@@ -30,7 +30,8 @@ final class MainScreenViewModel: ObservableObject {
             }
             
             DispatchQueue.main.asyncAfter(deadline: .now() + (DevPrefs.monthSlidingAnimationDuration)) {
-                self.dateOnTheScreen = date
+                self.firstDayOfMonthOnTheScreenDate = date.startOfMonth
+                print("Month on the screen \(firstDayOfMonthOnTheScreenDate)")
                 self.opacity = 0
                 self.offset = CGSize()
                 withAnimation(DevPrefs.monthAppearingAfterSlidingAnimation) {

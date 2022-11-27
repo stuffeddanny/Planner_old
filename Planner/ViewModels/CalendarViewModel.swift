@@ -11,7 +11,7 @@ final class CalendarViewModel: ObservableObject {
     @Published var monthName: String
     @Published var yearName: String
     @Published var days: [DayModel]
-    @Published var selectedDay: Date? = nil
+    @Published var selectedDate: Date? = nil
     
     private let date: Date
     
@@ -24,7 +24,8 @@ final class CalendarViewModel: ObservableObject {
     
     func select(_ day: DayModel) {
         withAnimation(DevPrefs.daySelectingAnimation) {
-            selectedDay = day.id
+            selectedDate = day.id
+            print("Chosen \(selectedDate)")
             DispatchQueue.main.asyncAfter(deadline: .now() + DevPrefs.daySelectingAnimationDuration) {
                 withAnimation(DevPrefs.weekHighlightingAnimation) {
                     self.leaveOnlyWeekWith(day)
@@ -46,7 +47,7 @@ final class CalendarViewModel: ObservableObject {
     
     func unselect(_ day: DayModel) {
         withAnimation(DevPrefs.daySelectingAnimation) {
-            selectedDay = nil
+            selectedDate = nil
             DispatchQueue.main.asyncAfter(deadline: .now() + DevPrefs.daySelectingAnimationDuration) {
                 withAnimation(DevPrefs.weekHighlightingAnimation) {
                     self.days = self.date.getDays()
@@ -56,7 +57,7 @@ final class CalendarViewModel: ObservableObject {
     }
     
     func isDaySelected(_ day: DayModel) -> Bool {
-        guard let selectedDay = selectedDay else { return false }
+        guard let selectedDay = selectedDate else { return false }
         return Calendar.current.isDate(day.id, equalTo: selectedDay, toGranularity: .day)
     }
 
