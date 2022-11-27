@@ -31,7 +31,7 @@ final class MainScreenViewModel: ObservableObject {
             
             DispatchQueue.main.asyncAfter(deadline: .now() + (DevPrefs.monthSlidingAnimationDuration)) {
                 self.firstDayOfMonthOnTheScreenDate = date.startOfMonth
-                print("Month on the screen \(firstDayOfMonthOnTheScreenDate)")
+                print("Month on the screen \(self.firstDayOfMonthOnTheScreenDate)")
                 self.opacity = 0
                 self.offset = CGSize()
                 withAnimation(DevPrefs.monthAppearingAfterSlidingAnimation) {

@@ -9,6 +9,7 @@ import Foundation
 
 extension Date {
     
+    
     func getDays() -> [DayModel] {
         let calendar = Calendar.current
 
@@ -17,7 +18,7 @@ extension Date {
         let startOfCurrentMonth = self.startOfMonth
         let startOfPrevMonth = self.monthAgo().startOfMonth
 
-        let firstWeekDay = Calendar.current.component(.weekday, from: startOfCurrentMonth)
+        let firstWeekDay = calendar.component(.weekday, from: startOfCurrentMonth)
 
         if firstWeekDay > 1 {
             let lastDayOfPrevMonth = startOfPrevMonth.endOfMonth.startOfDay
@@ -26,9 +27,9 @@ extension Date {
                 result.append(DayModel(id: calendar.date(byAdding: .day, value: index, to: lastDayOfPrevMonth)!, secondary: true))
             }
         }
-        
-        for day in Calendar.current.range(of: .day, in: .month, for: startOfCurrentMonth)! {
-            result.append(DayModel(id: calendar.date(byAdding: .day, value: day-1, to: startOfCurrentMonth)!))
+
+        for day in calendar.range(of: .day, in: .month, for: startOfCurrentMonth)! {
+            result.append(DayModel(id: calendar.date(byAdding: .day, value: day - 1, to: startOfCurrentMonth)!))
         }
         
         return result
@@ -45,11 +46,9 @@ extension Date {
     }
     
     var startOfMonth: Date {
+        let components = Calendar.current.dateComponents([.year, .month], from: self)
         
-        let calendar = Calendar.current
-        let components = calendar.dateComponents([.year, .month], from: self)
-        
-        return calendar.date(from: components)!
+        return Calendar.current.date(from: components)!
     }
     
     var endOfDay: Date {

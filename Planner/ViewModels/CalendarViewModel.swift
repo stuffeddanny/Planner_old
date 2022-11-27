@@ -25,7 +25,7 @@ final class CalendarViewModel: ObservableObject {
     func select(_ day: DayModel) {
         withAnimation(DevPrefs.daySelectingAnimation) {
             selectedDate = day.id
-            print("Chosen \(selectedDate)")
+            print("Chosen \(String(describing: selectedDate))")
             DispatchQueue.main.asyncAfter(deadline: .now() + DevPrefs.daySelectingAnimationDuration) {
                 withAnimation(DevPrefs.weekHighlightingAnimation) {
                     self.leaveOnlyWeekWith(day)
