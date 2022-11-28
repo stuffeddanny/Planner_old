@@ -6,15 +6,33 @@
 //
 
 import SwiftUI
+import Combine
 
 final class MainScreenViewModel: ObservableObject {
     
     @Published var firstDayOfMonthOnTheScreenDate: Date
     @Published var offset = CGSize()
     @Published var opacity: Double = 1
+    @Published var monthName: String
+    @Published var yearName: String
 
+    private var cancellables = Set<AnyCancellable>()
+    
     init() {
-        firstDayOfMonthOnTheScreenDate = .now.startOfMonth
+        let date = Date().startOfMonth
+        firstDayOfMonthOnTheScreenDate = date
+        monthName = date.month
+        yearName = date.year
+        addSubs()
+    }
+    
+    private func addSubs() {
+        $firstDayOfMonthOnTheScreenDate
+            .sink { newValue in
+                    self.monthName = newValue.month
+                    self.yearName = newValue.year
+            }
+            .store(in: &cancellables)
     }
     
     func goTo(_ date: Date) {

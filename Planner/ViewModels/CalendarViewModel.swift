@@ -8,8 +8,6 @@
 import SwiftUI
 
 final class CalendarViewModel: ObservableObject {
-    @Published var monthName: String
-    @Published var yearName: String
     @Published var days: [DayModel]
     @Published var selectedDate: Date? = nil
     
@@ -17,8 +15,6 @@ final class CalendarViewModel: ObservableObject {
     
     init(for date: Date) {
         self.date = date
-        monthName = date.month
-        yearName = date.year
         days = date.getDays()
     }
     
