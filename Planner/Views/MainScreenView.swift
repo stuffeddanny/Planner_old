@@ -9,10 +9,13 @@ import SwiftUI
 
 struct MainScreenView: View {
     
+    @EnvironmentObject private var settingManager: SettingManager
+    
     @StateObject private var vm = MainScreenViewModel()
     
     var body: some View {
         NavigationStack {
+            
             VStack(spacing: 0) {
                 
                 // Month and year
@@ -22,11 +25,11 @@ struct MainScreenView: View {
                 LazyVGrid(columns: .init(repeating: GridItem(alignment: .center), count: 7)) {
                     ForEach(Calendar.current.shortWeekdaySymbols, id: \.self) { weekDay in
                         Text(weekDay)
-                            .foregroundColor(weekDay == "Sat" || weekDay == "Sun" ? .red.opacity(0.6) : .secondary)
+                            .foregroundColor(weekDay == "Sat" || weekDay == "Sun" ? settingManager.settings.weekendsColor : .secondary)
                             .lineLimit(1)
                     }
-                    .padding(.vertical, 5)
                 }
+                .padding(.top)
              
                 Divider()
 
@@ -35,27 +38,7 @@ struct MainScreenView: View {
                     .offset(vm.offset)
                     .opacity(vm.opacity)
                     .environmentObject(vm)
-                    .gesture(
-                        DragGesture(minimumDistance: 0, coordinateSpace: .local)
-                            .onChanged({ value in
-                                withAnimation {
-                                    vm.offset.width = value.translation.width
-                                }
-                            })
-                            .onEnded({ value in
-                                if abs(value.translation.width) > UIScreen.main.bounds.width * 0.5 {
-                                    if value.translation.width < 0 {
-                                        vm.goTo(vm.firstDayOfMonthOnTheScreenDate.monthFurther())
-                                    } else {
-                                        vm.goTo(vm.firstDayOfMonthOnTheScreenDate.monthAgo())
-                                    }
-                                } else {
-                                    withAnimation {
-                                        vm.offset.width = .zero
-                                    }
-                                }
-                            })
-                    )
+                    .gesture(swipeGesture)
                 
                 Spacer(minLength: 0)
 
@@ -63,7 +46,32 @@ struct MainScreenView: View {
             .navigationTitle("Calendar")
             .toolbar(.hidden, for: .navigationBar)
             .toolbar { getToolbar() }
+            .background(settingManager.settings.backgroundColor)
         }
+        .tint(settingManager.settings.accentColor)
+    }
+    
+    private var swipeGesture: some Gesture {
+        DragGesture(minimumDistance: 0, coordinateSpace: .local)
+            .onChanged { value in
+                withAnimation(DevPrefs.slidingAfterFingerAnimation) {
+                    vm.offset.width = value.translation.width * DevPrefs.slidingAfterFingerFactor
+                }
+            }
+            .onEnded { value in
+                if abs(value.translation.width) > UIScreen.main.bounds.width * DevPrefs.screenWidthFactor ||
+                    abs(value.predictedEndTranslation.width) > UIScreen.main.bounds.width * DevPrefs.screenWidthFactor {
+                    if value.translation.width < 0 {
+                        vm.goTo(vm.firstDayOfMonthOnTheScreenDate.monthFurther())
+                    } else {
+                        vm.goTo(vm.firstDayOfMonthOnTheScreenDate.monthAgo())
+                    }
+                } else {
+                    withAnimation(DevPrefs.slidingToStartPositionAnimation) {
+                        vm.offset.width = .zero
+                    }
+                }
+            }
     }
     
     private var topLine: some View {
@@ -71,7 +79,7 @@ struct MainScreenView: View {
             Text(vm.monthName)
                 .font(.largeTitle)
                 .fontWeight(.semibold)
-                .foregroundColor(.accentColor)
+                .foregroundColor(settingManager.settings.accentColor)
                 .padding(.horizontal)
                 .contextMenu {
                     ForEach(Calendar.current.monthSymbols, id: \.self) { monthName in
@@ -93,7 +101,7 @@ struct MainScreenView: View {
             Text(vm.yearName)
                 .font(.title)
                 .fontWeight(.semibold)
-                .foregroundColor(.accentColor)
+                .foregroundColor(settingManager.settings.accentColor)
                 .padding(.horizontal)
         }
     }
@@ -105,10 +113,10 @@ struct MainScreenView: View {
             Spacer(minLength: 0)
             
             NavigationLink {
-                SettingsView()
+                SettingsView(settingManager)
             } label: {
                 Image(systemName: "gearshape")
-                    .foregroundColor(.accentColor)
+                    .foregroundColor(settingManager.settings.accentColor)
             }
 
             
@@ -119,5 +127,6 @@ struct MainScreenView: View {
 struct MainScreenView_Previews: PreviewProvider {
     static var previews: some View {
         MainScreenView()
+            .environmentObject(SettingManager())
     }
 }

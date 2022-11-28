@@ -21,7 +21,6 @@ final class CalendarViewModel: ObservableObject {
     func select(_ day: DayModel) {
         withAnimation(DevPrefs.daySelectingAnimation) {
             selectedDate = day.id
-            print("Chosen \(String(describing: selectedDate))")
             DispatchQueue.main.asyncAfter(deadline: .now() + DevPrefs.daySelectingAnimationDuration) {
                 withAnimation(DevPrefs.weekHighlightingAnimation) {
                     self.leaveOnlyWeekWith(day)
@@ -55,6 +54,10 @@ final class CalendarViewModel: ObservableObject {
     func isDaySelected(_ day: DayModel) -> Bool {
         guard let selectedDay = selectedDate else { return false }
         return Calendar.current.isDate(day.id, equalTo: selectedDay, toGranularity: .day)
+    }
+    
+    func isToday(_ day: DayModel) -> Bool {
+        return Calendar.current.isDate(day.id, equalTo: .now, toGranularity: .day)
     }
 
 }

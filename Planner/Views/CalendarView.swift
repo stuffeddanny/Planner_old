@@ -22,7 +22,7 @@ struct CalendarView: View {
         //            ScrollView(showsIndicators: false) {
         LazyVGrid(columns: .init(repeating: GridItem(alignment: .top), count: 7)) {
             ForEach(vm.days) { day in
-                DayView(for: day, isSelected: vm.isDaySelected(day))
+                DayView(for: day, isSelected: vm.isDaySelected(day), isToday: vm.isToday(day))
                     .onTapGesture {
                         day.secondary ? mainVm.goTo(day.id) : vm.isDaySelected(day) ? vm.unselect(day) : vm.select(day)
                     }
@@ -31,6 +31,7 @@ struct CalendarView: View {
                     .padding(.top, 5)
             }
         }
+        .background(Color.white.opacity(0.00000001))
         //            }
     }
     
