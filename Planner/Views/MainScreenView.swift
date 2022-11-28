@@ -12,11 +12,13 @@ struct MainScreenView: View {
     @StateObject private var vm = MainScreenViewModel()
     
     var body: some View {
+        NavigationStack {
             VStack {
                 CalendarView(for: vm.firstDayOfMonthOnTheScreenDate)
                     .offset(vm.offset)
                     .opacity(vm.opacity)
                     .environmentObject(vm)
+                    
                 
                 HStack {
                     Button {
@@ -40,6 +42,29 @@ struct MainScreenView: View {
                 .padding()
                 .buttonStyle(.borderedProminent)
             }
+            .navigationTitle("Calendar")
+            .toolbar(.hidden, for: .navigationBar)
+            .toolbar { getToolbar() }
+            .toolbarBackground(.red, for: .bottomBar)
+            .toolbarBackground(.visible, for: .bottomBar)
+        }
+    }
+    
+    @ToolbarContentBuilder
+    private func getToolbar() -> some ToolbarContent {
+        ToolbarItemGroup(placement: .bottomBar) {
+            
+            Spacer(minLength: 0)
+            
+            NavigationLink {
+                SettingsView()
+            } label: {
+                Image(systemName: "gearshape")
+                    .foregroundColor(.accentColor)
+            }
+
+            
+        }
     }
 }
 
