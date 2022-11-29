@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-/// <#Description#>
 struct SettingsView: View {
         
     @StateObject private var vm: SettingsViewModel
@@ -47,14 +46,17 @@ struct SettingsView: View {
                 .disabled(vm.applyButtonIsDisabled)
             }
         }
-        .confirmationDialog("Are you sure you want to apply changes?", isPresented: $showConfDialog, titleVisibility: .visible) {
-            Button("Apply") {
-                vm.apply()
-            }
-            Button("Cancel", role: .cancel) {}
-        }
+        .confirmationDialog("Are you sure you want to apply changes?", isPresented: $showConfDialog, titleVisibility: .visible, actions: getConfDialog)
         .navigationTitle("Settings")
         .navigationBarTitleDisplayMode(.inline)
+    }
+    
+    @ViewBuilder
+    private func getConfDialog() -> some View {
+        Button("Apply") {
+            vm.apply()
+        }
+        Button("Cancel", role: .cancel) {}
     }
 }
 

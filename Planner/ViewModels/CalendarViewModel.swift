@@ -15,8 +15,9 @@ final class CalendarViewModel: ObservableObject {
     
     init(for date: Date) {
         self.date = date
-        days = date.getDays()
+        days = date.getDayModelsForMonth()
     }
+    
     
     func select(_ day: DayModel) {
         withAnimation(DevPrefs.daySelectingAnimation) {
@@ -45,7 +46,7 @@ final class CalendarViewModel: ObservableObject {
             selectedDate = nil
             DispatchQueue.main.asyncAfter(deadline: .now() + DevPrefs.daySelectingAnimationDuration) {
                 withAnimation(DevPrefs.weekHighlightingAnimation) {
-                    self.days = self.date.getDays()
+                    self.days = self.date.getDayModelsForMonth()
                 }
             }
         }

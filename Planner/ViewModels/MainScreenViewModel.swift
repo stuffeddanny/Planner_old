@@ -29,8 +29,8 @@ final class MainScreenViewModel: ObservableObject {
     private func addSubs() {
         $firstDayOfMonthOnTheScreenDate
             .sink { newValue in
-                    self.monthName = newValue.month
-                    self.yearName = newValue.year
+                self.monthName = newValue.month
+                self.yearName = newValue.year
             }
             .store(in: &cancellables)
     }

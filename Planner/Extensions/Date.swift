@@ -9,8 +9,7 @@ import Foundation
 
 extension Date {
     
-    
-    func getDays() -> [DayModel] {
+    func getDayModelsForMonth() -> [DayModel] {
         let calendar = Calendar.current
 
         var result: [DayModel] = []

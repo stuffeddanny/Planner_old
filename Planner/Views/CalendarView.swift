@@ -10,6 +10,7 @@ import SwiftUI
 struct CalendarView: View {
     
     @EnvironmentObject private var mainVm: MainScreenViewModel
+    @EnvironmentObject private var manager: SettingManager
     
     @ObservedObject private var vm: CalendarViewModel
         
@@ -18,21 +19,22 @@ struct CalendarView: View {
     }
     
     var body: some View {
-        
-        //            ScrollView(showsIndicators: false) {
-        LazyVGrid(columns: .init(repeating: GridItem(alignment: .top), count: 7)) {
-            ForEach(vm.days) { day in
-                DayView(for: day, isSelected: vm.isDaySelected(day), isToday: vm.isToday(day))
-                    .onTapGesture {
-                        day.secondary ? mainVm.goTo(day.id) : vm.isDaySelected(day) ? vm.unselect(day) : vm.select(day)
-                    }
-                    .frame(width: 40, height: 40)
-                    .frame(minHeight: 40, alignment: .top) // Gaps betweenDays
-                    .padding(.top, 5)
+        ScrollView(showsIndicators: false) {
+            LazyVGrid(columns: .init(repeating: GridItem(alignment: .top), count: 7)) {
+                ForEach(vm.days) { day in
+                    DayView(for: day, isSelected: vm.isDaySelected(day), isToday: vm.isToday(day))
+                        .onTapGesture {
+                            day.secondary ? mainVm.goTo(day.id) : vm.isDaySelected(day) ? vm.unselect(day) : vm.select(day)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 40)
+                        .frame(height: CGFloat(manager.settings.gapBetweenDays), alignment: .top) // Gaps betweenDays
+                        .padding(.top, 5)
+                    
+                }
             }
         }
-        .background(Color.white.opacity(0.00000001))
-        //            }
+        .scrollDisabled(true)
     }
     
 }

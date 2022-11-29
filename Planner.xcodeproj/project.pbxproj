@@ -11,6 +11,7 @@
 		BB588DD9293534610092582B /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB588DD8293534610092582B /* UserSettings.swift */; };
 		BB9814A12934F3F0004B7302 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB9814A02934F3F0004B7302 /* SettingsView.swift */; };
 		BB9814A32934F3FC004B7302 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB9814A22934F3FC004B7302 /* SettingsViewModel.swift */; };
+		BB9F7C702936422400D3DA74 /* SettingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB9F7C6F2936422400D3DA74 /* SettingManager.swift */; };
 		BBAAD6A62931240800D78380 /* PlannerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAAD6A52931240800D78380 /* PlannerApp.swift */; };
 		BBAAD6A82931240800D78380 /* MainScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAAD6A72931240800D78380 /* MainScreenView.swift */; };
 		BBAAD6AA2931240900D78380 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BBAAD6A92931240900D78380 /* Assets.xcassets */; };
@@ -31,6 +32,7 @@
 		BB588DD8293534610092582B /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
 		BB9814A02934F3F0004B7302 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		BB9814A22934F3FC004B7302 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		BB9F7C6F2936422400D3DA74 /* SettingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingManager.swift; sourceTree = "<group>"; };
 		BBAAD6A22931240800D78380 /* Planner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Planner.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBAAD6A52931240800D78380 /* PlannerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlannerApp.swift; sourceTree = "<group>"; };
 		BBAAD6A72931240800D78380 /* MainScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainScreenView.swift; sourceTree = "<group>"; };
@@ -58,6 +60,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BB9F7C6E2936421900D3DA74 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				BB9F7C6F2936422400D3DA74 /* SettingManager.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 		BBAAD6992931240800D78380 = {
 			isa = PBXGroup;
 			children = (
@@ -78,6 +88,7 @@
 			isa = PBXGroup;
 			children = (
 				BBAAD6A52931240800D78380 /* PlannerApp.swift */,
+				BB9F7C6E2936421900D3DA74 /* Services */,
 				BBAAD6CA29327B7200D78380 /* ViewModels */,
 				BBAAD6C829327B6200D78380 /* Views */,
 				BBAAD6CD29327BF300D78380 /* Other */,
@@ -224,6 +235,7 @@
 				BBAAD6C62932752700D78380 /* DayModel.swift in Sources */,
 				BBAAD6CC29327B8600D78380 /* CalendarViewModel.swift in Sources */,
 				BBAAD6BE293143D100D78380 /* Date.swift in Sources */,
+				BB9F7C702936422400D3DA74 /* SettingManager.swift in Sources */,
 				BBAAD6B7293127B100D78380 /* LaunchView.swift in Sources */,
 				BB9814A32934F3FC004B7302 /* SettingsViewModel.swift in Sources */,
 				BBAAD6C42932745700D78380 /* MainScreenViewModel.swift in Sources */,

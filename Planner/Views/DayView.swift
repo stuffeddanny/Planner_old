@@ -24,15 +24,51 @@ struct DayView: View {
     var body: some View {
         ZStack {
             
-            if isSelected || isToday {
-                Circle()
-                    .foregroundColor(isSelected ? settingManager.settings.selectedDayColor : isToday ? settingManager.settings.todaysDayColor : .clear)
+            if !dayModel.secondary && (isSelected || isToday) {
+               highlight
             }
             
             
             Text("\(dayModel.id.day)")
-                .foregroundColor(dayModel.secondary ? .secondary : Calendar.isDateInWeekend(Calendar.current)(dayModel.id) ? settingManager.settings.weekendsColor : isSelected ?
-                                 settingManager.settings.isSelectedDayInverted ? .primary : Color.theme.primaryOpposite : isToday ? settingManager.settings.isTodayInverted ? .primary : Color.theme.primaryOpposite : .primary)
+                .foregroundColor(dayNumberColor())
+        }
+    }
+    
+    private var highlight: some View {
+        Circle()
+            .frame(width: 40, height: 40)
+            .foregroundColor(highLightColor())
+    }
+    
+    private func highLightColor() -> Color {
+        if isSelected {
+            return settingManager.settings.selectedDayColor
+        } else if isToday {
+            return settingManager.settings.todaysDayColor
+        } else {
+            return .clear
+        }
+    }
+    
+    private func dayNumberColor() -> Color {
+        if dayModel.secondary {
+            return .secondary
+        } else if Calendar.isDateInWeekend(Calendar.current)(dayModel.id) {
+            return settingManager.settings.weekendsColor
+        } else if isSelected {
+            if settingManager.settings.isSelectedDayInverted {
+                return .primary
+            } else {
+                return .theme.primaryOpposite
+            }
+        } else if isToday {
+            if settingManager.settings.isTodayInverted {
+                return .primary
+            } else {
+                return .theme.primaryOpposite
+            }
+        } else {
+            return .primary
         }
     }
 }

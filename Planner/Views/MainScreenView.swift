@@ -21,19 +21,13 @@ struct MainScreenView: View {
                 // Month and year
                 topLine
                 
-                // Weekdays
-                LazyVGrid(columns: .init(repeating: GridItem(alignment: .center), count: 7)) {
-                    ForEach(Calendar.current.shortWeekdaySymbols, id: \.self) { weekDay in
-                        Text(weekDay)
-                            .foregroundColor(weekDay == "Sat" || weekDay == "Sun" ? settingManager.settings.weekendsColor : .secondary)
-                            .lineLimit(1)
-                    }
-                }
+                // Weekdays names row
+                weekNames
                 .padding(.top)
              
                 Divider()
 
-                // Days
+                // Calendar
                 CalendarView(for: vm.firstDayOfMonthOnTheScreenDate)
                     .offset(vm.offset)
                     .opacity(vm.opacity)
@@ -51,8 +45,18 @@ struct MainScreenView: View {
         .tint(settingManager.settings.accentColor)
     }
     
+    private var weekNames: some View {
+        LazyVGrid(columns: .init(repeating: GridItem(alignment: .center), count: 7)) {
+            ForEach(Calendar.current.shortWeekdaySymbols, id: \.self) { weekDay in
+                Text(weekDay)
+                    .foregroundColor(weekDay == "Sat" || weekDay == "Sun" ? settingManager.settings.weekendsColor : .secondary)
+                    .lineLimit(1)
+            }
+        }
+    }
+    
     private var swipeGesture: some Gesture {
-        DragGesture(minimumDistance: 0, coordinateSpace: .local)
+        DragGesture(minimumDistance: 10, coordinateSpace: .local)
             .onChanged { value in
                 withAnimation(DevPrefs.slidingAfterFingerAnimation) {
                     vm.offset.width = value.translation.width * DevPrefs.slidingAfterFingerFactor
