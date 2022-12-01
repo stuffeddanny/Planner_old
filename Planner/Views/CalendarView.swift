@@ -31,9 +31,26 @@ struct CalendarView: View {
                 .offset(vm.offset)
                 .opacity(vm.opacity)
                 .gesture(swipeGesture)
+                .frame(maxHeight: vm.weekView ? 50 : .infinity)
             
+            if vm.showNote {
+                
+                Divider()
+
+                notePart
+            }
+            
+            Spacer(minLength: 0)
         }
         .toolbar { getToolBar() }
+    }
+    
+    @ViewBuilder
+    private var notePart: some View {
+        
+        ForEach(1..<20) { _ in
+            Text("dawdwa")
+        }
     }
     
     @ToolbarContentBuilder
@@ -129,6 +146,7 @@ struct CalendarView: View {
     private var topLine: some View {
         HStack {
             Text(vm.monthName)
+                .lineLimit(1)
                 .font(.largeTitle)
                 .fontWeight(.semibold)
                 .foregroundColor(settingManager.settings.accentColor)

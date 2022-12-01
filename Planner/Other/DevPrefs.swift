@@ -16,6 +16,9 @@ struct DevPrefs {
     static let weekHighlightingAnimationDuration: Double = 0.2
     static let weekHighlightingAnimation: Animation = .easeInOut(duration: weekHighlightingAnimationDuration)
     
+    static let noteAppearingAnimationDuration: Double = 0.1
+    static let noteAppearingAnimation: Animation = .easeInOut(duration: noteAppearingAnimationDuration)
+
     static let monthSlidingAnimationDuration: Double = 0.3
     static let monthSlidingAnimation: Animation = .linear(duration: monthSlidingAnimationDuration)
     

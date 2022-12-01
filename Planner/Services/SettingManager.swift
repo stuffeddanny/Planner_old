@@ -9,7 +9,7 @@ import SwiftUI
 
 class SettingManager: ObservableObject {
     
-    @Published var settings: UserSettings {
+    @Published var settings: UserSettingsModel {
         didSet {
             guard let data = try? JSONEncoder().encode(settings) else { return }
             UserDefaults.standard.set(data, forKey: "userSettings")
@@ -25,9 +25,9 @@ class SettingManager: ObservableObject {
         
         let data = UserDefaults.standard.data(forKey: "userSettings") ?? .init()
         
-        let decoded = try? JSONDecoder().decode(UserSettings.self, from: data)
+        let decoded = try? JSONDecoder().decode(UserSettingsModel.self, from: data)
         
-        settings = decoded ?? UserSettings()
+        settings = decoded ?? UserSettingsModel()
 
         UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor(settings.accentColor)]
         UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor(settings.accentColor)]
