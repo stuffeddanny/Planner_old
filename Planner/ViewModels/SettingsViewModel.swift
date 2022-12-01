@@ -27,6 +27,9 @@ final class SettingsViewModel: ObservableObject {
     @Published var isTodayInvertedToggle: Bool
     @Published var isSelectedDayInvertedToggle: Bool
     
+    // Sliders
+    @Published var gapsBetweenDays: Int
+    
     init(_ manager: SettingManager) {
         self.manager = manager
         
@@ -38,6 +41,8 @@ final class SettingsViewModel: ObservableObject {
         
         isTodayInvertedToggle = manager.settings.isTodayInverted
         isSelectedDayInvertedToggle = manager.settings.isSelectedDayInverted
+        
+        gapsBetweenDays = manager.settings.gapBetweenDays
         
         addSubs()
     }
@@ -57,28 +62,17 @@ final class SettingsViewModel: ObservableObject {
             .store(in: &cancellables)
         
         $todaysDayColorPicker
-            .combineLatest($isTodayInvertedToggle, $isSelectedDayInvertedToggle)
-            .sink { todaysColor, isTodayInverted, isSelectedInverted in
+            .combineLatest($isTodayInvertedToggle, $isSelectedDayInvertedToggle, $gapsBetweenDays)
+            .sink { todaysColor, isTodayInverted, isSelectedInverted, gaps in
                 self.applyButtonIsDisabled = !(
                     todaysColor != self.manager.settings.todaysDayColor ||
                     isTodayInverted != self.manager.settings.isTodayInverted ||
-                    isSelectedInverted != self.manager.settings.isSelectedDayInverted
+                    isSelectedInverted != self.manager.settings.isSelectedDayInverted ||
+                    gaps != self.manager.settings.gapBetweenDays
                 )
             }
             .store(in: &cancellables)
         
-    }
-    
-    private func checkForApplyButton() {
-        applyButtonIsDisabled = !(
-            accentColorPicker != manager.settings.accentColor ||
-            selectedDayColorPicker != manager.settings.selectedDayColor ||
-            weekendsColorPicker != manager.settings.weekendsColor ||
-            backgroundColorPicker != manager.settings.backgroundColor ||
-            todaysDayColorPicker != manager.settings.todaysDayColor ||
-            isTodayInvertedToggle != manager.settings.isTodayInverted ||
-            isSelectedDayInvertedToggle != manager.settings.isSelectedDayInverted
-        )
     }
     
     func apply() {
@@ -91,9 +85,10 @@ final class SettingsViewModel: ObservableObject {
         oldSettings.backgroundColor = backgroundColorPicker
         oldSettings.isTodayInverted = isTodayInvertedToggle
         oldSettings.isSelectedDayInverted = isSelectedDayInvertedToggle
+        oldSettings.gapBetweenDays = gapsBetweenDays
         
         manager.settings = oldSettings
         
-        checkForApplyButton()
+        applyButtonIsDisabled = true
     }
 }

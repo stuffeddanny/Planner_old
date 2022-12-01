@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct DevPrefs {
+    static let maximumGapBetweenDays: Int = 200
+    
     static let daySelectingAnimationDuration: Double = 0.1
     static let daySelectingAnimation: Animation = .easeInOut(duration: daySelectingAnimationDuration)
     

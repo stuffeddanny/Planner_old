@@ -15,7 +15,7 @@ struct UserSettings: Codable {
     var todaysDayColor: Color = .red
     var isTodayInverted: Bool = false
     var isSelectedDayInverted: Bool = false
-    var gapBetweenDays: Int = 40
+    var gapBetweenDays: Int = 20
 }
 
 

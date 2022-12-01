@@ -48,7 +48,7 @@ final class CalendarViewModel: ObservableObject {
                 withAnimation(DevPrefs.weekHighlightingAnimation) { [weak self] in
                     self?.weekView = true
                     self?.firstDayOfUnitOnTheScreenDate = day.id.startOfDay
-                    print(self?.firstDayOfUnitOnTheScreenDate ?? "none")
+                    
                 }
             }
         }

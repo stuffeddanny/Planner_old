@@ -12,6 +12,8 @@ struct CalendarView: View {
     @EnvironmentObject private var settingManager: SettingManager
         
     @StateObject private var vm = CalendarViewModel()
+    
+    @State private var scrollIsDisabled: Bool = false
             
     var body: some View {
         VStack(spacing: 0) {
@@ -35,20 +37,31 @@ struct CalendarView: View {
     }
     
     private var calendarDays: some View {
-//        ScrollView(showsIndicators: false) {
-            LazyVGrid(columns: .init(repeating: GridItem(alignment: .top), count: 7)) {
-                ForEach(vm.days) { day in
-                    DayView(for: day, isSelected: vm.isDaySelected(day), isToday: vm.isToday(day))
-                        .onTapGesture { onTapFunc(day) }
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 40)
-                        .frame(height: CGFloat(settingManager.settings.gapBetweenDays), alignment: .top) // Gaps betweenDays
-                        .padding(.top, 5)
-                    
+        GeometryReader { safeProxy in
+            ScrollView(showsIndicators: false) {
+                GeometryReader { actualProxy in
+                    ZStack {
+                        LazyVGrid(columns: .init(repeating: GridItem(alignment: .top), count: 7)) {
+                            ForEach(vm.days) { day in
+                                DayView(for: day, isSelected: vm.isDaySelected(day), isToday: vm.isToday(day))
+                                    .onTapGesture { onTapFunc(day) }
+                                    .frame(maxWidth: .infinity)
+                                    .frame(height: 40)
+                                    .frame(height: 40 + CGFloat(settingManager.settings.gapBetweenDays), alignment: .top) // Gaps betweenDays
+                                    .padding(.top, 5)
+                                
+                            }
+                        }
+                    }
+                    .onReceive(vm.$days.combineLatest(settingManager.$settings)) { _ in
+                        print("received; scrollViewSafe: \(safeProxy.size.height); actualContent: \(actualProxy.size.height)")
+                        scrollIsDisabled = actualProxy.size.height < safeProxy.size.height
+                    }
                 }
+                
             }
-//        }
-//        .scrollDisabled(true)
+            .scrollDisabled(vm.weekView || scrollIsDisabled)
+        }
     }
     
     private func onTapFunc(_ day: DayModel) {

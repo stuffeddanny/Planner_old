@@ -165,7 +165,7 @@ extension Date {
         if !Calendar.current.isDate(Calendar.current.date(byAdding: .weekOfMonth, value: -1, to: self)!, equalTo: self.startOfMonth, toGranularity: .month) {
             return self.startOfMonth
         }
-        return Calendar.current.date(byAdding: .weekOfMonth, value: -1, to: self)!
+        return Calendar.current.date(byAdding: .weekOfMonth, value: -1, to: self)!.startOfWeekInYear
     }
     
     func weekFurther() -> Date {
@@ -179,6 +179,6 @@ extension Date {
         if !Calendar.current.isDate(Calendar.current.date(byAdding: .weekOfYear, value: 1, to: self)!, equalTo: self.endOfMonth, toGranularity: .month) {
             return self.endOfMonth.startOfDay
         }
-        return Calendar.current.date(byAdding: .weekOfMonth, value: 1, to: self)!
+        return Calendar.current.date(byAdding: .weekOfMonth, value: 1, to: self)!.startOfWeekInYear
     }
 }
