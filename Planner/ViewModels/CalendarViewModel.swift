@@ -84,7 +84,7 @@ final class CalendarViewModel: ObservableObject {
     }
     
     func goTo(_ date: Date) {
-        if weekView || !Calendar.current.isDate(firstDayOfUnitOnTheScreenDate, equalTo: date, toGranularity: .month) {
+        if (weekView && !Date.isSameWeek(firstDayOfUnitOnTheScreenDate, date)) || !Calendar.current.isDate(firstDayOfUnitOnTheScreenDate, equalTo: date, toGranularity: .month) {
             withAnimation(DevPrefs.monthSlidingAnimation) {
                 offset = CGSize(width: UIScreen.main.bounds.size.width * (date < firstDayOfUnitOnTheScreenDate ? 1 : -1), height: 0)
             }

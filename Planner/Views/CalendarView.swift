@@ -10,11 +10,11 @@ import SwiftUI
 struct CalendarView: View {
     
     @EnvironmentObject private var settingManager: SettingManager
-        
+    
     @StateObject private var vm = CalendarViewModel()
     
     @State private var scrollIsDisabled: Bool = false
-            
+    
     var body: some View {
         VStack(spacing: 0) {
             
@@ -32,36 +32,52 @@ struct CalendarView: View {
                 .opacity(vm.opacity)
                 .gesture(swipeGesture)
             
-            Spacer(minLength: 0)
+        }
+        .toolbar { getToolBar() }
+    }
+    
+    @ToolbarContentBuilder
+    private func getToolBar() -> some ToolbarContent {
+        ToolbarItem(placement: .status) {
+            Button("Today") {
+                vm.goTo(Date().startOfDay)
+            }
         }
     }
     
     private var calendarDays: some View {
         GeometryReader { safeProxy in
             ScrollView(showsIndicators: false) {
-                GeometryReader { actualProxy in
-                    ZStack {
-                        LazyVGrid(columns: .init(repeating: GridItem(alignment: .top), count: 7)) {
-                            ForEach(vm.days) { day in
-                                DayView(for: day, isSelected: vm.isDaySelected(day), isToday: vm.isToday(day))
-                                    .onTapGesture { onTapFunc(day) }
-                                    .frame(maxWidth: .infinity)
-                                    .frame(height: 40)
-                                    .frame(height: 40 + CGFloat(settingManager.settings.gapBetweenDays), alignment: .top) // Gaps betweenDays
-                                    .padding(.top, 5)
-                                
-                            }
-                        }
-                    }
-                    .onReceive(vm.$days.combineLatest(settingManager.$settings)) { _ in
-                        print("received; scrollViewSafe: \(safeProxy.size.height); actualContent: \(actualProxy.size.height)")
-                        scrollIsDisabled = actualProxy.size.height < safeProxy.size.height
+                LazyVGrid(columns: .init(repeating: GridItem(alignment: .top), count: 7)) {
+                    ForEach(vm.days) { day in
+                        DayView(for: day, isSelected: vm.isDaySelected(day), isToday: vm.isToday(day))
+                            .onTapGesture { onTapFunc(day) }
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 40)
+                            .frame(height: 40 + CGFloat(settingManager.settings.gapBetweenDays), alignment: .top) // Gaps betweenDays
+                            .padding(.top, 5)
+                        
                     }
                 }
-                
+                .background(
+                    GeometryReader { actualProxy in
+                        Color.clear
+                            .onAppear {
+                                checkForScroll(actualHeight: actualProxy.size.height, safeHeight: safeProxy.size.height)
+                            }
+                            .onChange(of: actualProxy.size.height) { newValue in
+                                checkForScroll(actualHeight: newValue, safeHeight: safeProxy.size.height)
+                            }
+                    }
+                )
             }
+            
             .scrollDisabled(vm.weekView || scrollIsDisabled)
         }
+    }
+    
+    private func checkForScroll(actualHeight: Double, safeHeight: Double) {
+        scrollIsDisabled = actualHeight < safeHeight
     }
     
     private func onTapFunc(_ day: DayModel) {

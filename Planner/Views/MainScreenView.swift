@@ -18,8 +18,8 @@ struct MainScreenView: View {
             CalendarView()
                 .navigationTitle("Calendar")
                 .toolbar(.hidden, for: .navigationBar)
-                .toolbar { getToolbar() }
                 .background(settingManager.settings.backgroundColor)
+                .toolbar { getToolbar() }
         }
         .tint(settingManager.settings.accentColor)
     }
@@ -28,7 +28,7 @@ struct MainScreenView: View {
     private func getToolbar() -> some ToolbarContent {
         ToolbarItemGroup(placement: .bottomBar) {
             
-            Spacer(minLength: 0)
+            Color.clear
             
             NavigationLink {
                 SettingsView(settingManager)
@@ -36,8 +36,6 @@ struct MainScreenView: View {
                 Image(systemName: "gearshape")
                     .foregroundColor(settingManager.settings.accentColor)
             }
-
-            
         }
     }
 }

@@ -181,4 +181,11 @@ extension Date {
         }
         return Calendar.current.date(byAdding: .weekOfMonth, value: 1, to: self)!.startOfWeekInYear
     }
+    
+    static func isSameWeek(_ date1: Date, _ date2: Date) -> Bool {
+        if Calendar.current.isDate(date1, equalTo: date2, toGranularity: .month) {
+           return Calendar.current.isDate(date1, equalTo: date2, toGranularity: .weekOfYear)
+        }
+        return false
+    }
 }
