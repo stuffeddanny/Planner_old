@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		BB588DD729352E6D0092582B /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB588DD629352E6D0092582B /* String.swift */; };
-		BB588DD9293534610092582B /* UserSettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB588DD8293534610092582B /* UserSettingsModel.swift */; };
+		BB588DD9293534610092582B /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB588DD8293534610092582B /* UserSettings.swift */; };
 		BB9814A12934F3F0004B7302 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB9814A02934F3F0004B7302 /* SettingsView.swift */; };
 		BB9814A32934F3FC004B7302 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB9814A22934F3FC004B7302 /* SettingsViewModel.swift */; };
 		BB9F7C702936422400D3DA74 /* SettingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB9F7C6F2936422400D3DA74 /* SettingManager.swift */; };
@@ -25,11 +25,18 @@
 		BBAAD6C62932752700D78380 /* DayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAAD6C52932752700D78380 /* DayModel.swift */; };
 		BBAAD6CC29327B8600D78380 /* CalendarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAAD6CB29327B8600D78380 /* CalendarViewModel.swift */; };
 		BBAAD6CF29327C0600D78380 /* DevPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAAD6CE29327C0600D78380 /* DevPrefs.swift */; };
+		BBF07EF929391D92005B1705 /* ReminderList.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF07EF829391D92005B1705 /* ReminderList.swift */; };
+		BBF07EFB29391E63005B1705 /* FileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF07EFA29391E63005B1705 /* FileManager.swift */; };
+		BBF07EFD29391EA4005B1705 /* ReminderListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF07EFC29391EA4005B1705 /* ReminderListViewModel.swift */; };
+		BBF07F02293922CC005B1705 /* ReminderRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF07F01293922CC005B1705 /* ReminderRowView.swift */; };
+		BBF07F04293923BA005B1705 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF07F03293923BA005B1705 /* HapticManager.swift */; };
+		BBF07F0629392402005B1705 /* ReminderCompletionCircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF07F0529392402005B1705 /* ReminderCompletionCircleView.swift */; };
+		BBF07F22293937C1005B1705 /* Reminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF07F21293937C1005B1705 /* Reminder.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		BB588DD629352E6D0092582B /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
-		BB588DD8293534610092582B /* UserSettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettingsModel.swift; sourceTree = "<group>"; };
+		BB588DD8293534610092582B /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
 		BB9814A02934F3F0004B7302 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		BB9814A22934F3FC004B7302 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		BB9F7C6F2936422400D3DA74 /* SettingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingManager.swift; sourceTree = "<group>"; };
@@ -47,6 +54,13 @@
 		BBAAD6C52932752700D78380 /* DayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayModel.swift; sourceTree = "<group>"; };
 		BBAAD6CB29327B8600D78380 /* CalendarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewModel.swift; sourceTree = "<group>"; };
 		BBAAD6CE29327C0600D78380 /* DevPrefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevPrefs.swift; sourceTree = "<group>"; };
+		BBF07EF829391D92005B1705 /* ReminderList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderList.swift; sourceTree = "<group>"; };
+		BBF07EFA29391E63005B1705 /* FileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManager.swift; sourceTree = "<group>"; };
+		BBF07EFC29391EA4005B1705 /* ReminderListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderListViewModel.swift; sourceTree = "<group>"; };
+		BBF07F01293922CC005B1705 /* ReminderRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderRowView.swift; sourceTree = "<group>"; };
+		BBF07F03293923BA005B1705 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
+		BBF07F0529392402005B1705 /* ReminderCompletionCircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderCompletionCircleView.swift; sourceTree = "<group>"; };
+		BBF07F21293937C1005B1705 /* Reminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reminder.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +78,8 @@
 			isa = PBXGroup;
 			children = (
 				BB9F7C6F2936422400D3DA74 /* SettingManager.swift */,
+				BBF07EFA29391E63005B1705 /* FileManager.swift */,
+				BBF07F03293923BA005B1705 /* HapticManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -123,7 +139,8 @@
 			isa = PBXGroup;
 			children = (
 				BBAAD6C52932752700D78380 /* DayModel.swift */,
-				BB588DD8293534610092582B /* UserSettingsModel.swift */,
+				BB588DD8293534610092582B /* UserSettings.swift */,
+				BBF07F21293937C1005B1705 /* Reminder.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -131,10 +148,9 @@
 		BBAAD6C829327B6200D78380 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				BBAAD6A72931240800D78380 /* MainScreenView.swift */,
-				BBAAD6BB2931438600D78380 /* CalendarView.swift */,
-				BBAAD6BF29316A7B00D78380 /* DayView.swift */,
-				BB9814A02934F3F0004B7302 /* SettingsView.swift */,
+				BBF07F00293922B8005B1705 /* General */,
+				BBF07EFF293922AD005B1705 /* Calendar */,
+				BBF07EFE2939229E005B1705 /* Reminders */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -145,6 +161,7 @@
 				BBAAD6C32932745700D78380 /* MainScreenViewModel.swift */,
 				BBAAD6CB29327B8600D78380 /* CalendarViewModel.swift */,
 				BB9814A22934F3FC004B7302 /* SettingsViewModel.swift */,
+				BBF07EFC29391EA4005B1705 /* ReminderListViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -155,6 +172,34 @@
 				BBAAD6CE29327C0600D78380 /* DevPrefs.swift */,
 			);
 			path = Other;
+			sourceTree = "<group>";
+		};
+		BBF07EFE2939229E005B1705 /* Reminders */ = {
+			isa = PBXGroup;
+			children = (
+				BBF07EF829391D92005B1705 /* ReminderList.swift */,
+				BBF07F01293922CC005B1705 /* ReminderRowView.swift */,
+				BBF07F0529392402005B1705 /* ReminderCompletionCircleView.swift */,
+			);
+			path = Reminders;
+			sourceTree = "<group>";
+		};
+		BBF07EFF293922AD005B1705 /* Calendar */ = {
+			isa = PBXGroup;
+			children = (
+				BBAAD6BF29316A7B00D78380 /* DayView.swift */,
+				BBAAD6BB2931438600D78380 /* CalendarView.swift */,
+			);
+			path = Calendar;
+			sourceTree = "<group>";
+		};
+		BBF07F00293922B8005B1705 /* General */ = {
+			isa = PBXGroup;
+			children = (
+				BB9814A02934F3F0004B7302 /* SettingsView.swift */,
+				BBAAD6A72931240800D78380 /* MainScreenView.swift */,
+			);
+			path = General;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -228,20 +273,27 @@
 			buildActionMask = 2147483647;
 			files = (
 				BBAAD6C029316A7B00D78380 /* DayView.swift in Sources */,
+				BBF07F02293922CC005B1705 /* ReminderRowView.swift in Sources */,
 				BBAAD6A82931240800D78380 /* MainScreenView.swift in Sources */,
+				BBF07F22293937C1005B1705 /* Reminder.swift in Sources */,
 				BBAAD6CF29327C0600D78380 /* DevPrefs.swift in Sources */,
 				BBAAD6C2293272CD00D78380 /* Color.swift in Sources */,
 				BB588DD729352E6D0092582B /* String.swift in Sources */,
 				BBAAD6C62932752700D78380 /* DayModel.swift in Sources */,
+				BBF07EF929391D92005B1705 /* ReminderList.swift in Sources */,
 				BBAAD6CC29327B8600D78380 /* CalendarViewModel.swift in Sources */,
 				BBAAD6BE293143D100D78380 /* Date.swift in Sources */,
+				BBF07EFD29391EA4005B1705 /* ReminderListViewModel.swift in Sources */,
 				BB9F7C702936422400D3DA74 /* SettingManager.swift in Sources */,
 				BBAAD6B7293127B100D78380 /* LaunchView.swift in Sources */,
 				BB9814A32934F3FC004B7302 /* SettingsViewModel.swift in Sources */,
+				BBF07F0629392402005B1705 /* ReminderCompletionCircleView.swift in Sources */,
 				BBAAD6C42932745700D78380 /* MainScreenViewModel.swift in Sources */,
 				BB9814A12934F3F0004B7302 /* SettingsView.swift in Sources */,
+				BBF07F04293923BA005B1705 /* HapticManager.swift in Sources */,
 				BBAAD6A62931240800D78380 /* PlannerApp.swift in Sources */,
-				BB588DD9293534610092582B /* UserSettingsModel.swift in Sources */,
+				BBF07EFB29391E63005B1705 /* FileManager.swift in Sources */,
+				BB588DD9293534610092582B /* UserSettings.swift in Sources */,
 				BBAAD6BC2931438600D78380 /* CalendarView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

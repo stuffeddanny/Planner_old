@@ -33,25 +33,19 @@ struct CalendarView: View {
                 .gesture(swipeGesture)
                 .frame(maxHeight: vm.weekView ? 50 : .infinity)
             
-            if vm.showNote {
+            if let day = vm.selectedDay, vm.showNote {
                 
                 Divider()
 
-                notePart
+                ReminderList(for: day)
             }
             
             Spacer(minLength: 0)
         }
         .toolbar { getToolBar() }
+        .background(settingManager.settings.backgroundColor)
     }
     
-    @ViewBuilder
-    private var notePart: some View {
-        
-        ForEach(1..<20) { _ in
-            Text("dawdwa")
-        }
-    }
     
     @ToolbarContentBuilder
     private func getToolBar() -> some ToolbarContent {

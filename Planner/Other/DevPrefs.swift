@@ -36,5 +36,4 @@ struct DevPrefs {
     // value ~ 0 -> to swipe user's gesture translation width needs to be > 0
     static let screenWidthFactor: Double = 0.7
     
-    
 }

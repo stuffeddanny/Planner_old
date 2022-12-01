@@ -1,5 +1,5 @@
 //
-//  UserSettingsModel.swift
+//  UserSettings.swift
 //  Planner
 //
 //  Created by Danny on 11/28/22.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct UserSettingsModel: Codable {
+struct UserSettings: Codable {
     var accentColor: Color = .theme.accent
     var selectedDayColor: Color = .theme.accent
     var weekendsColor: Color = .red

@@ -27,22 +27,24 @@ final class CalendarViewModel: ObservableObject {
         firstDayOfUnitOnTheScreenDate.year
     }
         
-    @Published var weekView: Bool = false {
+    @Published var weekView: Bool = true
+    @Published var days: [DayModel]
+    @Published var selectedDay: DayModel? = DayModel(id: .now)  {
         didSet {
-            if weekView {
-                DispatchQueue.main.asyncAfter(deadline: .now() + DevPrefs.weekHighlightingAnimationDuration) { [weak self] in
+            if selectedDay != nil {
+                DispatchQueue.main.asyncAfter(deadline: .now() + DevPrefs.daySelectingAnimationDuration + DevPrefs.weekHighlightingAnimationDuration) { [weak self] in
                     if let self = self {
                         withAnimation(DevPrefs.noteAppearingAnimation) {
                             self.showNote = self.weekView
                         }
                     }
                 }
+            } else {
+                showNote = false
             }
         }
     }
-    @Published var days: [DayModel]
-    @Published var selectedDay: DayModel? = nil
-    @Published var showNote: Bool = false
+    @Published var showNote: Bool = true
     
     init() {
         let date = Date().startOfMonth
@@ -72,21 +74,16 @@ final class CalendarViewModel: ObservableObject {
             }
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + (wasSelected ? DevPrefs.daySelectingAnimationDuration : 0)) { [weak self] in
-            self?.dismissWeekView()
+            withAnimation(DevPrefs.weekHighlightingAnimation) {
+                self?.dismissWeekView()
+            }
         }
 
     }
     
     private func dismissWeekView() {
-        withAnimation(DevPrefs.noteAppearingAnimation) {
-            showNote = false
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now() + DevPrefs.noteAppearingAnimationDuration) {
-            withAnimation(DevPrefs.weekHighlightingAnimation) {
-                self.weekView = false
-                self.firstDayOfUnitOnTheScreenDate = self.firstDayOfUnitOnTheScreenDate.startOfMonth
-            }
-        }
+        weekView = false
+        firstDayOfUnitOnTheScreenDate = firstDayOfUnitOnTheScreenDate.startOfMonth
     }
     
     func isDaySelected(_ day: DayModel) -> Bool {
