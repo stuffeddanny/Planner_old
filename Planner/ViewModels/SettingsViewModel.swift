@@ -47,6 +47,20 @@ final class SettingsViewModel: ObservableObject {
         addSubs()
     }
     
+    private func getAllFieldsFromSettings() {
+        accentColorPicker = manager.settings.accentColor
+        selectedDayColorPicker = manager.settings.selectedDayColor
+        todaysDayColorPicker = manager.settings.todaysDayColor
+        weekendsColorPicker = manager.settings.weekendsColor
+        backgroundColorPicker = manager.settings.backgroundColor
+        
+        isTodayInvertedToggle = manager.settings.isTodayInverted
+        isSelectedDayInvertedToggle = manager.settings.isSelectedDayInverted
+        
+        gapsBetweenDays = manager.settings.gapBetweenDays
+
+    }
+    
     private func addSubs() {
        
         $accentColorPicker
@@ -75,19 +89,25 @@ final class SettingsViewModel: ObservableObject {
         
     }
     
+    func resetToDefault() {
+        manager.settings = UserSettings()
+        getAllFieldsFromSettings()
+        
+    }
+    
     func apply() {
-        var oldSettings = manager.settings
+        var newSettings = UserSettings()
         
-        oldSettings.accentColor = accentColorPicker
-        oldSettings.selectedDayColor = selectedDayColorPicker
-        oldSettings.todaysDayColor = todaysDayColorPicker
-        oldSettings.weekendsColor = weekendsColorPicker
-        oldSettings.backgroundColor = backgroundColorPicker
-        oldSettings.isTodayInverted = isTodayInvertedToggle
-        oldSettings.isSelectedDayInverted = isSelectedDayInvertedToggle
-        oldSettings.gapBetweenDays = gapsBetweenDays
+        newSettings.accentColor = accentColorPicker
+        newSettings.selectedDayColor = selectedDayColorPicker
+        newSettings.todaysDayColor = todaysDayColorPicker
+        newSettings.weekendsColor = weekendsColorPicker
+        newSettings.backgroundColor = backgroundColorPicker
+        newSettings.isTodayInverted = isTodayInvertedToggle
+        newSettings.isSelectedDayInverted = isSelectedDayInvertedToggle
+        newSettings.gapBetweenDays = gapsBetweenDays
         
-        manager.settings = oldSettings
+        manager.settings = newSettings
         
         applyButtonIsDisabled = true
     }

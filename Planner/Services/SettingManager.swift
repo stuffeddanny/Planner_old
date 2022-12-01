@@ -13,7 +13,7 @@ class SettingManager: ObservableObject {
         didSet {
             guard let data = try? JSONEncoder().encode(settings) else { return }
             UserDefaults.standard.set(data, forKey: "userSettings")
-            
+
             UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor(settings.accentColor)]
             UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor(settings.accentColor)]
             UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = UIColor(settings.accentColor)

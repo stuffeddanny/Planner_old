@@ -11,8 +11,9 @@ struct SettingsView: View {
         
     @StateObject private var vm: SettingsViewModel
     
-    @State private var showConfDialog: Bool = false
-    
+    @State private var showApplyConfDialog: Bool = false
+    @State private var showResetConfDialog: Bool = false
+
     init(_ manager: SettingManager) {
         _vm = .init(wrappedValue: SettingsViewModel(manager))
     }
@@ -54,20 +55,35 @@ struct SettingsView: View {
 
             Section {
                 Button("Apply changes") {
-                    showConfDialog = true
+                    showApplyConfDialog = true
                 }
                 .disabled(vm.applyButtonIsDisabled)
             }
+            
+            Section {
+                Button("Reset") {
+                    showResetConfDialog = true
+                }
+            }
         }
-        .confirmationDialog("Are you sure you want to apply changes?", isPresented: $showConfDialog, titleVisibility: .visible, actions: getConfDialog)
+        .confirmationDialog("Are you sure you want to apply changes?", isPresented: $showApplyConfDialog, titleVisibility: .visible, actions: getApplyConfDialog)
+        .confirmationDialog("Warning! All settings will be reset to default values.", isPresented: $showResetConfDialog, titleVisibility: .visible, actions: getResetConfDialog)
         .navigationTitle("Settings")
         .navigationBarTitleDisplayMode(.inline)
     }
     
     @ViewBuilder
-    private func getConfDialog() -> some View {
+    private func getApplyConfDialog() -> some View {
         Button("Apply") {
             vm.apply()
+        }
+        Button("Cancel", role: .cancel) {}
+    }
+    
+    @ViewBuilder
+    private func getResetConfDialog() -> some View {
+        Button("Reset to defaults") {
+            vm.resetToDefault()
         }
         Button("Cancel", role: .cancel) {}
     }

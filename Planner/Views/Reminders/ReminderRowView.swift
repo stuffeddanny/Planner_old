@@ -16,7 +16,7 @@ struct ReminderRowView: View {
     @State var reminder: Reminder
     
     var body: some View {
-        HStack {
+        HStack(spacing: 13) {
             ReminderCompletionCircleView(completed: $reminder.completed, color: settingManager.settings.accentColor)
                 .frame(width: 25, height: 25) // Circle size
                 .onTapGesture {
@@ -25,15 +25,21 @@ struct ReminderRowView: View {
                         HapticManager.instance.impact(style: .light)
                     }
                 }
-                    
-                
+            
+            
+            // Text column
             VStack(alignment: .leading, spacing: 0) {
-                TextField("", text: $reminder.headline)
+                TextField("", text: $reminder.headline, axis: .vertical)
                     .focused($focused)
-                
-                TextField("Note", text: $reminder.note)
+                    .submitLabel(.return)
+                    .onSubmit {
+                        print("Submont")
+                    }
+
+                TextField("Note", text: $reminder.note, axis: .vertical)
                     .font(.subheadline)
                     .foregroundColor(.secondary)
+                    .submitLabel(.return)
 
             }
         }
@@ -51,11 +57,11 @@ struct ReminderRowView_Previews: PreviewProvider {
     @State static private var completed: Bool = false
     
     static var previews: some View {
-        List {
-            ReminderRowView(reminder: Reminder())
-        }
+//        List {
+            ReminderRowView(reminder: Reminder(headline: "Reminder"))
+//        }
         .environmentObject(ReminderListViewModel(for: DayModel(id: .now)))
         .environmentObject(SettingManager())
-        .listStyle(.inset)
+//        .listStyle(.inset)
     }
 }

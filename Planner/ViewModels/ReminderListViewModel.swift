@@ -10,11 +10,7 @@ import Combine
 
 class ReminderListViewModel: ObservableObject {
     
-    @Published var reminders: [Reminder] = [] {
-        didSet {
-            print("Changed")
-        }
-    }
+    @Published var reminders: [Reminder] = []
     
     
     private let dayModel: DayModel
@@ -48,7 +44,6 @@ class ReminderListViewModel: ObservableObject {
     func update(_ reminder: Reminder) {
         if let index = reminders.firstIndex(where: { $0.id == reminder.id }) {
             reminders[index] = reminder
-            print("Reminders updated. New item \(reminders[index])")
         }
      }
 }
