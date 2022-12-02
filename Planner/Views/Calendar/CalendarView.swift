@@ -33,11 +33,12 @@ struct CalendarView: View {
                 .gesture(swipeGesture)
                 .frame(maxHeight: vm.weekView ? 50 : .infinity)
             
-            if let day = vm.selectedDay, vm.showNote {
+            if vm.selectedDay != nil && vm.showNote {
                 
                 Divider()
 
-                ReminderList(for: day)
+                ReminderList()
+                    .environmentObject(vm)
             }
             
             Spacer(minLength: 0)

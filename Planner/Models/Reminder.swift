@@ -13,4 +13,5 @@ struct Reminder: Identifiable, Codable, Equatable {
     var completed: Bool = false
     var headline: String = ""
     var note: String = ""
+    var justCreated = true
 }

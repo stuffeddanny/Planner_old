@@ -10,43 +10,38 @@ import SwiftUI
 struct ReminderList: View {
     
     @EnvironmentObject private var settingManager: SettingManager
-
-    @ObservedObject private var vm: ReminderListViewModel
-            
-    init(for day: DayModel) {
-        _vm = .init(wrappedValue: ReminderListViewModel(for: day))
-    }
+    @EnvironmentObject private var vm: CalendarViewModel
     
     var body: some View {
         NavigationView {
             
             mainContent
-            
                 .toolbar { getToolbar() }
-                .navigationTitle("Reminders")
+                .navigationTitle("Reminders (\(vm.remindersOnTheScreen.count))")
                 .navigationBarTitleDisplayMode(.inline)
                 .background(settingManager.settings.backgroundColor)
 
         }
     }
     
+    
     @ViewBuilder
     private var mainContent: some View {
-        if !vm.reminders.isEmpty {
-            List {
-                ForEach(vm.reminders) { reminder in
-                    ReminderRowView(reminder: reminder)
-                        .environmentObject(vm)
+        if !vm.remindersOnTheScreen.isEmpty {
+                List {
+                    ForEach(vm.remindersOnTheScreen) { reminder in
+                        ReminderRowView(reminder: reminder)
+                    }
+                    .onDelete { indexSet in
+                        vm.delete(in: indexSet)
+                    }
+                    .onMove { indexSet, index in
+                        vm.moveReminder(fromOffsets: indexSet, toOffset: index)
+                    }
+                    .listRowBackground(settingManager.settings.backgroundColor)
                 }
-                .onDelete { indexSet in
-                    vm.delete(in: indexSet)
-                }
-                .onMove { indexSet, index in
-                    vm.moveReminder(fromOffsets: indexSet, toOffset: index)
-                }
-                .listRowBackground(settingManager.settings.backgroundColor)
-            }
-            .listStyle(.plain)
+                .scrollDismissesKeyboard(.interactively)
+                .listStyle(.plain)
         } else {
             Text("You have no reminders.\nTap '+' button to create one ")
                 .lineSpacing(10)
@@ -68,7 +63,7 @@ struct ReminderList: View {
                 Image(systemName: "plus")
             }
 
-            if !vm.reminders.isEmpty {
+            if !vm.remindersOnTheScreen.isEmpty {
                 EditButton()
             }
         }
@@ -84,7 +79,7 @@ struct ReminderList: View {
 
 struct ReminderList_Previews: PreviewProvider {
     static var previews: some View {
-        ReminderList(for: DayModel(id: .now))
+        ReminderList()
             .environmentObject(SettingManager())
     }
 }

@@ -27,11 +27,19 @@ final class CalendarViewModel: ObservableObject {
         firstDayOfUnitOnTheScreenDate.year
     }
         
-    @Published var weekView: Bool = true
+    @Published var weekView: Bool = false
     @Published var days: [DayModel]
-    @Published var selectedDay: DayModel? = DayModel(id: .now)  {
+    @Published var selectedDay: DayModel? = nil {
         didSet {
-            if selectedDay != nil {
+            if let day = selectedDay {
+                Task {
+                    
+                    let reminders = await RemindersFromUserDefaultsManager.instance.getReminders(for: day) ?? []
+                    
+                    await MainActor.run {
+                        remindersOnTheScreen = reminders.filter({ !$0.completed && !$0.headline.isEmpty })
+                    }
+                }
                 DispatchQueue.main.asyncAfter(deadline: .now() + DevPrefs.daySelectingAnimationDuration + DevPrefs.weekHighlightingAnimationDuration) { [weak self] in
                     if let self = self {
                         withAnimation(DevPrefs.noteAppearingAnimation) {
@@ -44,7 +52,52 @@ final class CalendarViewModel: ObservableObject {
             }
         }
     }
-    @Published var showNote: Bool = true
+    @Published var showNote: Bool = false
+    
+    @Published var remindersOnTheScreen: [Reminder] = []
+
+    func delete(_ reminder: Reminder) {
+        withAnimation {
+            remindersOnTheScreen.removeAll(where: { $0.id == reminder.id })
+        }
+    }
+    
+    func delete(in set: IndexSet) {
+        let idsToDelete = set.map { remindersOnTheScreen[$0].id }
+        
+        _ = idsToDelete.compactMap { [weak self] id in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                self?.remindersOnTheScreen.removeAll(where: { $0.id == id })
+            }
+        }
+    }
+    
+    func createNewReminder(after reminder: Reminder? = nil) {
+        let newReminder = Reminder()
+        
+        withAnimation {
+            if let reminder = reminder, let index = remindersOnTheScreen.firstIndex(of: reminder) {
+                remindersOnTheScreen.insert(newReminder, at: index + 1)
+            } else {
+                remindersOnTheScreen.append(newReminder)
+            }
+        }
+    }
+    
+    func moveReminder(fromOffsets: IndexSet, toOffset: Int) {
+        remindersOnTheScreen.move(fromOffsets: fromOffsets, toOffset: toOffset)
+    }
+    
+    func update(_ reminder: Reminder) {
+        if let index = remindersOnTheScreen.firstIndex(where: { $0.id == reminder.id }) {
+            remindersOnTheScreen[index] = reminder
+            if let day = selectedDay {
+                Task {
+                    await RemindersFromUserDefaultsManager.instance.set(remindersOnTheScreen, for: day)
+                }
+            }
+        }
+     }
     
     init() {
         let date = Date().startOfMonth

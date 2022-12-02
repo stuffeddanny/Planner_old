@@ -6,14 +6,20 @@
 //
 
 import SwiftUI
+import Combine
 
 struct ReminderRowView: View {
-    @FocusState private var focused: Bool
-    @EnvironmentObject private var vm: ReminderListViewModel
+    @FocusState private var focused: FocusedField?
+
+    @EnvironmentObject private var vm: CalendarViewModel
     @EnvironmentObject private var settingManager: SettingManager
 
-    
+    enum FocusedField {
+        case headline, note
+    }
+
     @State var reminder: Reminder
+
     
     var body: some View {
         HStack(spacing: 13) {
@@ -29,25 +35,37 @@ struct ReminderRowView: View {
             
             // Text column
             VStack(alignment: .leading, spacing: 0) {
-                TextField("", text: $reminder.headline, axis: .vertical)
-                    .focused($focused)
-                    .submitLabel(.return)
+                TextField("", text: $reminder.headline, axis: .horizontal)
+                    .focused($focused, equals: .headline)
                     .onSubmit {
-                        print("Submont")
+                        if !reminder.headline.isEmpty {
+                            vm.createNewReminder(after: reminder)
+                        }
                     }
 
-                TextField("Note", text: $reminder.note, axis: .vertical)
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-                    .submitLabel(.return)
-
+                if focused != nil || !reminder.note.isEmpty {
+                    TextField("Note", text: $reminder.note, axis: .vertical)
+                        .focused($focused, equals: .note)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .submitLabel(.return)
+                }
+            }
+            .foregroundColor(reminder.completed && focused == nil ? .secondary : .primary)
+        }
+        .onChange(of: focused) { newValue in
+            if newValue == nil && reminder.headline.isEmpty {
+                reminder.headline = "New reminder"
             }
         }
         .onChange(of: reminder) { newValue in
             vm.update(newValue)
         }
-        .onAppear {
-            focused = true
+        .task {
+            if reminder.justCreated {
+                focused = .headline
+                reminder.justCreated = false
+            }
         }
     }
 }
@@ -60,7 +78,7 @@ struct ReminderRowView_Previews: PreviewProvider {
 //        List {
             ReminderRowView(reminder: Reminder(headline: "Reminder"))
 //        }
-        .environmentObject(ReminderListViewModel(for: DayModel(id: .now)))
+        .environmentObject(CalendarViewModel())
         .environmentObject(SettingManager())
 //        .listStyle(.inset)
     }
