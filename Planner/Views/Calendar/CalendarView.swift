@@ -47,7 +47,6 @@ struct CalendarView: View {
         .background(settingManager.settings.backgroundColor)
     }
     
-    
     @ToolbarContentBuilder
     private func getToolBar() -> some ToolbarContent {
         ToolbarItem(placement: .status) {
@@ -125,8 +124,6 @@ struct CalendarView: View {
             }
     }
     
-
-    
     private var weekNames: some View {
         LazyVGrid(columns: .init(repeating: GridItem(alignment: .center), count: 7)) {
             ForEach(Calendar.current.shortWeekdaySymbols, id: \.self) { weekDay in
@@ -136,7 +133,6 @@ struct CalendarView: View {
             }
         }
     }
-
     
     private var topLine: some View {
         HStack {

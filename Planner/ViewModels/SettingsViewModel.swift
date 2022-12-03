@@ -13,9 +13,8 @@ final class SettingsViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     @Published var applyButtonIsDisabled: Bool = true
     
-    let manager: SettingManager
+    private let manager: SettingManager
     
-        
     // Pickers
     @Published var accentColorPicker: Color
     @Published var selectedDayColorPicker: Color
@@ -29,6 +28,9 @@ final class SettingsViewModel: ObservableObject {
     
     // Sliders
     @Published var gapsBetweenDays: Int
+    
+    // Tags
+    @Published var tags: [Tag]
     
     init(_ manager: SettingManager) {
         self.manager = manager
@@ -44,6 +46,8 @@ final class SettingsViewModel: ObservableObject {
         
         gapsBetweenDays = manager.settings.gapBetweenDays
         
+        tags = manager.settings.tags
+        
         addSubs()
     }
     
@@ -58,6 +62,8 @@ final class SettingsViewModel: ObservableObject {
         isSelectedDayInvertedToggle = manager.settings.isSelectedDayInverted
         
         gapsBetweenDays = manager.settings.gapBetweenDays
+        
+        tags = manager.settings.tags
 
     }
     
@@ -87,6 +93,15 @@ final class SettingsViewModel: ObservableObject {
             }
             .store(in: &cancellables)
         
+        $tags
+//            .combineLatest()
+            .sink { tags in
+                self.applyButtonIsDisabled = !(
+                    tags != self.manager.settings.tags
+                )
+            }
+            .store(in: &cancellables)
+        
     }
     
     func resetToDefault() {
@@ -106,6 +121,7 @@ final class SettingsViewModel: ObservableObject {
         newSettings.isTodayInverted = isTodayInvertedToggle
         newSettings.isSelectedDayInverted = isSelectedDayInvertedToggle
         newSettings.gapBetweenDays = gapsBetweenDays
+        newSettings.tags = tags
         
         manager.settings = newSettings
         

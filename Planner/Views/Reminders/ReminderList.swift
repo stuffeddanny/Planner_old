@@ -16,6 +16,20 @@ struct ReminderList: View {
         NavigationView {
             
             mainContent
+                .task {
+                    if let day = vm.selectedDay, !vm.remindersOnTheScreen.compactMap({ $0.tag }).filter({ !settingManager.settings.tags.contains($0) }).isEmpty {
+                        print("TAsk")
+                        vm.remindersOnTheScreen = vm.remindersOnTheScreen.map({ reminder in
+                            if let tag = reminder.tag, !settingManager.settings.tags.contains(tag) {
+                                var newReminder = reminder
+                                newReminder.tag = nil
+                                return newReminder
+                            }
+                            return reminder
+                        })
+                        await RemindersFromUserDefaultsManager.instance.set(vm.remindersOnTheScreen, for: day)
+                    }
+                }
                 .toolbar { getToolbar() }
                 .navigationTitle("Reminders (\(vm.remindersOnTheScreen.count))")
                 .navigationBarTitleDisplayMode(.inline)
@@ -81,5 +95,6 @@ struct ReminderList_Previews: PreviewProvider {
     static var previews: some View {
         ReminderList()
             .environmentObject(SettingManager())
+            .environmentObject(CalendarViewModel())
     }
 }

@@ -6,11 +6,14 @@
 //
 
 import SwiftUI
+import Combine
 
 struct SettingsView: View {
+    
+    @FocusState private var focusedTag: Tag?
         
     @StateObject private var vm: SettingsViewModel
-    
+            
     @State private var showApplyConfDialog: Bool = false
     @State private var showResetConfDialog: Bool = false
 
@@ -31,6 +34,46 @@ struct SettingsView: View {
                 ColorPicker("Selected day highlight color", selection: $vm.selectedDayColorPicker, supportsOpacity: false)
                 ColorPicker("Today highlight color", selection: $vm.todaysDayColorPicker, supportsOpacity: false)
             }
+            
+            Section(header: Text("Tags (\(vm.tags.count))")) {
+                if !vm.tags.isEmpty {
+                    ForEach(vm.tags) { tag in
+                        if let index = vm.tags.firstIndex(of: tag) {
+                            ColorPicker(selection: $vm.tags[index].color) {
+                                TextField("Name", text: $vm.tags[index].text)
+                                    .focused($focusedTag, equals: tag)
+                                    .submitLabel(.done)
+                            }
+                            .onChange(of: focusedTag) { newValue in
+                                if newValue != tag && tag.text.isEmpty {
+                                    vm.tags[index].text = "New tag"
+                                }
+                            }
+                             .swipeActions(allowsFullSwipe: true) {
+                                if vm.tags.count > 1 {
+                                    Button("Delete", role: .destructive) {
+                                        vm.tags.remove(at: index)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                } else {
+                    Text("You have no tags created")
+                        .foregroundColor(.secondary)
+                }
+                
+                Button("Add tag") {
+                    withAnimation {
+                        let newTag = Tag(text: "", color: .accentColor)
+                        vm.tags.append(newTag)
+                        focusedTag = newTag
+                    }
+                }
+                .disabled(vm.tags.count >= DevPrefs.tagsAmountLimit)
+            }
+            
             Section(footer: Text("Color of weekends columns")) {
                 ColorPicker("Weekends color", selection: $vm.weekendsColorPicker, supportsOpacity: true)
             }
@@ -66,12 +109,22 @@ struct SettingsView: View {
                 }
             }
         }
+        .scrollIndicators(.hidden)
+        .scrollDismissesKeyboard(.interactively)
+        .onReceive(vm.$tags.removeDuplicates()) { newValue in
+            let filtered = newValue.filter({ $0.text.count > DevPrefs.tagNameLimit })
+            for tagWithBrokenLimit in filtered {
+                if let index = vm.tags.firstIndex(of: tagWithBrokenLimit) {
+                    vm.tags[index].text = String(tagWithBrokenLimit.text.prefix(DevPrefs.tagNameLimit))
+                }
+            }
+        }
         .confirmationDialog("Are you sure you want to apply changes?", isPresented: $showApplyConfDialog, titleVisibility: .visible, actions: getApplyConfDialog)
         .confirmationDialog("Warning! All settings will be reset to default values.", isPresented: $showResetConfDialog, titleVisibility: .visible, actions: getResetConfDialog)
         .navigationTitle("Settings")
         .navigationBarTitleDisplayMode(.inline)
     }
-    
+            
     @ViewBuilder
     private func getApplyConfDialog() -> some View {
         Button("Apply") {

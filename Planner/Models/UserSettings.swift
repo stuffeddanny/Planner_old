@@ -16,6 +16,10 @@ struct UserSettings: Codable {
     var isTodayInverted: Bool = false
     var isSelectedDayInverted: Bool = false
     var gapBetweenDays: Int = 20
+    var tags: [Tag] = [
+        Tag(text: "Work", color: .blue),
+        Tag(text: "Study", color: .green)
+    ]
 }
 
 

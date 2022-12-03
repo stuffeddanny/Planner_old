@@ -26,6 +26,8 @@
 		BBAAD6C62932752700D78380 /* DayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAAD6C52932752700D78380 /* DayModel.swift */; };
 		BBAAD6CC29327B8600D78380 /* CalendarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAAD6CB29327B8600D78380 /* CalendarViewModel.swift */; };
 		BBAAD6CF29327C0600D78380 /* DevPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAAD6CE29327C0600D78380 /* DevPrefs.swift */; };
+		BBCDE098293BA589008FA36B /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCDE097293BA589008FA36B /* Tag.swift */; };
+		BBCDE09A293BA5A7008FA36B /* TagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCDE099293BA5A7008FA36B /* TagView.swift */; };
 		BBF07EF929391D92005B1705 /* ReminderList.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF07EF829391D92005B1705 /* ReminderList.swift */; };
 		BBF07EFB29391E63005B1705 /* RemindersFromUserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF07EFA29391E63005B1705 /* RemindersFromUserDefaultsManager.swift */; };
 		BBF07F02293922CC005B1705 /* ReminderRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF07F01293922CC005B1705 /* ReminderRowView.swift */; };
@@ -55,6 +57,8 @@
 		BBAAD6C52932752700D78380 /* DayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayModel.swift; sourceTree = "<group>"; };
 		BBAAD6CB29327B8600D78380 /* CalendarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewModel.swift; sourceTree = "<group>"; };
 		BBAAD6CE29327C0600D78380 /* DevPrefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevPrefs.swift; sourceTree = "<group>"; };
+		BBCDE097293BA589008FA36B /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
+		BBCDE099293BA5A7008FA36B /* TagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagView.swift; sourceTree = "<group>"; };
 		BBF07EF829391D92005B1705 /* ReminderList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderList.swift; sourceTree = "<group>"; };
 		BBF07EFA29391E63005B1705 /* RemindersFromUserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindersFromUserDefaultsManager.swift; sourceTree = "<group>"; };
 		BBF07F01293922CC005B1705 /* ReminderRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderRowView.swift; sourceTree = "<group>"; };
@@ -142,6 +146,7 @@
 				BBAAD6C52932752700D78380 /* DayModel.swift */,
 				BB588DD8293534610092582B /* UserSettings.swift */,
 				BBF07F21293937C1005B1705 /* Reminder.swift */,
+				BBCDE097293BA589008FA36B /* Tag.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -180,6 +185,7 @@
 				BBF07EF829391D92005B1705 /* ReminderList.swift */,
 				BBF07F01293922CC005B1705 /* ReminderRowView.swift */,
 				BBF07F0529392402005B1705 /* ReminderCompletionCircleView.swift */,
+				BBCDE099293BA5A7008FA36B /* TagView.swift */,
 			);
 			path = Reminders;
 			sourceTree = "<group>";
@@ -272,11 +278,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BBCDE098293BA589008FA36B /* Tag.swift in Sources */,
 				BB38CF3E293A2FEC00B6A662 /* UIApplication.swift in Sources */,
 				BBAAD6C029316A7B00D78380 /* DayView.swift in Sources */,
 				BBF07F02293922CC005B1705 /* ReminderRowView.swift in Sources */,
 				BBAAD6A82931240800D78380 /* MainScreenView.swift in Sources */,
 				BBF07F22293937C1005B1705 /* Reminder.swift in Sources */,
+				BBCDE09A293BA5A7008FA36B /* TagView.swift in Sources */,
 				BBAAD6CF29327C0600D78380 /* DevPrefs.swift in Sources */,
 				BBAAD6C2293272CD00D78380 /* Color.swift in Sources */,
 				BB588DD729352E6D0092582B /* String.swift in Sources */,

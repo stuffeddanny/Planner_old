@@ -42,7 +42,7 @@ struct ReminderRowView: View {
                             vm.createNewReminder(after: reminder)
                         }
                     }
-
+                
                 if focused != nil || !reminder.note.isEmpty {
                     TextField("Note", text: $reminder.note, axis: .vertical)
                         .focused($focused, equals: .note)
@@ -52,6 +52,17 @@ struct ReminderRowView: View {
                 }
             }
             .foregroundColor(reminder.completed && focused == nil ? .secondary : .primary)
+            
+            if let tag = reminder.tag {
+                Circle()
+                    .frame(width: 10, height: 10)
+                    .foregroundColor(tag.color)
+            }
+        }
+        .toolbar {
+            if focused != nil {
+                getToolbar()
+            }
         }
         .onChange(of: focused) { newValue in
             if newValue == nil && reminder.headline.isEmpty {
@@ -68,6 +79,48 @@ struct ReminderRowView: View {
             }
         }
     }
+    
+    @ToolbarContentBuilder
+    private func getToolbar() -> some ToolbarContent {
+        ToolbarItemGroup(placement: .keyboard) {
+            HStack {
+                
+                Button {
+                    //                    showCalendarSheet = true
+                } label: {
+                    Image(systemName: "calendar")
+                }            .font(.title3)
+                
+                
+                Button {
+                    //                    showClockSheet = true
+                } label: {
+                    Image(systemName: "clock")
+                }            .font(.title3)
+                
+                
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack {
+                        ForEach(settingManager.settings.tags) { tag in
+                            TagView(tag: tag, isSelected: tag == reminder.tag)
+                                .frame(height: 30)
+                                .onTapGesture {
+                                    withAnimation(.easeInOut(duration: 0.2)) {
+                                        if tag == reminder.tag {
+                                            reminder.tag = nil
+                                        } else {
+                                            reminder.tag = tag
+                                        }
+                                    }
+                                }
+                        }
+                    }
+                }
+            }
+            
+            .buttonStyle(.borderless)
+        }
+    }
 }
 
 struct ReminderRowView_Previews: PreviewProvider {
@@ -76,7 +129,8 @@ struct ReminderRowView_Previews: PreviewProvider {
     
     static var previews: some View {
 //        List {
-            ReminderRowView(reminder: Reminder(headline: "Reminder"))
+        ReminderRowView(reminder: Reminder(headline: "Reminderda wda 9wdhawdbad advkawdv advada iwvd", note: "dajdhuiawdawba bd adba d ad a dabvd awda daiwdiduabiudbhawdiawdb ab adahidabdw", tag: Tag(text: "someth", color: .pink)))
+            .previewLayout(.sizeThatFits)
 //        }
         .environmentObject(CalendarViewModel())
         .environmentObject(SettingManager())

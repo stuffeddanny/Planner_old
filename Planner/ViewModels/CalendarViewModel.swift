@@ -9,6 +9,7 @@ import SwiftUI
 import Combine
 
 final class CalendarViewModel: ObservableObject {
+        
     @Published var firstDayOfUnitOnTheScreenDate: Date {
         didSet {
             if weekView {
@@ -56,6 +57,12 @@ final class CalendarViewModel: ObservableObject {
     
     @Published var remindersOnTheScreen: [Reminder] = []
 
+    init() {
+        let date = Date().startOfMonth
+        firstDayOfUnitOnTheScreenDate = date
+        days = date.getDayModelsForMonth()
+    }
+    
     func delete(_ reminder: Reminder) {
         withAnimation {
             remindersOnTheScreen.removeAll(where: { $0.id == reminder.id })
@@ -99,12 +106,6 @@ final class CalendarViewModel: ObservableObject {
         }
      }
     
-    init() {
-        let date = Date().startOfMonth
-        firstDayOfUnitOnTheScreenDate = date
-        days = date.getDayModelsForMonth()
-    }
-    
     func select(_ day: DayModel) {
         withAnimation(DevPrefs.daySelectingAnimation) {
             selectedDay = day
@@ -117,7 +118,6 @@ final class CalendarViewModel: ObservableObject {
             }
         }
     }
-    
     
     func unselect() {
         let wasSelected = selectedDay != nil
