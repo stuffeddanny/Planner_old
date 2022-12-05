@@ -18,7 +18,7 @@ struct ReminderList: View {
             mainContent
                 .task {
                     if let day = vm.selectedDay, !vm.remindersOnTheScreen.compactMap({ $0.tag }).filter({ !settingManager.settings.tags.contains($0) }).isEmpty {
-                        print("TAsk")
+
                         vm.remindersOnTheScreen = vm.remindersOnTheScreen.map({ reminder in
                             if let tag = reminder.tag, !settingManager.settings.tags.contains(tag) {
                                 var newReminder = reminder
@@ -34,7 +34,6 @@ struct ReminderList: View {
                 .navigationTitle("Reminders (\(vm.remindersOnTheScreen.count))")
                 .navigationBarTitleDisplayMode(.inline)
                 .background(settingManager.settings.backgroundColor)
-
         }
     }
     
@@ -42,20 +41,20 @@ struct ReminderList: View {
     @ViewBuilder
     private var mainContent: some View {
         if !vm.remindersOnTheScreen.isEmpty {
-                List {
-                    ForEach(vm.remindersOnTheScreen) { reminder in
-                        ReminderRowView(reminder: reminder)
-                    }
-                    .onDelete { indexSet in
-                        vm.delete(in: indexSet)
-                    }
-                    .onMove { indexSet, index in
-                        vm.moveReminder(fromOffsets: indexSet, toOffset: index)
-                    }
-                    .listRowBackground(settingManager.settings.backgroundColor)
+            List {
+                ForEach(vm.remindersOnTheScreen) { reminder in
+                    ReminderRowView(reminder: reminder)
                 }
-                .scrollDismissesKeyboard(.interactively)
-                .listStyle(.plain)
+                .onDelete { indexSet in
+                    vm.delete(in: indexSet)
+                }
+                .onMove { indexSet, index in
+                    vm.moveReminder(fromOffsets: indexSet, toOffset: index)
+                }
+                .listRowBackground(settingManager.settings.backgroundColor)
+            }
+            .scrollDismissesKeyboard(.interactively)
+            .listStyle(.plain)
         } else {
             Text("You have no reminders.\nTap '+' button to create one ")
                 .lineSpacing(10)

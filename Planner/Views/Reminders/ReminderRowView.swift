@@ -10,16 +10,18 @@ import Combine
 
 struct ReminderRowView: View {
     @FocusState private var focused: FocusedField?
-
+    
     @EnvironmentObject private var vm: CalendarViewModel
     @EnvironmentObject private var settingManager: SettingManager
-
+    
+    @State private var showTags: Bool = false
+    
     enum FocusedField {
         case headline, note
     }
-
+    
     @State var reminder: Reminder
-
+    
     
     var body: some View {
         HStack(spacing: 13) {
@@ -83,41 +85,60 @@ struct ReminderRowView: View {
     @ToolbarContentBuilder
     private func getToolbar() -> some ToolbarContent {
         ToolbarItemGroup(placement: .keyboard) {
-            HStack {
+            HStack(spacing: 0) {
                 
                 Button {
-                    //                    showCalendarSheet = true
+                    showTags.toggle()
                 } label: {
-                    Image(systemName: "calendar")
-                }            .font(.title3)
+                    Image(systemName: "tag")
+                }
                 
+                Image(systemName: "chevron.right")
+                    .rotationEffect(showTags ? Angle(degrees: 180) : Angle())
+                    .foregroundColor(.secondary)
+                    .font(.footnote)
+                    .animation(.linear(duration: 0.1), value: showTags)
+                    .padding(.trailing, 5)
                 
-                Button {
-                    //                    showClockSheet = true
-                } label: {
-                    Image(systemName: "clock")
-                }            .font(.title3)
+
+                Spacer(minLength: 0)
                 
-                
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack {
-                        ForEach(settingManager.settings.tags) { tag in
-                            TagView(tag: tag, isSelected: tag == reminder.tag)
-                                .frame(height: 30)
-                                .onTapGesture {
-                                    withAnimation(.easeInOut(duration: 0.2)) {
-                                        if tag == reminder.tag {
-                                            reminder.tag = nil
-                                        } else {
-                                            reminder.tag = tag
+                if showTags {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack {
+                            ForEach(settingManager.settings.tags) { tag in
+                                TagView(tag: tag, isSelected: tag == reminder.tag)
+                                    .frame(height: 27)
+                                    .onTapGesture {
+                                        withAnimation(.easeInOut(duration: 0.2)) {
+                                            if tag == reminder.tag {
+                                                reminder.tag = nil
+                                            } else {
+                                                reminder.tag = tag
+                                            }
                                         }
                                     }
-                                }
+                            }
                         }
                     }
+                    .scrollDismissesKeyboard(.never)
+                } else {
+                    Button {
+                        //                    showCalendarSheet = true
+                    } label: {
+                        Image(systemName: "calendar")
+                    }           
+                        .padding(.trailing)
+                    
+                    
+                    Button {
+                        //                    showClockSheet = true
+                    } label: {
+                        Image(systemName: "clock")
+                    }
+                    
                 }
             }
-            
             .buttonStyle(.borderless)
         }
     }

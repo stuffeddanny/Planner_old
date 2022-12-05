@@ -39,7 +39,7 @@ struct SettingsView: View {
                 if !vm.tags.isEmpty {
                     ForEach(vm.tags) { tag in
                         if let index = vm.tags.firstIndex(of: tag) {
-                            ColorPicker(selection: $vm.tags[index].color) {
+                            ColorPicker(selection: $vm.tags[index].color, supportsOpacity: false) {
                                 TextField("Name", text: $vm.tags[index].text)
                                     .focused($focusedTag, equals: tag)
                                     .submitLabel(.done)
@@ -109,8 +109,8 @@ struct SettingsView: View {
                 }
             }
         }
-        .scrollIndicators(.hidden)
         .scrollDismissesKeyboard(.interactively)
+        .scrollIndicators(.hidden)
         .onReceive(vm.$tags.removeDuplicates()) { newValue in
             let filtered = newValue.filter({ $0.text.count > DevPrefs.tagNameLimit })
             for tagWithBrokenLimit in filtered {
