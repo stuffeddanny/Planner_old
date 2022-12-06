@@ -55,10 +55,10 @@ struct ReminderRowView: View {
             }
             .foregroundColor(reminder.completed && focused == nil ? .secondary : .primary)
             
-            if let tag = reminder.tag {
+            if let tagId = reminder.tagId {
                 Circle()
                     .frame(width: 10, height: 10)
-                    .foregroundColor(tag.color)
+                    .foregroundColor(settingManager.settings.tags.first(where: { $0.id == tagId })?.color ?? .clear)
             }
         }
         .toolbar {
@@ -107,14 +107,14 @@ struct ReminderRowView: View {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
                             ForEach(settingManager.settings.tags) { tag in
-                                TagView(tag: tag, isSelected: tag == reminder.tag)
+                                TagView(tag: tag, isSelected: tag.id == reminder.tagId)
                                     .frame(height: 27)
                                     .onTapGesture {
                                         withAnimation(.easeInOut(duration: 0.2)) {
-                                            if tag == reminder.tag {
-                                                reminder.tag = nil
+                                            if tag.id == reminder.tagId {
+                                                reminder.tagId = nil
                                             } else {
-                                                reminder.tag = tag
+                                                reminder.tagId = tag.id
                                             }
                                         }
                                     }
@@ -150,7 +150,7 @@ struct ReminderRowView_Previews: PreviewProvider {
     
     static var previews: some View {
 //        List {
-        ReminderRowView(reminder: Reminder(headline: "Reminderda wda 9wdhawdbad advkawdv advada iwvd", note: "dajdhuiawdawba bd adba d ad a dabvd awda daiwdiduabiudbhawdiawdb ab adahidabdw", tag: Tag(text: "someth", color: .pink)))
+        ReminderRowView(reminder: Reminder(headline: "Reminderda wda 9wdhawdbad advkawdv advada iwvd", note: "dajdhuiawdawba bd adba d ad a dabvd awda daiwdiduabiudbhawdiawdb ab adahidabdw", tagId: nil))
             .previewLayout(.sizeThatFits)
 //        }
         .environmentObject(CalendarViewModel())

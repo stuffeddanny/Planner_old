@@ -17,12 +17,12 @@ struct ReminderList: View {
             
             mainContent
                 .task {
-                    if let day = vm.selectedDay, !vm.remindersOnTheScreen.compactMap({ $0.tag }).filter({ !settingManager.settings.tags.contains($0) }).isEmpty {
+                    if let day = vm.selectedDay, !vm.remindersOnTheScreen.compactMap({ $0.tagId }).filter({ !settingManager.settings.tags.map({ $0.id }).contains($0) }).isEmpty {
 
                         vm.remindersOnTheScreen = vm.remindersOnTheScreen.map({ reminder in
-                            if let tag = reminder.tag, !settingManager.settings.tags.contains(tag) {
+                            if let tagId = reminder.tagId, !settingManager.settings.tags.map({ $0.id }).contains(tagId) {
                                 var newReminder = reminder
-                                newReminder.tag = nil
+                                newReminder.tagId = nil
                                 return newReminder
                             }
                             return reminder

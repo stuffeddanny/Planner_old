@@ -36,7 +36,7 @@ final class CalendarViewModel: ObservableObject {
                 Task {
                     
                     let reminders = await RemindersFromUserDefaultsManager.instance.getReminders(for: day) ?? []
-                    
+                                        
                     await MainActor.run {
                         remindersOnTheScreen = reminders.filter({ !$0.completed && !$0.headline.isEmpty })
                     }

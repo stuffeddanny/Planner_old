@@ -61,10 +61,9 @@ struct CalendarView: View {
             ScrollView(showsIndicators: false) {
                 LazyVGrid(columns: .init(repeating: GridItem(alignment: .top), count: 7)) {
                     ForEach(vm.days) { day in
-                        DayView(for: day, isSelected: vm.isDaySelected(day), isToday: vm.isToday(day))
+                        DayView(for: day, isSelected: vm.isDaySelected(day), isToday: vm.isToday(day), with: getTagsColors(for: day))
                             .onTapGesture { onTapFunc(day) }
                             .frame(maxWidth: .infinity)
-                            .frame(height: 40)
                             .frame(height: 40 + CGFloat(settingManager.settings.gapBetweenDays), alignment: .top) // Gaps betweenDays
                             .padding(.top, 5)
                         
@@ -86,6 +85,14 @@ struct CalendarView: View {
             .scrollDisabled(vm.weekView || scrollIsDisabled)
         }
     }
+    
+//    private func getTagsColors(for day: DayModel) -> [Color] {
+//        if let reminders = await RemindersFromUserDefaultsManager.instance.getReminders(for: day) {
+//            let a = Array(Set(reminders.compactMap({ $0.tagId })))
+//            return settingManager.settings.tags.filter({ a.contains($0.id) }).map({ $0.color })
+//        }
+//
+//    }
     
     private func checkForScroll(actualHeight: Double, safeHeight: Double) {
         scrollIsDisabled = actualHeight < safeHeight
