@@ -12,6 +12,9 @@ struct ReminderRowView: View {
     
     @EnvironmentObject private var settingManager: SettingManager
     @EnvironmentObject private var vm: ReminderListViewModel
+    
+    @State private var showCalendarSheet: Bool = false
+    @State private var showClockSheet: Bool = false
 
     @State private var showTags: Bool = false
     
@@ -123,15 +126,15 @@ struct ReminderRowView: View {
                     .scrollDismissesKeyboard(.never)
                 } else {
                     Button {
-                        //                    showCalendarSheet = true
+                        showCalendarSheet = true
                     } label: {
                         Image(systemName: "calendar")
                     }
-                        .padding(.trailing)
+                    .padding(.trailing)
                     
                     
                     Button {
-                        //                    showClockSheet = true
+                        showClockSheet = true
                     } label: {
                         Image(systemName: "clock")
                     }

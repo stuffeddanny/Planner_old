@@ -75,9 +75,18 @@ struct CalendarView: View {
     }
 
     private func getTagsColors(for day: DayModel) -> [Color] {
+        if vm.weekView {
+            return []
+        }
         let reminders = vm.reminders[day.id] ?? []
-        return Array(Set(reminders.compactMap({ $0.tagId }).compactMap({ id in
-            settingManager.settings.tags.first(where: { $0.id == id })?.color })))
+        let ids = reminders.compactMap({ $0.tagId })
+        
+        if !reminders.isEmpty && ids.isEmpty {
+            return [.secondary]
+        }
+        
+        return ids.compactMap({ id in
+            settingManager.settings.tags.first(where: { $0.id == id })?.color }).uniqueElements()
     }
 
     private var DaysGrid: some View {
@@ -88,7 +97,7 @@ struct CalendarView: View {
                         DayView(for: day, isSelected: vm.isDaySelected(day), isToday: vm.isToday(day), with: getTagsColors(for: day))
                             .onTapGesture { onTapFunc(day) }
                             .frame(maxWidth: .infinity)
-                            .frame(height: 40 + CGFloat(settingManager.settings.gapBetweenDays), alignment: .top) // Gaps betweenDays
+                            .frame(height: 45 + CGFloat(settingManager.settings.gapBetweenDays), alignment: .top) // Gaps betweenDays
                             .padding(.top, 5)
                         
                     }

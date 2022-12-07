@@ -30,29 +30,37 @@ struct ReminderList: View {
     @ViewBuilder
     private var Content: some View {
         if !vm.reminders.isEmpty {
-            List {
-                ForEach(vm.reminders) { reminder in
-                    ReminderRowView(reminder: reminder)
-                        .environmentObject(vm)
+                List {
+                    ForEach(vm.reminders) { reminder in
+                        ReminderRowView(reminder: reminder)
+                            .environmentObject(vm)
+                    }
+                    .onDelete { indexSet in
+                        vm.delete(in: indexSet)
+                    }
+                    .onMove { indexSet, index in
+                        vm.moveReminder(fromOffsets: indexSet, toOffset: index)
+                    }
+                    .listRowBackground(settingManager.settings.backgroundColor)
                 }
-                .onDelete { indexSet in
-                    vm.delete(in: indexSet)
-                }
-                .onMove { indexSet, index in
-                    vm.moveReminder(fromOffsets: indexSet, toOffset: index)
-                }
-                .listRowBackground(settingManager.settings.backgroundColor)
-            }
-            .scrollDismissesKeyboard(.interactively)
-            .listStyle(.plain)
+                .scrollDismissesKeyboard(.interactively)
+                .listStyle(.plain)
         } else {
-            Text("You have no reminders.\nTap '+' button to create one ")
-                .lineSpacing(10)
-                .multilineTextAlignment(.center)
-                .font(.title3)
-                .foregroundColor(.secondary)
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-                .padding(.top, 30)
+            ZStack {
+                
+
+                Text("You have no reminders.\nTap here to create one ")
+                    .lineSpacing(10)
+                    .multilineTextAlignment(.center)
+                    .font(.title3)
+                    .foregroundColor(.secondary)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                    .padding(.top, 30)
+            }
+            .background(Color.white.opacity(0.000000001)
+                .onTapGesture {
+                    vm.createNewReminder()
+                })
         }
     }
     
