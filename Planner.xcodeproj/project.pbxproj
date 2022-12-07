@@ -188,7 +188,6 @@
 		BBF07EFE2939229E005B1705 /* Reminders */ = {
 			isa = PBXGroup;
 			children = (
-				BBCDE099293BA5A7008FA36B /* TagView.swift */,
 				BBF07F0529392402005B1705 /* ReminderCompletionCircleView.swift */,
 				BB6B01472941167D0027FF90 /* ReminderList.swift */,
 				BB6B014B294118D70027FF90 /* ReminderRowView.swift */,
@@ -210,6 +209,7 @@
 			children = (
 				BB9814A02934F3F0004B7302 /* SettingsView.swift */,
 				BBAAD6A72931240800D78380 /* MainScreenView.swift */,
+				BBCDE099293BA5A7008FA36B /* TagView.swift */,
 			);
 			path = General;
 			sourceTree = "<group>";

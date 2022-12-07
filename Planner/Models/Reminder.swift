@@ -15,6 +15,7 @@ struct Reminder: Identifiable, Codable, Equatable {
     var note: String = ""
     var justCreated = true
     var tagId: UUID? = nil
+    var date: Date? = nil
 }
 
 struct RemindersDictionary: Codable {

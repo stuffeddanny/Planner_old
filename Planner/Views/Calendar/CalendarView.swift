@@ -40,6 +40,9 @@ struct CalendarView: View {
         }
         .toolbar { getToolBar() }
         .background(settingManager.settings.backgroundColor)
+        .onAppear {
+            UIApplication.shared.applicationIconBadgeNumber = 0
+        }
     }
     
     @ToolbarContentBuilder

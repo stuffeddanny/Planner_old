@@ -43,6 +43,9 @@ struct ReminderList: View {
                     }
                     .listRowBackground(settingManager.settings.backgroundColor)
                 }
+                .onAppear {
+                    NotificationManager.instance.removeDeliveredNotificationsFromNotificationCenter(with: vm.reminders.map({ $0.id }))
+                }
                 .scrollDismissesKeyboard(.interactively)
                 .listStyle(.plain)
         } else {

@@ -12,7 +12,7 @@ struct PlannerApp: App {
     
     @State private var showLaunchView: Bool = true
     @StateObject private var settingManager = SettingManager()
-    
+        
     var body: some Scene {
         WindowGroup {
             ZStack {
