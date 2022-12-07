@@ -2,136 +2,111 @@
 //  CalendarViewModel.swift
 //  Planner
 //
-//  Created by Danny on 11/26/22.
+//  Created by Danny on 12/7/22.
 //
 
 import SwiftUI
 import Combine
 
 final class CalendarViewModel: ObservableObject {
-        
-    @Published var firstDayOfUnitOnTheScreenDate: Date {
-        didSet {
-            if weekView {
-                days = firstDayOfUnitOnTheScreenDate.getDayModelsForWeek()
-            } else {
-                days = firstDayOfUnitOnTheScreenDate.getDayModelsForMonth()
-            }
-        }
-    }
-    @Published var offset = CGSize()
-    @Published var opacity: Double = 1
     var monthName: String {
         firstDayOfUnitOnTheScreenDate.month
     }
     var yearName: String {
         firstDayOfUnitOnTheScreenDate.year
     }
-        
+    
+    @Published var firstDayOfUnitOnTheScreenDate: Date
     @Published var weekView: Bool = false
-    @Published var days: [DayModel]
+    
+    @Published var showReminder: Bool = false
+    
+    var days: [DayModel] {
+        get {
+            if weekView {
+                return firstDayOfUnitOnTheScreenDate.getDayModelsForWeek()
+            } else {
+                return firstDayOfUnitOnTheScreenDate.getDayModelsForMonth()
+            }
+        }
+        
+        set { }
+    }
+    @Published var offset = CGSize()
+    @Published var opacity: Double = 1
+    
+    
     @Published var selectedDay: DayModel? = nil {
         didSet {
-            if let day = selectedDay {
-                Task {
-                    
-                    let reminders = await RemindersFromUserDefaultsManager.instance.getReminders(for: day) ?? []
-                                        
-                    await MainActor.run {
-                        remindersOnTheScreen = reminders.filter({ !$0.completed && !$0.headline.isEmpty })
-                    }
-                }
-                DispatchQueue.main.asyncAfter(deadline: .now() + DevPrefs.daySelectingAnimationDuration + DevPrefs.weekHighlightingAnimationDuration) { [weak self] in
-                    if let self = self {
-                        withAnimation(DevPrefs.noteAppearingAnimation) {
-                            self.showNote = self.weekView
-                        }
-                    }
-                }
+            if let id = selectedDay?.id {
+                remindersOnTheScreen = reminders[id] ?? []
             } else {
-                showNote = false
+                remindersOnTheScreen = []
+            }
+            
+        }
+    }
+    
+    @Published var remindersOnTheScreen: [Reminder] = [] {
+        didSet {
+            if let id = selectedDay?.id {
+                reminders[id] = remindersOnTheScreen
             }
         }
     }
-    @Published var showNote: Bool = false
     
-    @Published var remindersOnTheScreen: [Reminder] = []
-
+    var reminders: [DayModel.ID : [Reminder]] {
+        get {
+            let data = UserDefaults.standard.data(forKey: "reminders") ?? .init()
+            
+            let dict = try? JSONDecoder().decode(RemindersDictionary.self, from: data)
+            
+            return dict?.reminders ?? [:]
+        }
+        set {
+            UserDefaults.standard.set(try? JSONEncoder().encode(RemindersDictionary(reminders: newValue)), forKey: "reminders")
+        }
+    }
+    
+ 
     init() {
+                
         let date = Date().startOfMonth
+        
         firstDayOfUnitOnTheScreenDate = date
-        days = date.getDayModelsForMonth()
     }
     
-    func delete(_ reminder: Reminder) {
-        withAnimation {
-            remindersOnTheScreen.removeAll(where: { $0.id == reminder.id })
+    func isDaySelected(_ day: DayModel) -> Bool {
+        if let selectedDay = selectedDay {
+            return selectedDay.id == day.id
         }
+        return false
     }
-    
-    func delete(in set: IndexSet) {
-        let idsToDelete = set.map { remindersOnTheScreen[$0].id }
         
-        _ = idsToDelete.compactMap { [weak self] id in
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                self?.remindersOnTheScreen.removeAll(where: { $0.id == id })
-            }
-        }
+    func isToday(_ day: DayModel) -> Bool {
+        Calendar.current.isDate(day.id, equalTo: .now, toGranularity: .day)
     }
-    
-    func createNewReminder(after reminder: Reminder? = nil) {
-        let newReminder = Reminder()
-        
-        withAnimation {
-            if let reminder = reminder, let index = remindersOnTheScreen.firstIndex(of: reminder) {
-                remindersOnTheScreen.insert(newReminder, at: index + 1)
-            } else {
-                remindersOnTheScreen.append(newReminder)
-            }
-        }
-    }
-    
-    func moveReminder(fromOffsets: IndexSet, toOffset: Int) {
-        remindersOnTheScreen.move(fromOffsets: fromOffsets, toOffset: toOffset)
-    }
-    
-    func update(_ reminder: Reminder) {
-        if let index = remindersOnTheScreen.firstIndex(where: { $0.id == reminder.id }) {
-            remindersOnTheScreen[index] = reminder
-            if let day = selectedDay {
-                Task {
-                    await RemindersFromUserDefaultsManager.instance.set(remindersOnTheScreen, for: day)
-                }
-            }
-        }
-     }
-    
-    func select(_ day: DayModel) {
-        withAnimation(DevPrefs.daySelectingAnimation) {
-            selectedDay = day
-            DispatchQueue.main.asyncAfter(deadline: .now() + DevPrefs.daySelectingAnimationDuration) {
-                withAnimation(DevPrefs.weekHighlightingAnimation) { [weak self] in
-                    self?.weekView = true
-                    self?.firstDayOfUnitOnTheScreenDate = day.id.startOfDay
-                    
-                }
-            }
-        }
-    }
-    
-    func unselect() {
-        let wasSelected = selectedDay != nil
-        if wasSelected {
-            withAnimation(DevPrefs.daySelectingAnimation) {
-                selectedDay = nil
-            }
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now() + (wasSelected ? DevPrefs.daySelectingAnimationDuration : 0)) { [weak self] in
-            withAnimation(DevPrefs.weekHighlightingAnimation) {
-                self?.dismissWeekView()
-            }
-        }
 
+    func unselect() {
+        Task {
+            let wasSelected = selectedDay != nil
+            if wasSelected {
+                await MainActor.run {
+                    withAnimation(DevPrefs.daySelectingAnimation) {
+                        selectedDay = nil
+                    }
+                    showReminder = false
+                }
+            }
+            
+            try? await Task.sleep(for: .seconds(wasSelected ? DevPrefs.daySelectingAnimationDuration : 0))
+            
+            await MainActor.run {
+                withAnimation(DevPrefs.weekHighlightingAnimation) {
+                    dismissWeekView()
+                }
+            }
+        }
     }
     
     private func dismissWeekView() {
@@ -139,12 +114,33 @@ final class CalendarViewModel: ObservableObject {
         firstDayOfUnitOnTheScreenDate = firstDayOfUnitOnTheScreenDate.startOfMonth
     }
     
-    func isDaySelected(_ day: DayModel) -> Bool {
-        selectedDay == day
-    }
-    
-    func isToday(_ day: DayModel) -> Bool {
-        return Calendar.current.isDate(day.id, equalTo: .now, toGranularity: .day)
+    func select(_ day: DayModel) {
+        Task {
+            await MainActor.run {
+                withAnimation(DevPrefs.daySelectingAnimation) {
+                    selectedDay = day
+                }
+            }
+            
+            try? await Task.sleep(for: .seconds(DevPrefs.daySelectingAnimationDuration))
+              
+            await MainActor.run {
+                withAnimation(DevPrefs.weekHighlightingAnimation) {
+                    firstDayOfUnitOnTheScreenDate = day.id.startOfDay
+                    weekView = true
+                    
+                }
+            }
+            
+            try? await Task.sleep(for: .seconds(DevPrefs.weekHighlightingAnimationDuration))
+              
+            await MainActor.run {
+                withAnimation(DevPrefs.noteAppearingAnimation) {
+                    showReminder = true
+                    
+                }
+            }
+        }
     }
     
     func goTo(_ date: Date) {
@@ -152,12 +148,12 @@ final class CalendarViewModel: ObservableObject {
             withAnimation(DevPrefs.monthSlidingAnimation) {
                 offset = CGSize(width: UIScreen.main.bounds.size.width * (date < firstDayOfUnitOnTheScreenDate ? 1 : -1), height: 0)
             }
-            
+
             DispatchQueue.main.asyncAfter(deadline: .now() + (DevPrefs.monthSlidingAnimationDuration)) {
-                
+
                 self.firstDayOfUnitOnTheScreenDate = self.weekView ? date.startOfDay : date.startOfMonth
                 self.selectedDay = nil
-                
+
                 self.opacity = 0
                 self.offset = CGSize()
                 withAnimation(DevPrefs.monthAppearingAfterSlidingAnimation) {
@@ -166,4 +162,6 @@ final class CalendarViewModel: ObservableObject {
             }
         }
     }
+
+
 }

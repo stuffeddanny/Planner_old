@@ -2,7 +2,7 @@
 //  CalendarView.swift
 //  Planner
 //
-//  Created by Danny on 11/25/22.
+//  Created by Danny on 12/7/22.
 //
 
 import SwiftUI
@@ -14,31 +14,26 @@ struct CalendarView: View {
     @StateObject private var vm = CalendarViewModel()
     
     @State private var scrollIsDisabled: Bool = false
-    
+
     var body: some View {
         VStack(spacing: 0) {
             
-            // Month and year
-            topLine
+            TopLine
             
-            // Weekdays names row
-            weekNames
+            WeekNames
                 .padding(.top)
             
-            Divider()
-            
-            calendarDays
+            DaysGrid
                 .offset(vm.offset)
                 .opacity(vm.opacity)
                 .gesture(swipeGesture)
                 .frame(maxHeight: vm.weekView ? 50 : .infinity)
             
-            if vm.selectedDay != nil && vm.showNote {
+            if vm.selectedDay != nil && vm.showReminder {
                 
                 Divider()
 
-                ReminderList()
-                    .environmentObject(vm)
+                ReminderList(reminders: $vm.remindersOnTheScreen)
             }
             
             Spacer(minLength: 0)
@@ -56,7 +51,36 @@ struct CalendarView: View {
         }
     }
     
-    private var calendarDays: some View {
+    private var swipeGesture: some Gesture {
+        DragGesture(minimumDistance: 10, coordinateSpace: .local)
+            .onChanged { value in
+                withAnimation(DevPrefs.slidingAfterFingerAnimation) {
+                    vm.offset.width = value.translation.width * DevPrefs.slidingAfterFingerFactor
+                }
+            }
+            .onEnded { value in
+                if abs(value.translation.width) > UIScreen.main.bounds.width * DevPrefs.screenWidthFactor ||
+                    abs(value.predictedEndTranslation.width) > UIScreen.main.bounds.width * DevPrefs.screenWidthFactor {
+                    if value.translation.width < 0 {
+                        vm.goTo(vm.weekView ? vm.firstDayOfUnitOnTheScreenDate.weekFurther() : vm.firstDayOfUnitOnTheScreenDate.monthFurther())
+                    } else {
+                        vm.goTo(vm.weekView ? vm.firstDayOfUnitOnTheScreenDate.weekAgo() : vm.firstDayOfUnitOnTheScreenDate.monthAgo())
+                    }
+                } else {
+                    withAnimation(DevPrefs.slidingToStartPositionAnimation) {
+                        vm.offset.width = .zero
+                    }
+                }
+            }
+    }
+
+    private func getTagsColors(for day: DayModel) -> [Color] {
+        let reminders = vm.reminders[day.id] ?? []
+        return Array(Set(reminders.compactMap({ $0.tagId }).compactMap({ id in
+            settingManager.settings.tags.first(where: { $0.id == id })?.color })))
+    }
+
+    private var DaysGrid: some View {
         GeometryReader { safeProxy in
             ScrollView(showsIndicators: false) {
                 LazyVGrid(columns: .init(repeating: GridItem(alignment: .top), count: 7)) {
@@ -86,52 +110,22 @@ struct CalendarView: View {
         }
     }
     
-//    private func getTagsColors(for day: DayModel) -> [Color] {
-//        if let reminders = await RemindersFromUserDefaultsManager.instance.getReminders(for: day) {
-//            let a = Array(Set(reminders.compactMap({ $0.tagId })))
-//            return settingManager.settings.tags.filter({ a.contains($0.id) }).map({ $0.color })
-//        }
-//
-//    }
-    
-    private func checkForScroll(actualHeight: Double, safeHeight: Double) {
-        scrollIsDisabled = actualHeight < safeHeight
-    }
-    
     private func onTapFunc(_ day: DayModel) {
         if day.secondary {
             vm.goTo(day.id)
-        } else if vm.isDaySelected(day) {
+        } else if vm.selectedDay == day {
             vm.unselect()
         } else {
             vm.select(day)
         }
     }
     
-    private var swipeGesture: some Gesture {
-        DragGesture(minimumDistance: 10, coordinateSpace: .local)
-            .onChanged { value in
-                withAnimation(DevPrefs.slidingAfterFingerAnimation) {
-                    vm.offset.width = value.translation.width * DevPrefs.slidingAfterFingerFactor
-                }
-            }
-            .onEnded { value in
-                if abs(value.translation.width) > UIScreen.main.bounds.width * DevPrefs.screenWidthFactor ||
-                    abs(value.predictedEndTranslation.width) > UIScreen.main.bounds.width * DevPrefs.screenWidthFactor {
-                    if value.translation.width < 0 {
-                        vm.goTo(vm.weekView ? vm.firstDayOfUnitOnTheScreenDate.weekFurther() : vm.firstDayOfUnitOnTheScreenDate.monthFurther())
-                    } else {
-                        vm.goTo(vm.weekView ? vm.firstDayOfUnitOnTheScreenDate.weekAgo() : vm.firstDayOfUnitOnTheScreenDate.monthAgo())
-                    }
-                } else {
-                    withAnimation(DevPrefs.slidingToStartPositionAnimation) {
-                        vm.offset.width = .zero
-                    }
-                }
-            }
+    private func checkForScroll(actualHeight: Double, safeHeight: Double) {
+        scrollIsDisabled = actualHeight < safeHeight
     }
+
     
-    private var weekNames: some View {
+    private var WeekNames: some View {
         LazyVGrid(columns: .init(repeating: GridItem(alignment: .center), count: 7)) {
             ForEach(Calendar.current.shortWeekdaySymbols, id: \.self) { weekDay in
                 Text(weekDay)
@@ -141,7 +135,7 @@ struct CalendarView: View {
         }
     }
     
-    private var topLine: some View {
+    private var TopLine: some View {
         HStack {
             Text(vm.monthName)
                 .lineLimit(1)
@@ -157,12 +151,12 @@ struct CalendarView: View {
                         Button(monthName) {
                             let form = DateFormatter()
                             form.dateFormat = "MMMM"
-
+                            
                             vm.goTo(Calendar.current.date(from: DateComponents(
                                 year: Calendar.current.component(.year, from: vm.firstDayOfUnitOnTheScreenDate),
                                 month: Calendar.current.component(.month, from: form.date(from: monthName) ?? .now)
                             ))!)
-
+                            
                         }
                     }
                 }
@@ -178,9 +172,9 @@ struct CalendarView: View {
     }
 }
 
+
 struct CalendarView_Previews: PreviewProvider {
     static var previews: some View {
         CalendarView()
-            .environmentObject(SettingManager())
     }
 }

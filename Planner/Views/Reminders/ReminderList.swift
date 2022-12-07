@@ -2,7 +2,7 @@
 //  ReminderList.swift
 //  Planner
 //
-//  Created by Danny on 12/1/22.
+//  Created by Danny on 12/7/22.
 //
 
 import SwiftUI
@@ -10,40 +10,30 @@ import SwiftUI
 struct ReminderList: View {
     
     @EnvironmentObject private var settingManager: SettingManager
-    @EnvironmentObject private var vm: CalendarViewModel
+
+    @ObservedObject private var vm: ReminderListViewModel
+    
+    init(reminders: Binding<[Reminder]>) {
+        _vm = .init(wrappedValue: ReminderListViewModel(reminders))
+    }
     
     var body: some View {
         NavigationView {
-            
-            mainContent
-                .task {
-                    if let day = vm.selectedDay, !vm.remindersOnTheScreen.compactMap({ $0.tagId }).filter({ !settingManager.settings.tags.map({ $0.id }).contains($0) }).isEmpty {
-
-                        vm.remindersOnTheScreen = vm.remindersOnTheScreen.map({ reminder in
-                            if let tagId = reminder.tagId, !settingManager.settings.tags.map({ $0.id }).contains(tagId) {
-                                var newReminder = reminder
-                                newReminder.tagId = nil
-                                return newReminder
-                            }
-                            return reminder
-                        })
-                        await RemindersFromUserDefaultsManager.instance.set(vm.remindersOnTheScreen, for: day)
-                    }
-                }
+            Content
                 .toolbar { getToolbar() }
-                .navigationTitle("Reminders (\(vm.remindersOnTheScreen.count))")
+                .navigationTitle("Reminders (\(vm.reminders.count))")
                 .navigationBarTitleDisplayMode(.inline)
                 .background(settingManager.settings.backgroundColor)
         }
     }
     
-    
     @ViewBuilder
-    private var mainContent: some View {
-        if !vm.remindersOnTheScreen.isEmpty {
+    private var Content: some View {
+        if !vm.reminders.isEmpty {
             List {
-                ForEach(vm.remindersOnTheScreen) { reminder in
+                ForEach(vm.reminders) { reminder in
                     ReminderRowView(reminder: reminder)
+                        .environmentObject(vm)
                 }
                 .onDelete { indexSet in
                     vm.delete(in: indexSet)
@@ -65,7 +55,6 @@ struct ReminderList: View {
                 .padding(.top, 30)
         }
     }
-
     
     @ToolbarContentBuilder
     private func getToolbar() -> some ToolbarContent {
@@ -76,24 +65,10 @@ struct ReminderList: View {
                 Image(systemName: "plus")
             }
 
-            if !vm.remindersOnTheScreen.isEmpty {
+            if !vm.reminders.isEmpty {
                 EditButton()
             }
         }
     }
 }
 
-
-
-
-
-
-
-
-struct ReminderList_Previews: PreviewProvider {
-    static var previews: some View {
-        ReminderList()
-            .environmentObject(SettingManager())
-            .environmentObject(CalendarViewModel())
-    }
-}

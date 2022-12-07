@@ -8,50 +8,50 @@
 import SwiftUI
 
 struct DayView: View {
-    
+
     @EnvironmentObject private var settingManager: SettingManager
-    
+
     let dayModel: DayModel
     let isSelected: Bool
     let isToday: Bool
     let colors: [Color]
-    
+
     init(for day: DayModel, isSelected: Bool, isToday: Bool, with colors: [Color]) {
         dayModel = day
         self.isSelected = isSelected
         self.isToday = isToday
         self.colors = colors
     }
-    
+
     var body: some View {
         VStack(spacing: 5) {
             ZStack {
-                
+
                 highlight
-                
+
                 Text("\(dayModel.id.day)")
                     .foregroundColor(dayNumberColor())
             }
-            
+
             VStack(spacing: 0) {
                 ForEach(colors, id: \.self) { color in
                     Circle()
                         .frame(width: 10, height: 10)
                         .foregroundColor(color)
                 }
-                .frame(maxHeight: CGFloat((settingManager.settings.gapBetweenDays))/CGFloat(colors.count), alignment: .top)
+                .frame(maxHeight: CGFloat((settingManager.settings.gapBetweenDays))/CGFloat(colors.count) > 0 ? CGFloat((settingManager.settings.gapBetweenDays))/CGFloat(colors.count) : 10, alignment: .top)
             }
-                .frame(maxHeight: 30 * CGFloat(colors.count), alignment: .top)
-            
+            .frame(maxHeight: 30 * CGFloat(colors.count), alignment: .top)
+
         }
     }
-    
+
     private var highlight: some View {
         Circle()
             .frame(width: 40, height: 40)
             .foregroundColor(!dayModel.secondary && (isSelected || isToday) ? highLightColor() : .clear)
     }
-    
+
     private func highLightColor() -> Color {
         if isSelected {
             return settingManager.settings.selectedDayColor
@@ -61,7 +61,7 @@ struct DayView: View {
             return .clear
         }
     }
-    
+
     private func dayNumberColor() -> Color {
         if dayModel.secondary {
             return .secondary

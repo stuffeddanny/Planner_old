@@ -16,3 +16,7 @@ struct Reminder: Identifiable, Codable, Equatable {
     var justCreated = true
     var tagId: UUID? = nil
 }
+
+struct RemindersDictionary: Codable {
+    var reminders: [DayModel.ID : [Reminder]]
+}

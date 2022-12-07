@@ -8,16 +8,16 @@
 import SwiftUI
 
 struct TagView: View {
-    
+
     let tag: Tag
     let isSelected: Bool
-    
+
     var body: some View {
         HStack(spacing: 5) {
             Circle()
                 .foregroundColor(tag.color)
                 .padding(.vertical, 5)
-            
+
             Text(tag.text)
         }
         .padding(.horizontal, 7)
@@ -26,7 +26,7 @@ struct TagView: View {
                 .cornerRadius(15)
                 .foregroundColor(isSelected ? tag.color.opacity(0.6) : .secondary.opacity(0.5))
         )
-        
+
     }
 }
 

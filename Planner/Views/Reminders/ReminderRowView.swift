@@ -2,18 +2,17 @@
 //  ReminderRowView.swift
 //  Planner
 //
-//  Created by Danny on 12/1/22.
+//  Created by Danny on 12/7/22.
 //
 
 import SwiftUI
-import Combine
 
 struct ReminderRowView: View {
     @FocusState private var focused: FocusedField?
     
-    @EnvironmentObject private var vm: CalendarViewModel
     @EnvironmentObject private var settingManager: SettingManager
-    
+    @EnvironmentObject private var vm: ReminderListViewModel
+
     @State private var showTags: Bool = false
     
     enum FocusedField {
@@ -127,7 +126,7 @@ struct ReminderRowView: View {
                         //                    showCalendarSheet = true
                     } label: {
                         Image(systemName: "calendar")
-                    }           
+                    }
                         .padding(.trailing)
                     
                     
@@ -141,20 +140,5 @@ struct ReminderRowView: View {
             }
             .buttonStyle(.borderless)
         }
-    }
-}
-
-struct ReminderRowView_Previews: PreviewProvider {
-    
-    @State static private var completed: Bool = false
-    
-    static var previews: some View {
-//        List {
-        ReminderRowView(reminder: Reminder(headline: "Reminderda wda 9wdhawdbad advkawdv advada iwvd", note: "dajdhuiawdawba bd adba d ad a dabvd awda daiwdiduabiudbhawdiawdb ab adahidabdw", tagId: nil))
-            .previewLayout(.sizeThatFits)
-//        }
-        .environmentObject(CalendarViewModel())
-        .environmentObject(SettingManager())
-//        .listStyle(.inset)
     }
 }
