@@ -98,6 +98,7 @@ struct SettingsView: View {
 
             Section {
                 Button("Apply changes") {
+                    UIApplication.shared.endEditing()
                     showApplyConfDialog = true
                 }
                 .disabled(vm.applyButtonIsDisabled)

@@ -13,8 +13,8 @@ struct ReminderList: View {
 
     @ObservedObject private var vm: ReminderListViewModel
     
-    init(reminders: Binding<[Reminder]>) {
-        _vm = .init(wrappedValue: ReminderListViewModel(reminders))
+    init(reminders: Binding<[Reminder]>, for day: DayModel) {
+        _vm = .init(wrappedValue: ReminderListViewModel(reminders, day))
     }
     
     var body: some View {

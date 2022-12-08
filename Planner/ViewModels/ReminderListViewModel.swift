@@ -10,22 +10,25 @@ import SwiftUI
 final class ReminderListViewModel: ObservableObject {
     
     @Binding var reminders: [Reminder]
+    let dayModel: DayModel
     
-    init(_ reminders: Binding<[Reminder]>) {
+    init(_ reminders: Binding<[Reminder]>, _ day: DayModel) {
         self._reminders = reminders.projectedValue
+        dayModel = day
     }
     
-    func delete(_ reminder: Reminder) {
-        withAnimation {
-            reminders.removeAll(where: { $0.id == reminder.id })
-        }
-    }
+//    func delete(_ reminder: Reminder) {
+//        withAnimation {
+//            reminders.removeAll(where: { $0.id == reminder.id })
+//        }
+//    }
 
     func delete(in set: IndexSet) {
         let idsToDelete = set.map { reminders[$0].id }
 
         _ = idsToDelete.compactMap { [weak self] id in
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                NotificationManager.instance.removePendingNotification(with: idsToDelete)
                 self?.reminders.removeAll(where: { $0.id == id })
             }
         }

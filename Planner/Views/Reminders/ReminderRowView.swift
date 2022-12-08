@@ -58,6 +58,7 @@ struct ReminderRowView: View {
                             vm.createNewReminder(after: reminder)
                         }
                     }
+                    .foregroundColor(reminder.completed && focused == nil ? .secondary : .primary)
                 
                 if focused != nil || !reminder.note.isEmpty {
                     TextField("Note", text: $reminder.note, axis: .vertical)
@@ -70,14 +71,13 @@ struct ReminderRowView: View {
                 if let date = reminder.date {
                     
                     Text(date.formattedToTimeFormat())
-                        .foregroundColor(date.time < Date().time ? .red : .secondary)
+                        .foregroundColor(compareDates(date1: .now, date2: date) && !reminder.completed ? .red : .secondary)
                         .font(.caption)
                     
                 }
                 
             }
-            .foregroundColor(reminder.completed && focused == nil ? .secondary : .primary)
-            
+
             if let tagId = reminder.tagId {
                 Circle()
                     .frame(width: 10, height: 10)
@@ -116,7 +116,19 @@ struct ReminderRowView: View {
                 focused = .headline
                 reminder.justCreated = false
             }
+            
+            if !Calendar.current.isDate(vm.dayModel.id, equalTo: .now, toGranularity: .day) {
+                selectedDate = vm.dayModel.id
+            }
         }
+    }
+    
+    private func compareDates(date1: Date, date2: Date) -> Bool {
+        if Calendar.current.compare(date1, to: date2, toGranularity: .minute).rawValue == 1 {
+            return true
+        }
+        
+        return false
     }
     
     private func setNotification() {
@@ -128,13 +140,13 @@ struct ReminderRowView: View {
             content.sound = .default
             content.badge = 1
             
-            let components = Calendar.current.dateComponents([.hour, .minute], from: selectedDate)
+            let components = Calendar.current.dateComponents([.hour, .minute, .day, .year, .month], from: selectedDate)
             
             notificationManager.scheduleNotification(with: content, identifier: reminder.id, dateComponents: components)
             
             reminder.date = Calendar.current.date(from: components)
         } else {
-            notificationManager.removePendingNotification(with: reminder.id)
+            notificationManager.removePendingNotification(with: [reminder.id])
             
             reminder.date = nil
         }
@@ -250,6 +262,6 @@ struct ReminderRowView_Previews: PreviewProvider {
     static var previews: some View {
         ReminderRowView(reminder: reminder)
             .environmentObject(SettingManager())
-            .environmentObject(ReminderListViewModel(.constant([reminder])))
+            .environmentObject(ReminderListViewModel(.constant([reminder]), DayModel(id: .now)))
     }
 }

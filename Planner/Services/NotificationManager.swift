@@ -34,8 +34,8 @@ class NotificationManager {
         UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: ids.map({ $0.uuidString }))
     }
     
-    func removePendingNotification(with id: UUID) {
-        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [id.uuidString])
+    func removePendingNotification(with ids: [UUID]) {
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ids.map({ $0.uuidString }))
     }
     
     func scheduleNotification(with content: UNMutableNotificationContent, identifier: UUID, dateComponents: DateComponents) {
