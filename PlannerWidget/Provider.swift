@@ -21,7 +21,7 @@ struct Provider: TimelineProvider {
         var result = Reminder.SnapshotReminders()
         
         if let reminders = dict?.reminders[DayModel(id: Date().startOfDay).id], !reminders.isEmpty {
-            result = Array(reminders.prefix(5))
+            result = Array(reminders)
         }
                 
         let entry = SimpleEntry(date: .now, reminders: result)
@@ -36,7 +36,7 @@ struct Provider: TimelineProvider {
         var result: [Reminder] = []
         
         if let reminders = dict?.reminders[DayModel(id: Date().startOfDay).id] {
-            result = Array(reminders.prefix(5))
+            result = Array(reminders)
         }
                 
         let entry = SimpleEntry(date: .now, reminders: result)

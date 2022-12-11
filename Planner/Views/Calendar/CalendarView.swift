@@ -47,13 +47,14 @@ struct CalendarView: View {
             guard
                 url.scheme == "planner",
                 url.host == "reminder",
-//                let id = UUID(uuidString: url.pathComponents[1]),
-                let dayModel = vm.days.first(where: { $0.id == Date().startOfDay })
+                let id = UUID(uuidString: url.pathComponents[1]),
+                let reminder = vm.reminders.filter({ $0.value.contains(where: { $0.id == id }) }).first
                     
             else {
                 return
             }
-            vm.select(dayModel)
+            
+            vm.swipeAndGoTo(reminder)
         }
     }
     

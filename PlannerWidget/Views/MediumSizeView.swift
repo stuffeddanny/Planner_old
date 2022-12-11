@@ -20,7 +20,6 @@ struct MediumSizeView: View {
         } label: {
             days
         }
-        .widgetURL(URL(string: "planner://reminder/\(entry.reminders.first?.id.uuidString ?? "nil")"))
     }
     
     @ViewBuilder
@@ -28,28 +27,31 @@ struct MediumSizeView: View {
         if !entry.reminders.isEmpty {
             VStack(alignment: .leading, spacing: 5) {
 
-                ForEach(entry.reminders.filter({ !$0.completed }).prefix(2)) { reminder in
+                ForEach(entry.reminders.filter({ !$0.completed }).prefix(3)) { reminder in
                     
                     Divider()
-                    HStack {
-                        Circle()
-                            .strokeBorder(reminder.completed ? settingManager.settings.accentColor : Color.secondary, lineWidth: 1.5)
-                            .background(
-                                Circle().foregroundColor(reminder.completed ? settingManager.settings.accentColor : Color.clear)
-                                    .padding(4)
-                            )
-                            .frame(width: 17, height: 17)
-                        
-                        VStack(alignment: .leading, spacing: 0) {
-                            Text(reminder.headline)
-                                .font(.footnote)
+                    
+                    Link(destination: URL(string: "planner://reminder/\(reminder.id.uuidString)")!) {
+                        HStack {
+                            Circle()
+                                .strokeBorder(reminder.completed ? settingManager.settings.accentColor : Color.secondary, lineWidth: 1.5)
+                                .background(
+                                    Circle().foregroundColor(reminder.completed ? settingManager.settings.accentColor : Color.clear)
+                                        .padding(4)
+                                )
+                                .frame(width: 17, height: 17)
                             
-                            if !reminder.note.isEmpty {
-                                Text(reminder.note)
-                                    .font(.caption2)
-                                    .foregroundColor(.secondary)
-                            }
+                                Text(reminder.headline)
+                                
+                                Spacer(minLength: 0)
+                                
+                                if let date = reminder.date {
+                                    Text(date.formattedToTimeFormat())
+                                        .foregroundColor(Date.compareDates(date1: .now, date2: date) && !reminder.completed ? .red : .secondary)
+                                }
+                                
                         }
+                        .font(.footnote)
                         .lineLimit(1)
                         
                     }
@@ -89,21 +91,5 @@ struct MediumSizeView: View {
                 
             }
         }
-    }
-}
-
-
-struct WidgetView_Previews: PreviewProvider {
-    @StateObject static private var manager = SettingManager()
-    
-    static var previews: some View {
-        MediumSizeView(entry: SimpleEntry(date: .now, reminders:
-                                            [
-                                                Reminder(completed: false, headline: "Buy chicken", note: "Lidl"),
-                                                Reminder(completed: false, headline: "Buy cola", note: "Lidl"),
-                                                Reminder(completed: false, headline: "RentRoom", note: "dawdaw")
-                                            ]))
-            .previewContext(WidgetPreviewContext(family: .systemMedium))
-            .environmentObject(manager)
     }
 }

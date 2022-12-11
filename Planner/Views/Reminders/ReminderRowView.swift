@@ -71,7 +71,7 @@ struct ReminderRowView: View {
                 if let date = reminder.date {
                     
                     Text(date.formattedToTimeFormat())
-                        .foregroundColor(compareDates(date1: .now, date2: date) && !reminder.completed ? .red : .secondary)
+                        .foregroundColor(Date.compareDates(date1: .now, date2: date) && !reminder.completed ? .red : .secondary)
                         .font(.caption)
                     
                 }
@@ -121,14 +121,6 @@ struct ReminderRowView: View {
                 selectedDate = vm.dayModel.id
             }
         }
-    }
-    
-    private func compareDates(date1: Date, date2: Date) -> Bool {
-        if Calendar.current.compare(date1, to: date2, toGranularity: .minute).rawValue == 1 {
-            return true
-        }
-        
-        return false
     }
     
     private func setNotification() {

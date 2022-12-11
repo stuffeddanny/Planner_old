@@ -78,6 +78,24 @@ final class CalendarViewModel: ObservableObject {
         firstDayOfUnitOnTheScreenDate = date
     }
     
+    func swipeAndGoTo(_ reminderDict: Dictionary<DayModel.ID, [Reminder]>.Element) {
+        Task {
+            if !Calendar.current.isDate(firstDayOfUnitOnTheScreenDate, equalTo: reminderDict.key, toGranularity: .month) {
+                await MainActor.run {
+                    goTo(reminderDict.key)
+                }
+                
+                try await Task.sleep(for: .seconds(DevPrefs.monthSlidingAnimationDuration + DevPrefs.monthAppearingAfterSlidingAnimationDuration))
+            }
+            
+            guard let dayModel = days.first(where: { $0.id == reminderDict.key }) else { return }
+
+            await MainActor.run {
+                select(dayModel)
+            }
+        }
+    }
+    
     func isDaySelected(_ day: DayModel) -> Bool {
         if let selectedDay = selectedDay {
             return selectedDay.id == day.id

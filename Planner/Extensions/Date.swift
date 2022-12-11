@@ -9,6 +9,14 @@ import Foundation
 
 extension Date {
     
+    static func compareDates(date1: Date, date2: Date) -> Bool {
+        if Calendar.current.compare(date1, to: date2, toGranularity: .minute).rawValue == 1 {
+            return true
+        }
+        
+        return false
+    }
+    
     func isToday() -> Bool {
         Calendar.current.isDate(self, inSameDayAs: .now)
     }
