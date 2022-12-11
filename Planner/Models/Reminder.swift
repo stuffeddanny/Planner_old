@@ -21,3 +21,15 @@ struct Reminder: Identifiable, Codable, Equatable {
 struct RemindersDictionary: Codable {
     var reminders: [DayModel.ID : [Reminder]]
 }
+
+extension Reminder {
+    static func SnapshotReminders() -> [Reminder] {
+        [
+            Reminder(completed: .random(), headline: "Buy chicken"),
+            Reminder(completed: .random(), headline: "Do sports"),
+            Reminder(completed: .random(), headline: "Cook dinner"),
+            Reminder(completed: .random(), headline: "Watch movie"),
+            Reminder(completed: .random(), headline: "House cleaning")
+        ]
+    }
+}

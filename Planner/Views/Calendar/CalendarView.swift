@@ -43,6 +43,18 @@ struct CalendarView: View {
         .onAppear {
             UIApplication.shared.applicationIconBadgeNumber = 0
         }
+        .onOpenURL { url in
+            guard
+                url.scheme == "planner",
+                url.host == "reminder",
+//                let id = UUID(uuidString: url.pathComponents[1]),
+                let dayModel = vm.days.first(where: { $0.id == Date().startOfDay })
+                    
+            else {
+                return
+            }
+            vm.select(dayModel)
+        }
     }
     
     @ToolbarContentBuilder
@@ -188,5 +200,6 @@ struct CalendarView: View {
 struct CalendarView_Previews: PreviewProvider {
     static var previews: some View {
         CalendarView()
+            .environmentObject(SettingManager())
     }
 }

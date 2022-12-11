@@ -8,6 +8,15 @@
 import Foundation
 
 extension Date {
+    
+    func isToday() -> Bool {
+        Calendar.current.isDate(self, inSameDayAs: .now)
+    }
+    
+    func weekdaySymbol() -> String {
+        let weekday = Calendar.current.component(.weekday, from: self)
+        return Calendar.current.shortWeekdaySymbols[weekday-1]
+    }
 
     func formattedToTimeFormat() -> String {
         let formatter = DateFormatter()
@@ -16,7 +25,6 @@ extension Date {
         return formatter.string(from: self)
     }
 
-    
     func getDayModelsForMonth() -> [DayModel] {
         let calendar = Calendar.current
 

@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct UserSettings: Codable {
-    var accentColor: Color = .theme.accent
-    var selectedDayColor: Color = .theme.accent
+    var accentColor: Color = Color(.sRGB, red: 1, green: 0.396, blue: 0.392, opacity: 1)
+    var selectedDayColor: Color = Color(.sRGB, red: 1, green: 0.396, blue: 0.392, opacity: 1)
     var weekendsColor: Color = .red
     var backgroundColor: Color = .clear
     var todaysDayColor: Color = .red

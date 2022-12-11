@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Combine
+import WidgetKit
 
 final class CalendarViewModel: ObservableObject {
     var monthName: String {
@@ -57,14 +58,15 @@ final class CalendarViewModel: ObservableObject {
     
     var reminders: [DayModel.ID : [Reminder]] {
         get {
-            let data = UserDefaults.standard.data(forKey: "reminders") ?? .init()
+            let data = UserDefaults(suiteName: "group.plannerapp")?.data(forKey: "reminders") ?? .init()
             
             let dict = try? JSONDecoder().decode(RemindersDictionary.self, from: data)
             
             return dict?.reminders ?? [:]
         }
         set {
-            UserDefaults.standard.set(try? JSONEncoder().encode(RemindersDictionary(reminders: newValue)), forKey: "reminders")
+            UserDefaults(suiteName: "group.plannerapp")?.set(try? JSONEncoder().encode(RemindersDictionary(reminders: newValue)), forKey: "reminders")
+            WidgetCenter.shared.reloadAllTimelines()
         }
     }
     

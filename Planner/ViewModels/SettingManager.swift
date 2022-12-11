@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Combine
+import WidgetKit
 
 class SettingManager: ObservableObject {
     
@@ -16,7 +17,9 @@ class SettingManager: ObservableObject {
     
     private func saveSettings(_ settings: UserSettings) {
         guard let data = try? JSONEncoder().encode(settings) else { return }
-        UserDefaults.standard.set(data, forKey: "userSettings")
+        UserDefaults(suiteName: "group.plannerapp")?.set(data, forKey: "userSettings")
+        
+        WidgetCenter.shared.reloadAllTimelines()
 
         UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor(settings.accentColor)]
         UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor(settings.accentColor)]
@@ -26,19 +29,21 @@ class SettingManager: ObservableObject {
     
     init() {
                 
-        let data = UserDefaults.standard.data(forKey: "userSettings") ?? .init()
+//        let data = UserDefaults(suiteName: "group.plannerapp")?.data(forKey: "userSettings") ?? .init()
         
-        let decoded = try? JSONDecoder().decode(UserSettings.self, from: data)
+//        let decoded = try? JSONDecoder().decode(UserSettings.self, from: data)
         
-        settings = decoded ?? UserSettings()
+//        settings = decoded ?? UserSettings()
         
-        saveSettings(settings)
+        settings = UserSettings()
         
-        $settings
-            .sink { newValue in
-                self.saveSettings(newValue)
-            }
-            .store(in: &cancellables)
+//        saveSettings(settings)
+        
+//        $settings
+//            .sink { newValue in
+//                self.saveSettings(newValue)
+//            }
+//            .store(in: &cancellables)
 
     }
 }
