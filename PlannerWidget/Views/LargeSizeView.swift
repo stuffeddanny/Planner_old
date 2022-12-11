@@ -22,11 +22,16 @@ struct LargeSizeView: View {
         }
     }
     
+    private func getTagColor(for id: UUID) -> Color {
+        settingManager.settings.tags.first(where: { $0.id == id })?.color ?? .clear
+    }
+    
+    
     @ViewBuilder
     private var Content: some View {
         if !entry.reminders.isEmpty {
             VStack(alignment: .leading, spacing: 5) {
-
+                
                 ForEach(entry.reminders.filter({ !$0.completed }).prefix(6)) { reminder in
                     
                     Divider()
@@ -41,33 +46,39 @@ struct LargeSizeView: View {
                                 )
                                 .frame(width: 17, height: 17)
                             
-                                VStack(alignment: .leading) {
-                                    Text(reminder.headline)
-                                        .font(.callout)
-                                    
-                                    if !reminder.note.isEmpty {
-                                        Text(reminder.note)
-                                            .foregroundColor(.secondary)
-                                            .font(.footnote)
-                                    }
+                            VStack(alignment: .leading) {
+                                Text(reminder.headline)
+                                    .font(.callout)
+                                
+                                if !reminder.note.isEmpty {
+                                    Text(reminder.note)
+                                        .foregroundColor(.secondary)
+                                        .font(.footnote)
                                 }
-                                .frame(minHeight: 35)
-                                
-                                Spacer(minLength: 0)
-                                
-                                if let date = reminder.date {
-                                    Text(date.formattedToTimeFormat())
-                                        .font(.callout)
-                                        .foregroundColor(Date.compareDates(date1: .now, date2: date) && !reminder.completed ? .red : .secondary)
-                                }
-                                
+                            }
+                            .frame(minHeight: 35)
+                            
+                            Spacer(minLength: 0)
+                            
+                            if let tagId = reminder.tagId {
+                                Circle()
+                                    .frame(width: 7, height: 7)
+                                    .foregroundColor(getTagColor(for: tagId))
+                            }
+                            
+                            if let date = reminder.date {
+                                Text(date.formattedToTimeFormat())
+                                    .font(.callout)
+                                    .foregroundColor(Date.compareDates(date1: .now, date2: date) && !reminder.completed ? .red : .secondary)
+                            }
+                            
                             
                         }
                         .lineLimit(1)
                     }
                     
                 }
-
+                
             }
             .frame(maxHeight: .infinity, alignment: .top)
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -102,5 +113,5 @@ struct LargeSizeView: View {
             }
         }
     }
-
+    
 }

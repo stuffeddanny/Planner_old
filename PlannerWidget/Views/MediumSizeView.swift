@@ -26,7 +26,7 @@ struct MediumSizeView: View {
     private var Content: some View {
         if !entry.reminders.isEmpty {
             VStack(alignment: .leading, spacing: 5) {
-
+                
                 ForEach(entry.reminders.filter({ !$0.completed }).prefix(3)) { reminder in
                     
                     Divider()
@@ -41,15 +41,21 @@ struct MediumSizeView: View {
                                 )
                                 .frame(width: 17, height: 17)
                             
-                                Text(reminder.headline)
-                                
-                                Spacer(minLength: 0)
-                                
-                                if let date = reminder.date {
-                                    Text(date.formattedToTimeFormat())
-                                        .foregroundColor(Date.compareDates(date1: .now, date2: date) && !reminder.completed ? .red : .secondary)
-                                }
-                                
+                            Text(reminder.headline)
+                            
+                            Spacer(minLength: 0)
+                            
+                            if let tagId = reminder.tagId {
+                                Circle()
+                                    .frame(width: 7, height: 7)
+                                    .foregroundColor(getTagColor(for: tagId))
+                            }
+                            
+                            if let date = reminder.date {
+                                Text(date.formattedToTimeFormat())
+                                    .foregroundColor(Date.compareDates(date1: .now, date2: date) && !reminder.completed ? .red : .secondary)
+                            }
+                            
                         }
                         .font(.footnote)
                         .lineLimit(1)
@@ -57,7 +63,7 @@ struct MediumSizeView: View {
                     }
                     
                 }
-
+                
             }
             .frame(maxHeight: .infinity, alignment: .top)
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -65,6 +71,10 @@ struct MediumSizeView: View {
             Text("No reminders for today")
                 .foregroundColor(.secondary)
         }
+    }
+    
+    private func getTagColor(for id: UUID) -> Color {
+        settingManager.settings.tags.first(where: { $0.id == id })?.color ?? .clear
     }
     
     @ViewBuilder

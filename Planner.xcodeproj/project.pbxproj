@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		BB1921CE29412D9D00E35441 /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1921CD29412D9D00E35441 /* Array.swift */; };
 		BB1921D0294137FC00E35441 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1921CF294137FC00E35441 /* NotificationManager.swift */; };
-		BB19EA3C2946196A00D98B86 /* SettingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB9F7C6F2936422400D3DA74 /* SettingManager.swift */; };
 		BB19EA3D2946197A00D98B86 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB588DD8293534610092582B /* UserSettings.swift */; };
 		BB19EA3E294619A000D98B86 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCDE097293BA589008FA36B /* Tag.swift */; };
 		BB19EA402946230E00D98B86 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BBAAD6A92931240900D78380 /* Assets.xcassets */; };
@@ -25,6 +24,7 @@
 		BB6B01482941167D0027FF90 /* ReminderList.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6B01472941167D0027FF90 /* ReminderList.swift */; };
 		BB6B014C294118D70027FF90 /* ReminderRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6B014B294118D70027FF90 /* ReminderRowView.swift */; };
 		BB6B014E29411F920027FF90 /* ReminderListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6B014D29411F920027FF90 /* ReminderListViewModel.swift */; };
+		BB7C453929469DBE0054B4B5 /* SettingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB9F7C6F2936422400D3DA74 /* SettingManager.swift */; };
 		BB9557362942301C00918D6C /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB955718294227D300918D6C /* WidgetKit.framework */; };
 		BB9557372942301C00918D6C /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB95571A294227D300918D6C /* SwiftUI.framework */; };
 		BB95573C2942301C00918D6C /* PlannerWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB95573B2942301C00918D6C /* PlannerWidget.swift */; };
@@ -173,6 +173,7 @@
 			children = (
 				BBF07F03293923BA005B1705 /* HapticManager.swift */,
 				BB1921CF294137FC00E35441 /* NotificationManager.swift */,
+				BB9F7C6F2936422400D3DA74 /* SettingManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -262,7 +263,6 @@
 				BBAAD6C32932745700D78380 /* MainScreenViewModel.swift */,
 				BB9814A22934F3FC004B7302 /* SettingsViewModel.swift */,
 				BB6B01452940F9340027FF90 /* CalendarViewModel.swift */,
-				BB9F7C6F2936422400D3DA74 /* SettingManager.swift */,
 				BB6B014D29411F920027FF90 /* ReminderListViewModel.swift */,
 			);
 			path = ViewModels;
@@ -418,9 +418,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				BB19EA3E294619A000D98B86 /* Tag.swift in Sources */,
-				BB19EA3C2946196A00D98B86 /* SettingManager.swift in Sources */,
 				BBEAC2372944DC7B005F1BB8 /* SimpleEntry.swift in Sources */,
 				BBEAC23F2944E34B005F1BB8 /* Reminder.swift in Sources */,
+				BB7C453929469DBE0054B4B5 /* SettingManager.swift in Sources */,
 				BB95573C2942301C00918D6C /* PlannerWidget.swift in Sources */,
 				BB19EA452946309B00D98B86 /* Color.swift in Sources */,
 				BBEAC23B2944DDE0005F1BB8 /* MediumSizeView.swift in Sources */,

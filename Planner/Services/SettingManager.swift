@@ -29,21 +29,21 @@ class SettingManager: ObservableObject {
     
     init() {
                 
-//        let data = UserDefaults(suiteName: "group.plannerapp")?.data(forKey: "userSettings") ?? .init()
+        let data = UserDefaults(suiteName: "group.plannerapp")?.data(forKey: "userSettings") ?? .init()
         
-//        let decoded = try? JSONDecoder().decode(UserSettings.self, from: data)
+        let decoded = try? JSONDecoder().decode(UserSettings.self, from: data)
         
-//        settings = decoded ?? UserSettings()
+        settings = decoded ?? UserSettings()
         
         settings = UserSettings()
         
-//        saveSettings(settings)
+        saveSettings(settings)
         
-//        $settings
-//            .sink { newValue in
-//                self.saveSettings(newValue)
-//            }
-//            .store(in: &cancellables)
+        $settings
+            .sink { newValue in
+                self.saveSettings(newValue)
+            }
+            .store(in: &cancellables)
 
     }
 }
