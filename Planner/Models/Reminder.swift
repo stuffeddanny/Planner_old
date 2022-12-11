@@ -25,11 +25,12 @@ struct RemindersDictionary: Codable {
 extension Reminder {
     static func SnapshotReminders() -> [Reminder] {
         [
-            Reminder(headline: "Buy chicken"),
-            Reminder(headline: "Do sports"),
-            Reminder(headline: "Cook dinner"),
-            Reminder(headline: "Watch movie"),
-            Reminder(headline: "House cleaning")
+            Reminder(headline: "Buy chicken", note: "120g chicken breast", date: .now.advanced(by: 60 * 60 * 30)),
+            Reminder(headline: "Do sports", note: "Running + yoga", date: .now.advanced(by: 60 * 60 * 100)),
+            Reminder(headline: "Cook dinner", note: "Chicken with mushrooms", date: .now.advanced(by: 60 * 60 * 150)),
+            Reminder(headline: "Watch movie", note: "Home alone 2", date: .now.advanced(by: 60 * 60 * 200)),
+            Reminder(headline: "Prepare for test", note: "Math + Java", date: .now.advanced(by: 60 * 60 * 250)),
+            Reminder(headline: "House cleaning", note: "Bedroom + bathroom", date: .now.advanced(by: 60 * 60 * 300))
         ]
     }
 }
