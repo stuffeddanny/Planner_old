@@ -8,7 +8,7 @@
 import Foundation
 
 
-struct Reminder: Identifiable, Codable, Equatable {
+struct Reminder: Identifiable, Codable, Equatable, Hashable {
     var id = UUID()
     var completed: Bool = false
     var headline: String = ""
@@ -25,11 +25,11 @@ struct RemindersDictionary: Codable {
 extension Reminder {
     static func SnapshotReminders() -> [Reminder] {
         [
-            Reminder(completed: .random(), headline: "Buy chicken"),
-            Reminder(completed: .random(), headline: "Do sports"),
-            Reminder(completed: .random(), headline: "Cook dinner"),
-            Reminder(completed: .random(), headline: "Watch movie"),
-            Reminder(completed: .random(), headline: "House cleaning")
+            Reminder(headline: "Buy chicken"),
+            Reminder(headline: "Do sports"),
+            Reminder(headline: "Cook dinner"),
+            Reminder(headline: "Watch movie"),
+            Reminder(headline: "House cleaning")
         ]
     }
 }
