@@ -12,7 +12,7 @@ struct MainScreenView: View {
     @EnvironmentObject private var settingManager: SettingManager
     
     @StateObject private var vm = MainScreenViewModel()
-    
+        
     var body: some View {
         NavigationStack {
             CalendarView()

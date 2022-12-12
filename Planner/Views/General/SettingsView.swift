@@ -16,6 +16,8 @@ struct SettingsView: View {
             
     @State private var showApplyConfDialog: Bool = false
     @State private var showResetConfDialog: Bool = false
+    
+    @Environment(\.presentationMode) private var presentationMode
 
     init(_ manager: SettingManager) {
         _vm = .init(wrappedValue: SettingsViewModel(manager))
@@ -124,6 +126,18 @@ struct SettingsView: View {
         .confirmationDialog("Warning! All settings will be reset to default values.", isPresented: $showResetConfDialog, titleVisibility: .visible, actions: getResetConfDialog)
         .navigationTitle("Settings")
         .navigationBarTitleDisplayMode(.inline)
+        .onOpenURL { url in
+            guard
+                url.scheme == "planner",
+                url.host == "reminder"
+            else {
+                return
+            }
+            
+            presentationMode.wrappedValue.dismiss()
+
+        }
+
     }
             
     @ViewBuilder

@@ -11,12 +11,10 @@ import SwiftUI
 @main
 struct PlannerWidget: Widget {
     let kind: String = "PlannerWidget"
-    @StateObject private var settingManager = SettingManager()
 
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in
             WidgetView(entry: entry)
-                .environmentObject(settingManager)
         }
         .supportedFamilies([.systemMedium, .systemLarge])
         .configurationDisplayName("Planner Widget")

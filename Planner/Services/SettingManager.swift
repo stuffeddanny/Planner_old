@@ -18,7 +18,7 @@ class SettingManager: ObservableObject {
     private func saveSettings(_ settings: UserSettings) {
         guard let data = try? JSONEncoder().encode(settings) else { return }
         UserDefaults(suiteName: "group.plannerapp")?.set(data, forKey: "userSettings")
-        
+                
         WidgetCenter.shared.reloadAllTimelines()
 
         UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor(settings.accentColor)]
@@ -34,9 +34,7 @@ class SettingManager: ObservableObject {
         let decoded = try? JSONDecoder().decode(UserSettings.self, from: data)
         
         settings = decoded ?? UserSettings()
-        
-        settings = UserSettings()
-        
+                
         saveSettings(settings)
         
         $settings
