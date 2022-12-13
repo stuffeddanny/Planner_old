@@ -10,7 +10,7 @@ import Foundation
 extension Date {
     
     static func compareDates(date1: Date, date2: Date) -> Bool {
-        if Calendar.current.compare(date1, to: date2, toGranularity: .minute).rawValue == 1 {
+        if Calendar.gregorianWithSunAsFirstWeekday.compare(date1, to: date2, toGranularity: .minute).rawValue == 1 {
             return true
         }
         
@@ -18,12 +18,12 @@ extension Date {
     }
     
     func isToday() -> Bool {
-        Calendar.current.isDate(self, inSameDayAs: .now)
+        Calendar.gregorianWithSunAsFirstWeekday.isDate(self, inSameDayAs: .now)
     }
     
     func weekdaySymbol() -> String {
-        let weekday = Calendar.current.component(.weekday, from: self)
-        return Calendar.current.shortWeekdaySymbols[weekday-1]
+        let weekday = Calendar.gregorianWithSunAsFirstWeekday.component(.weekday, from: self)
+        return Calendar.gregorianWithSunAsFirstWeekday.shortWeekdaySymbols[weekday-1]
     }
 
     func formattedToTimeFormat() -> String {
@@ -34,7 +34,7 @@ extension Date {
     }
 
     func getDayModelsForMonth() -> [DayModel] {
-        let calendar = Calendar.current
+        let calendar = Calendar.gregorianWithSunAsFirstWeekday
 
         var result: [DayModel] = []
 
@@ -72,7 +72,7 @@ extension Date {
     }
     
     func getDayModelsForWeek() -> [DayModel] {
-        let calendar = Calendar.current
+        let calendar = Calendar.gregorianWithSunAsFirstWeekday
 
         var result: [DayModel] = []
         
@@ -122,40 +122,40 @@ extension Date {
     }
     
     var startOfDay: Date {
-        return Calendar.current.startOfDay(for: self)
+        return Calendar.gregorianWithSunAsFirstWeekday.startOfDay(for: self)
     }
     
     var startOfMonth: Date {
-        let components = Calendar.current.dateComponents([.year, .month], from: self)
+        let components = Calendar.gregorianWithSunAsFirstWeekday.dateComponents([.year, .month], from: self)
         
-        return Calendar.current.date(from: components)!
+        return Calendar.gregorianWithSunAsFirstWeekday.date(from: components)!
     }
     
     var startOfWeekInYear: Date {
-        let components = Calendar.current.dateComponents([.year, .yearForWeekOfYear, .weekOfYear], from: self)
+        let components = Calendar.gregorianWithSunAsFirstWeekday.dateComponents([.year, .yearForWeekOfYear, .weekOfYear], from: self)
         
-        return Calendar.current.date(from: components)!
+        return Calendar.gregorianWithSunAsFirstWeekday.date(from: components)!
     }
         
     var endOfDay: Date {
         var components = DateComponents()
         components.day = 1
         components.second = -1
-        return Calendar.current.date(byAdding: components, to: startOfDay)!
+        return Calendar.gregorianWithSunAsFirstWeekday.date(byAdding: components, to: startOfDay)!
     }
     
     var endOfWeekInYear: Date {
         var components = DateComponents()
         components.weekOfYear = 1
         components.second = -1
-        return Calendar.current.date(byAdding: components, to: startOfWeekInYear)!
+        return Calendar.gregorianWithSunAsFirstWeekday.date(byAdding: components, to: startOfWeekInYear)!
     }
         
     var endOfMonth: Date {
         var components = DateComponents()
         components.month = 1
         components.second = -1
-        return Calendar.current.date(byAdding: components, to: startOfMonth)!
+        return Calendar.gregorianWithSunAsFirstWeekday.date(byAdding: components, to: startOfMonth)!
     }
     
     var month: String {
@@ -171,44 +171,44 @@ extension Date {
     }
     
     func monthAgo() -> Date {
-        Calendar.current.date(byAdding: .month, value: -1, to: self)!
+        Calendar.gregorianWithSunAsFirstWeekday.date(byAdding: .month, value: -1, to: self)!
     }
     
     func monthFurther() -> Date {
-        Calendar.current.date(byAdding: .month, value: 1, to: self)!
+        Calendar.gregorianWithSunAsFirstWeekday.date(byAdding: .month, value: 1, to: self)!
     }
     
     func weekAgo() -> Date {
-        if Calendar.current.isDate(self, equalTo: self.startOfMonth, toGranularity: .weekOfYear) {
-            if Calendar.current.component(.weekday, from: self.startOfMonth) > 1 { // First week
+        if Calendar.gregorianWithSunAsFirstWeekday.isDate(self, equalTo: self.startOfMonth, toGranularity: .weekOfYear) {
+            if Calendar.gregorianWithSunAsFirstWeekday.component(.weekday, from: self.startOfMonth) > 1 { // First week
                 return self.startOfWeekInYear
             } else {
                 return self.monthAgo().endOfMonth.startOfWeekInYear
             }
         }
-        if !Calendar.current.isDate(Calendar.current.date(byAdding: .weekOfMonth, value: -1, to: self)!, equalTo: self.startOfMonth, toGranularity: .month) {
+        if !Calendar.gregorianWithSunAsFirstWeekday.isDate(Calendar.gregorianWithSunAsFirstWeekday.date(byAdding: .weekOfMonth, value: -1, to: self)!, equalTo: self.startOfMonth, toGranularity: .month) {
             return self.startOfMonth
         }
-        return Calendar.current.date(byAdding: .weekOfMonth, value: -1, to: self)!.startOfWeekInYear
+        return Calendar.gregorianWithSunAsFirstWeekday.date(byAdding: .weekOfMonth, value: -1, to: self)!.startOfWeekInYear
     }
     
     func weekFurther() -> Date {
-        if Calendar.current.isDate(self, equalTo: self.endOfMonth, toGranularity: .weekOfYear) {
-            if Calendar.current.component(.weekday, from: self.endOfMonth) < 7 { // Last week
+        if Calendar.gregorianWithSunAsFirstWeekday.isDate(self, equalTo: self.endOfMonth, toGranularity: .weekOfYear) {
+            if Calendar.gregorianWithSunAsFirstWeekday.component(.weekday, from: self.endOfMonth) < 7 { // Last week
                 return self.endOfWeekInYear
             } else {
                 return self.monthFurther().startOfMonth
             }
         }
-        if !Calendar.current.isDate(Calendar.current.date(byAdding: .weekOfYear, value: 1, to: self)!, equalTo: self.endOfMonth, toGranularity: .month) {
+        if !Calendar.gregorianWithSunAsFirstWeekday.isDate(Calendar.gregorianWithSunAsFirstWeekday.date(byAdding: .weekOfYear, value: 1, to: self)!, equalTo: self.endOfMonth, toGranularity: .month) {
             return self.endOfMonth.startOfDay
         }
-        return Calendar.current.date(byAdding: .weekOfMonth, value: 1, to: self)!.startOfWeekInYear
+        return Calendar.gregorianWithSunAsFirstWeekday.date(byAdding: .weekOfMonth, value: 1, to: self)!.startOfWeekInYear
     }
     
     static func isSameWeek(_ date1: Date, _ date2: Date) -> Bool {
-        if Calendar.current.isDate(date1, equalTo: date2, toGranularity: .month) {
-           return Calendar.current.isDate(date1, equalTo: date2, toGranularity: .weekOfYear)
+        if Calendar.gregorianWithSunAsFirstWeekday.isDate(date1, equalTo: date2, toGranularity: .month) {
+           return Calendar.gregorianWithSunAsFirstWeekday.isDate(date1, equalTo: date2, toGranularity: .weekOfYear)
         }
         return false
     }

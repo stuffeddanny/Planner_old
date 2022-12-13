@@ -80,7 +80,7 @@ final class CalendarViewModel: ObservableObject {
     
     func swipeAndGoTo(_ reminderDict: Dictionary<DayModel.ID, [Reminder]>.Element) {
         Task {
-            if !Calendar.current.isDate(firstDayOfUnitOnTheScreenDate, equalTo: reminderDict.key, toGranularity: .month) {
+            if !Calendar.gregorianWithSunAsFirstWeekday.isDate(firstDayOfUnitOnTheScreenDate, equalTo: reminderDict.key, toGranularity: .month) {
                 await MainActor.run {
                     goTo(reminderDict.key)
                 }
@@ -104,7 +104,7 @@ final class CalendarViewModel: ObservableObject {
     }
         
     func isToday(_ day: DayModel) -> Bool {
-        Calendar.current.isDate(day.id, equalTo: .now, toGranularity: .day)
+        Calendar.gregorianWithSunAsFirstWeekday.isDate(day.id, equalTo: .now, toGranularity: .day)
     }
 
     func unselect() {
@@ -164,7 +164,7 @@ final class CalendarViewModel: ObservableObject {
     }
     
     func goTo(_ date: Date) {
-        if (weekView && !Date.isSameWeek(firstDayOfUnitOnTheScreenDate, date)) || !Calendar.current.isDate(firstDayOfUnitOnTheScreenDate, equalTo: date, toGranularity: .month) {
+        if (weekView && !Date.isSameWeek(firstDayOfUnitOnTheScreenDate, date)) || !Calendar.gregorianWithSunAsFirstWeekday.isDate(firstDayOfUnitOnTheScreenDate, equalTo: date, toGranularity: .month) {
             withAnimation(DevPrefs.monthSlidingAnimation) {
                 offset = CGSize(width: UIScreen.main.bounds.size.width * (date < firstDayOfUnitOnTheScreenDate ? 1 : -1), height: 0)
             }

@@ -117,7 +117,7 @@ struct ReminderRowView: View {
                 reminder.justCreated = false
             }
             
-            if !Calendar.current.isDate(vm.dayModel.id, equalTo: .now, toGranularity: .day) {
+            if !Calendar.gregorianWithSunAsFirstWeekday.isDate(vm.dayModel.id, equalTo: .now, toGranularity: .day) {
                 selectedDate = vm.dayModel.id
             }
         }
@@ -132,11 +132,11 @@ struct ReminderRowView: View {
             content.sound = .default
             content.badge = 1
             
-            let components = Calendar.current.dateComponents([.hour, .minute, .day, .year, .month], from: selectedDate)
+            let components = Calendar.gregorianWithSunAsFirstWeekday.dateComponents([.hour, .minute, .day, .year, .month], from: selectedDate)
             
             notificationManager.scheduleNotification(with: content, identifier: reminder.id, dateComponents: components)
             
-            reminder.date = Calendar.current.date(from: components)
+            reminder.date = Calendar.gregorianWithSunAsFirstWeekday.date(from: components)
         } else {
             notificationManager.removePendingNotification(with: [reminder.id])
             

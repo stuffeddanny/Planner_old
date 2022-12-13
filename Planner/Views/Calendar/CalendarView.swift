@@ -94,6 +94,16 @@ struct CalendarView: View {
         if vm.weekView {
             return []
         }
+        
+        vm.reminders[day.id] = vm.reminders[day.id]?.map { reminder in
+            if let tagId = reminder.tagId, !settingManager.settings.tags.contains(where: { $0.id == tagId}) {
+                var reminder = reminder
+                reminder.tagId = nil
+                return reminder
+            }
+            return reminder
+        }
+        
         let reminders = vm.reminders[day.id] ?? []
         let ids = reminders.compactMap({ $0.tagId })
         
@@ -152,7 +162,7 @@ struct CalendarView: View {
     
     private var WeekNames: some View {
         LazyVGrid(columns: .init(repeating: GridItem(alignment: .center), count: 7)) {
-            ForEach(Calendar.current.shortWeekdaySymbols, id: \.self) { weekDay in
+            ForEach(Calendar.gregorianWithSunAsFirstWeekday.shortWeekdaySymbols, id: \.self) { weekDay in
                 Text(weekDay)
                     .foregroundColor(weekDay == "Sat" || weekDay == "Sun" ? settingManager.settings.weekendsColor : .secondary)
                     .lineLimit(1)
@@ -172,14 +182,14 @@ struct CalendarView: View {
                     vm.unselect()
                 }
                 .contextMenu {
-                    ForEach(Calendar.current.monthSymbols, id: \.self) { monthName in
+                    ForEach(Calendar.gregorianWithSunAsFirstWeekday.monthSymbols, id: \.self) { monthName in
                         Button(monthName) {
                             let form = DateFormatter()
                             form.dateFormat = "MMMM"
                             
-                            vm.goTo(Calendar.current.date(from: DateComponents(
-                                year: Calendar.current.component(.year, from: vm.firstDayOfUnitOnTheScreenDate),
-                                month: Calendar.current.component(.month, from: form.date(from: monthName) ?? .now)
+                            vm.goTo(Calendar.gregorianWithSunAsFirstWeekday.date(from: DateComponents(
+                                year: Calendar.gregorianWithSunAsFirstWeekday.component(.year, from: vm.firstDayOfUnitOnTheScreenDate),
+                                month: Calendar.gregorianWithSunAsFirstWeekday.component(.month, from: form.date(from: monthName) ?? .now)
                             ))!)
                             
                         }

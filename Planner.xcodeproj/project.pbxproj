@@ -54,6 +54,8 @@
 		BBF07F04293923BA005B1705 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF07F03293923BA005B1705 /* HapticManager.swift */; };
 		BBF07F0629392402005B1705 /* ReminderCompletionCircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF07F0529392402005B1705 /* ReminderCompletionCircleView.swift */; };
 		BBF07F22293937C1005B1705 /* Reminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF07F21293937C1005B1705 /* Reminder.swift */; };
+		BBF98DD42948F82900844556 /* Calendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF98DD32948F82900844556 /* Calendar.swift */; };
+		BBF98DD52948F95500844556 /* Calendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF98DD32948F82900844556 /* Calendar.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -124,6 +126,7 @@
 		BBF07F03293923BA005B1705 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
 		BBF07F0529392402005B1705 /* ReminderCompletionCircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderCompletionCircleView.swift; sourceTree = "<group>"; };
 		BBF07F21293937C1005B1705 /* Reminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reminder.swift; sourceTree = "<group>"; };
+		BBF98DD32948F82900844556 /* Calendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Calendar.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -232,6 +235,7 @@
 				BB588DD629352E6D0092582B /* String.swift */,
 				BB38CF3D293A2FEC00B6A662 /* UIApplication.swift */,
 				BB1921CD29412D9D00E35441 /* Array.swift */,
+				BBF98DD32948F82900844556 /* Calendar.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -430,6 +434,7 @@
 				BB19EA3D2946197A00D98B86 /* UserSettings.swift in Sources */,
 				BB19EA46294630B300D98B86 /* Date.swift in Sources */,
 				BB19EA442946308100D98B86 /* DayModel.swift in Sources */,
+				BBF98DD52948F95500844556 /* Calendar.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -464,6 +469,7 @@
 				BBAAD6A62931240800D78380 /* PlannerApp.swift in Sources */,
 				BB6B01462940F9340027FF90 /* CalendarViewModel.swift in Sources */,
 				BB588DD9293534610092582B /* UserSettings.swift in Sources */,
+				BBF98DD42948F82900844556 /* Calendar.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
