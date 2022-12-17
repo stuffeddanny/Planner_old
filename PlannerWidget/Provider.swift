@@ -39,8 +39,8 @@ struct Provider: TimelineProvider {
             result = Array(reminders)
         }
                 
-        let entry = SimpleEntry(date: .now, reminders: result, settingManager: SettingManager())
-        let timeline = Timeline(entries: [entry], policy: .never)
+        let entry = SimpleEntry(date: .now.endOfDay, reminders: result, settingManager: SettingManager())
+        let timeline = Timeline(entries: [entry], policy: .atEnd)
         completion(timeline)
     }
 }

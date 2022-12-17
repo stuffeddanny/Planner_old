@@ -65,7 +65,11 @@ final class CalendarViewModel: ObservableObject {
             return dict?.reminders ?? [:]
         }
         set {
-            UserDefaults(suiteName: "group.plannerapp")?.set(try? JSONEncoder().encode(RemindersDictionary(reminders: newValue)), forKey: "reminders")
+            if let defaults = UserDefaults(suiteName: "group.plannerapp"),
+               let encoded = try? JSONEncoder().encode(RemindersDictionary(reminders: newValue)) {
+                defaults.set(encoded, forKey: "reminders")
+            }
+            
             WidgetCenter.shared.reloadAllTimelines()
         }
     }
