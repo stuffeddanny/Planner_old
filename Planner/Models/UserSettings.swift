@@ -12,7 +12,7 @@ struct UserSettings: Codable {
     var selectedDayColor: Color = Color(.sRGB, red: 1, green: 0.396, blue: 0.392, opacity: 1)
     var weekendsColor: Color = .red
     var backgroundColor: Color = .clear
-    var todaysDayColor: Color = .red
+    var todaysDayColor: Color = .primary
     var isTodayInverted: Bool = false
     var isSelectedDayInverted: Bool = false
     var gapBetweenDays: Int = 20
