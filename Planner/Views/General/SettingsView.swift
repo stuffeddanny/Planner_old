@@ -77,7 +77,7 @@ struct SettingsView: View {
             }
             
             Section(footer: Text("Color of weekends columns")) {
-                ColorPicker("Weekends color", selection: $vm.weekendsColorPicker, supportsOpacity: true)
+                ColorPicker("Weekends color", selection: $vm.weekendsColorPicker, supportsOpacity: false)
             }
             Section(footer: Text("Inverts color of number of selected or todays day")) {
                 Toggle("Invert selected day", isOn: $vm.isSelectedDayInvertedToggle)
