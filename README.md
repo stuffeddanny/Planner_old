@@ -16,3 +16,6 @@ Keep everything planned with Planner
 * Add custom tags to plan even more efficient  
 
 ![](https://github.com/stuffeddanny/Planner/blob/main/Preview/tags.gif)
+![](https://github.com/stuffeddanny/Planner/blob/main/Preview/horizontal_tags.png)
+![](https://github.com/stuffeddanny/Planner/blob/main/Preview/vetical_tags.png)
+![](https://github.com/stuffeddanny/Planner/blob/main/Preview/big_vertical_tags.png)
