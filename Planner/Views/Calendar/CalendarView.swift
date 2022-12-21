@@ -182,7 +182,7 @@ struct CalendarView: View {
                     vm.unselect()
                 }
                 .contextMenu {
-                    ForEach(Calendar.gregorianWithSunAsFirstWeekday.monthSymbols, id: \.self) { monthName in
+                    ForEach(Calendar.current.monthSymbols, id: \.self) { monthName in
                         Button(monthName) {
                             let form = DateFormatter()
                             form.dateFormat = "MMMM"
