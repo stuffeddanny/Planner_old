@@ -89,6 +89,7 @@
 		BB19EA3B2946061100D98B86 /* PlannerWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PlannerWidgetExtension.entitlements; sourceTree = "<group>"; };
 		BB19EA4129462A4C00D98B86 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BB38CF3D293A2FEC00B6A662 /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
+		BB4DCFA729532C44006D199B /* calendar.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = calendar.gif; sourceTree = "<group>"; };
 		BB588DD629352E6D0092582B /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		BB588DD8293534610092582B /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
 		BB6B01432940F8F90027FF90 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
@@ -149,6 +150,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BB4DCFA629532C2C006D199B /* Preview */ = {
+			isa = PBXGroup;
+			children = (
+				BB4DCFA729532C44006D199B /* calendar.gif */,
+			);
+			path = Preview;
+			sourceTree = "<group>";
+		};
 		BB955717294227D300918D6C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -184,9 +193,10 @@
 		BBAAD6992931240800D78380 = {
 			isa = PBXGroup;
 			children = (
-				BB19EA3B2946061100D98B86 /* PlannerWidgetExtension.entitlements */,
 				BBAAD6A42931240800D78380 /* Planner */,
+				BB4DCFA629532C2C006D199B /* Preview */,
 				BB9557382942301C00918D6C /* PlannerWidget */,
+				BB19EA3B2946061100D98B86 /* PlannerWidgetExtension.entitlements */,
 				BB955717294227D300918D6C /* Frameworks */,
 				BBAAD6A32931240800D78380 /* Products */,
 			);
@@ -666,6 +676,7 @@
 				DEVELOPMENT_TEAM = VFJ7656544;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Planner;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -700,6 +711,7 @@
 				DEVELOPMENT_TEAM = VFJ7656544;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Planner;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
