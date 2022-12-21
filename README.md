@@ -17,6 +17,8 @@ Keep everything planned with Planner
 
 ![](https://github.com/stuffeddanny/Planner/blob/main/Preview/tags.gif)
 
-![alt text](https://github.com/stuffeddanny/Planner/blob/main/Preview/horizontal_tags.png)
-![alt text](https://github.com/stuffeddanny/Planner/blob/main/Preview/vetical_tags.png)
-![alt text](https://github.com/stuffeddanny/Planner/blob/main/Preview/big_vertical_tags.png)
+<img
+  src="https://github.com/stuffeddanny/Planner/blob/main/Preview/horizontal_tags.png"
+  alt="Alt text"
+  title="Optional title"
+  style="display: inline-block; margin: 0 auto; max-width: 300px">
