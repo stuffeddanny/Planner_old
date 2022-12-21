@@ -19,6 +19,5 @@ Keep everything planned with Planner
 
 <img
   src="https://github.com/stuffeddanny/Planner/blob/main/Preview/horizontal_tags.png"
-  alt="Alt text"
-  title="Optional title"
-  style="display: inline-block; margin: 0 auto; max-width: 100px">
+     width="100"
+>
