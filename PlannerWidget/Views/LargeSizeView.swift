@@ -59,18 +59,17 @@ struct LargeSizeView: View {
                             
                             Spacer(minLength: 0)
                             
-                            if let tagId = reminder.tagId {
-                                Circle()
-                                    .frame(width: 7, height: 7)
-                                    .foregroundColor(getTagColor(for: tagId))
-                            }
-                            
                             if let date = reminder.date {
                                 Text(date.formattedToTimeFormat())
                                     .font(.callout)
                                     .foregroundColor(Date.compareDates(date1: .now, date2: date) && !reminder.completed ? .red : .secondary)
                             }
                             
+                            if let tagId = reminder.tagId {
+                                Circle()
+                                    .frame(width: 7, height: 7)
+                                    .foregroundColor(getTagColor(for: tagId))
+                            }
                             
                         }
                         .lineLimit(1)
