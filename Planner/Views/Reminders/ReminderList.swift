@@ -50,7 +50,6 @@ struct ReminderList: View {
                 .listStyle(.plain)
         } else {
             ZStack {
-                
 
                 Text("You have no reminders.\nTap here to create one ")
                     .lineSpacing(10)
