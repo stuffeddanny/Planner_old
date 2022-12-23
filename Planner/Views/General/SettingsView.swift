@@ -22,9 +22,19 @@ struct SettingsView: View {
     init(_ manager: SettingManager) {
         _vm = .init(wrappedValue: SettingsViewModel(manager))
     }
-    
+            
     var body: some View {
         List {
+            
+            Section {
+                Toggle("Sync reminders through iCloud", isOn: vm.isSyncAvailable ? $vm.syncThroughICloudEnabledToggle : .constant(false))
+                    .disabled(!vm.isSyncAvailable)
+            } footer: {
+                if !vm.isSyncAvailable {
+                    Text("You must be signed in your Apple ID account to use iCloud")
+                }
+            }
+            
             Section(footer: Text("Accent color of whole app")) {
                 ColorPicker("Accent color", selection: $vm.accentColorPicker, supportsOpacity: false)
             }

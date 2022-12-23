@@ -15,6 +15,7 @@ struct UserSettings: Codable {
     var todaysDayColor: Color = .pink
     var isTodayInverted: Bool = false
     var isSelectedDayInverted: Bool = false
+    var syncThroughICloudEnabled: Bool = true
     var gapBetweenDays: Int = 20
     var tags: [Tag] = [
         Tag(text: "Work", color: .blue),

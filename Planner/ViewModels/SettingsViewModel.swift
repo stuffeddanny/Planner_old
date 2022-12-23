@@ -12,6 +12,7 @@ final class SettingsViewModel: ObservableObject {
 
     private var cancellables = Set<AnyCancellable>()
     @Published var applyButtonIsDisabled: Bool = true
+    @Published var isSyncAvailable: Bool = false
     
     private let manager: SettingManager
     
@@ -25,7 +26,8 @@ final class SettingsViewModel: ObservableObject {
     // Toggles
     @Published var isTodayInvertedToggle: Bool
     @Published var isSelectedDayInvertedToggle: Bool
-    
+    @Published var syncThroughICloudEnabledToggle: Bool
+
     // Sliders
     @Published var gapsBetweenDays: Int
     
@@ -33,6 +35,7 @@ final class SettingsViewModel: ObservableObject {
     @Published var tags: [Tag]
     
     init(_ manager: SettingManager) {
+                
         self.manager = manager
         
         accentColorPicker = manager.settings.accentColor
@@ -43,12 +46,33 @@ final class SettingsViewModel: ObservableObject {
         
         isTodayInvertedToggle = manager.settings.isTodayInverted
         isSelectedDayInvertedToggle = manager.settings.isSelectedDayInverted
+        syncThroughICloudEnabledToggle = manager.settings.syncThroughICloudEnabled
         
         gapsBetweenDays = manager.settings.gapBetweenDays
         
         tags = manager.settings.tags
         
+        Task {
+            await checkICloudStatus()
+        }
+        
         addSubs()
+    }
+    
+    private func checkICloudStatus() async {
+        switch await CloudKitManager.instance.getICloudStatus() {
+        case .success(let status):
+            switch status {
+            case .available:
+                await MainActor.run {
+                    isSyncAvailable = true
+                }
+            default:
+                break
+            }
+        case .failure(_):
+            break
+        }
     }
     
     private func getAllFieldsFromSettings() {

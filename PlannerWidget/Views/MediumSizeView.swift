@@ -95,9 +95,7 @@ struct MediumSizeView: View {
                         }
                 }
                 .lineLimit(1)
-                .font(.caption)
-                .fontWeight(.semibold)
-                
+                .font(.caption.weight(.semibold))
             }
         }
     }

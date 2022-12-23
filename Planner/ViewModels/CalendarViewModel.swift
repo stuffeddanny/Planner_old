@@ -89,6 +89,7 @@ final class CalendarViewModel: ObservableObject {
                     goTo(reminderDict.key)
                 }
                 
+                
                 try await Task.sleep(for: .seconds(DevPrefs.monthSlidingAnimationDuration + DevPrefs.monthAppearingAfterSlidingAnimationDuration))
             }
             

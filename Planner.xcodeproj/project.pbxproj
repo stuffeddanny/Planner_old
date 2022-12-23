@@ -45,6 +45,7 @@
 		BBAAD6CF29327C0600D78380 /* DevPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAAD6CE29327C0600D78380 /* DevPrefs.swift */; };
 		BBCDE098293BA589008FA36B /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCDE097293BA589008FA36B /* Tag.swift */; };
 		BBCDE09A293BA5A7008FA36B /* TagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCDE099293BA5A7008FA36B /* TagView.swift */; };
+		BBDED458295663FE00256B0A /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBDED457295663FE00256B0A /* CloudKitManager.swift */; };
 		BBEAC2352944DBD2005F1BB8 /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBEAC2342944DBD2005F1BB8 /* Provider.swift */; };
 		BBEAC2372944DC7B005F1BB8 /* SimpleEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBEAC2362944DC7B005F1BB8 /* SimpleEntry.swift */; };
 		BBEAC2392944DCA1005F1BB8 /* WidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBEAC2382944DCA1005F1BB8 /* WidgetView.swift */; };
@@ -88,6 +89,7 @@
 		BB19EA3A294605C700D98B86 /* Planner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Planner.entitlements; sourceTree = "<group>"; };
 		BB19EA3B2946061100D98B86 /* PlannerWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PlannerWidgetExtension.entitlements; sourceTree = "<group>"; };
 		BB19EA4129462A4C00D98B86 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		BB2437A22955DEC40033ABFF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		BB38CF3D293A2FEC00B6A662 /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
 		BB4DCFA729532C44006D199B /* calendar.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = calendar.gif; sourceTree = "<group>"; };
 		BB588DD629352E6D0092582B /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
@@ -119,6 +121,7 @@
 		BBAAD6CE29327C0600D78380 /* DevPrefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevPrefs.swift; sourceTree = "<group>"; };
 		BBCDE097293BA589008FA36B /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
 		BBCDE099293BA5A7008FA36B /* TagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagView.swift; sourceTree = "<group>"; };
+		BBDED457295663FE00256B0A /* CloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitManager.swift; sourceTree = "<group>"; };
 		BBEAC2342944DBD2005F1BB8 /* Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Provider.swift; sourceTree = "<group>"; };
 		BBEAC2362944DC7B005F1BB8 /* SimpleEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleEntry.swift; sourceTree = "<group>"; };
 		BBEAC2382944DCA1005F1BB8 /* WidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetView.swift; sourceTree = "<group>"; };
@@ -186,6 +189,7 @@
 				BBF07F03293923BA005B1705 /* HapticManager.swift */,
 				BB1921CF294137FC00E35441 /* NotificationManager.swift */,
 				BB9F7C6F2936422400D3DA74 /* SettingManager.swift */,
+				BBDED457295663FE00256B0A /* CloudKitManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -214,6 +218,7 @@
 		BBAAD6A42931240800D78380 /* Planner */ = {
 			isa = PBXGroup;
 			children = (
+				BB2437A22955DEC40033ABFF /* Info.plist */,
 				BB19EA3A294605C700D98B86 /* Planner.entitlements */,
 				BBAAD6A52931240800D78380 /* PlannerApp.swift */,
 				BB9F7C6E2936421900D3DA74 /* Services */,
@@ -466,6 +471,7 @@
 				BB6B01482941167D0027FF90 /* ReminderList.swift in Sources */,
 				BB1921D0294137FC00E35441 /* NotificationManager.swift in Sources */,
 				BB588DD729352E6D0092582B /* String.swift in Sources */,
+				BBDED458295663FE00256B0A /* CloudKitManager.swift in Sources */,
 				BB6B014C294118D70027FF90 /* ReminderRowView.swift in Sources */,
 				BBAAD6C62932752700D78380 /* DayModel.swift in Sources */,
 				BBAAD6BE293143D100D78380 /* Date.swift in Sources */,
@@ -507,18 +513,19 @@
 				INFOPLIST_FILE = PlannerWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = PlannerWidget;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = stuffeddanny.Planner.PlannerWidget;
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = stuffeddanny.PlannerApp.Widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -535,18 +542,19 @@
 				INFOPLIST_FILE = PlannerWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = PlannerWidget;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = stuffeddanny.Planner.PlannerWidget;
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = stuffeddanny.PlannerApp.Widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -600,7 +608,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -654,7 +662,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -676,19 +684,20 @@
 				DEVELOPMENT_TEAM = VFJ7656544;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Planner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Planner;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = stuffeddanny.Planner;
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = stuffeddanny.PlannerApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -711,19 +720,20 @@
 				DEVELOPMENT_TEAM = VFJ7656544;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Planner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Planner;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = stuffeddanny.Planner;
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = stuffeddanny.PlannerApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
