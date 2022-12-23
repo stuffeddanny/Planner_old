@@ -23,3 +23,8 @@ Keep everything planned with Planner
 <img src="https://github.com/stuffeddanny/Planner/blob/main/Preview/appearance2.png" width="300" />
 </p>
 
+* Use convenient Widgets to keep your reminders close to you
+<p float="left">
+<img src="https://github.com/stuffeddanny/Planner/blob/main/Preview/widgets.gif" width="300" />
+<img src="https://github.com/stuffeddanny/Planner/blob/main/Preview/widgets.png" width="300" />
+</p>
