@@ -11,12 +11,12 @@ struct DayView: View {
     
     @EnvironmentObject private var settingManager: SettingManager
     
-    let dayModel: DayModel
+    let dayModel: DayViewModel
     let isSelected: Bool
     let isToday: Bool
     let colors: [Color]
     
-    init(for day: DayModel, isSelected: Bool, isToday: Bool, with colors: [Color]) {
+    init(for day: DayViewModel, isSelected: Bool, isToday: Bool, with colors: [Color]) {
         dayModel = day
         self.isSelected = isSelected
         self.isToday = isToday
@@ -106,7 +106,7 @@ struct DayView: View {
 
 struct DayView_Previews: PreviewProvider {
     static var previews: some View {
-        DayView(for: DayModel(id: .now), isSelected: false, isToday: false, with: [.red, .blue])
+        DayView(for: DayViewModel(id: .now), isSelected: false, isToday: false, with: [.red, .blue])
             .environmentObject(SettingManager())
     }
 }

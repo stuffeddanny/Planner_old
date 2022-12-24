@@ -10,7 +10,7 @@ import WidgetKit
 
 struct LargeSizeView: View {
     var entry: SimpleEntry
-    private let daysForCurrentWeek: [DayModel] = Date().getDayModelsForWeek()
+    private let daysForCurrentWeek: [DayViewModel] = Date().getDayModelsForWeek()
     
     var body: some View {
         GroupBox {

@@ -15,12 +15,12 @@ struct Provider: TimelineProvider {
     }
 
     func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> ()) {
-        let data = UserDefaults(suiteName: "group.plannerapp")?.data(forKey: "reminders") ?? .init()
-        let dict = try? JSONDecoder().decode(RemindersDictionary.self, from: data)
+        let data = UserDefaults(suiteName: "group.plannerapp")?.data(forKey: "dayModels") ?? .init()
+        let holder = try? JSONDecoder().decode(DayModelsHolder.self, from: data)
         
         var result = Reminder.SnapshotReminders()
         
-        if let reminders = dict?.reminders[DayModel(id: Date().startOfDay).id], !reminders.isEmpty {
+        if let reminders = holder?.models.first(where: { $0.id == Date().startOfDay })?.reminders, !reminders.isEmpty {
             result = Array(reminders)
         }
                 
@@ -30,12 +30,12 @@ struct Provider: TimelineProvider {
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<SimpleEntry>) -> ()) {
         
-        let data = UserDefaults(suiteName: "group.plannerapp")?.data(forKey: "reminders") ?? .init()
-        let dict = try? JSONDecoder().decode(RemindersDictionary.self, from: data)
+        let data = UserDefaults(suiteName: "group.plannerapp")?.data(forKey: "dayModels") ?? .init()
+        let holder = try? JSONDecoder().decode(DayModelsHolder.self, from: data)
         
         var result: [Reminder] = []
         
-        if let reminders = dict?.reminders[DayModel(id: Date().startOfDay).id] {
+        if let reminders = holder?.models.first(where: { $0.id == Date().startOfDay })?.reminders {
             result = Array(reminders)
         }
                 

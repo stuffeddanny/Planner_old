@@ -18,10 +18,6 @@ struct Reminder: Identifiable, Codable, Equatable, Hashable {
     var date: Date? = nil
 }
 
-struct RemindersDictionary: Codable {
-    var reminders: [DayModel.ID : [Reminder]]
-}
-
 extension Reminder {
     static func SnapshotReminders() -> [Reminder] {
         [

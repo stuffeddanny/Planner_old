@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Combine
+import CloudKit
 import WidgetKit
 
 final class CalendarViewModel: ObservableObject {
@@ -22,7 +23,7 @@ final class CalendarViewModel: ObservableObject {
     
     @Published var showReminder: Bool = false
     
-    var days: [DayModel] {
+    var days: [DayViewModel] {
         get {
             if weekView {
                 return firstDayOfUnitOnTheScreenDate.getDayModelsForWeek()
@@ -37,10 +38,10 @@ final class CalendarViewModel: ObservableObject {
     @Published var opacity: Double = 1
     
     
-    @Published var selectedDay: DayModel? = nil {
+    @Published var selectedDay: DayViewModel? = nil {
         didSet {
             if let id = selectedDay?.id {
-                remindersOnTheScreen = reminders[id] ?? []
+                remindersOnTheScreen = dayModels.first(where: { $0.id == id })?.reminders ?? []
             } else {
                 remindersOnTheScreen = []
             }
@@ -51,23 +52,31 @@ final class CalendarViewModel: ObservableObject {
     @Published var remindersOnTheScreen: [Reminder] = [] {
         didSet {
             if let id = selectedDay?.id {
-                reminders[id] = remindersOnTheScreen
+                if let index = dayModels.firstIndex(where: { $0.id == id }) {
+                    dayModels[index].reminders = remindersOnTheScreen
+                } else {
+                    dayModels.append(DayModel(id: id, reminders: remindersOnTheScreen))
+                }
             }
         }
     }
     
-    var reminders: [DayModel.ID : [Reminder]] {
+    var dayModels: [DayModel] {
         get {
-            let data = UserDefaults(suiteName: "group.plannerapp")?.data(forKey: "reminders") ?? .init()
+            let data = UserDefaults(suiteName: "group.plannerapp")?.data(forKey: "dayModels") ?? .init()
             
-            let dict = try? JSONDecoder().decode(RemindersDictionary.self, from: data)
+            let holder = try? JSONDecoder().decode(DayModelsHolder.self, from: data)
             
-            return dict?.reminders ?? [:]
+            return holder?.models ?? []
         }
         set {
+            
+            
+            
+            
             if let defaults = UserDefaults(suiteName: "group.plannerapp"),
-               let encoded = try? JSONEncoder().encode(RemindersDictionary(reminders: newValue)) {
-                defaults.set(encoded, forKey: "reminders")
+               let encoded = try? JSONEncoder().encode(DayModelsHolder(models: newValue)) {
+                defaults.set(encoded, forKey: "dayModels")
             }
             
             WidgetCenter.shared.reloadAllTimelines()
@@ -82,33 +91,53 @@ final class CalendarViewModel: ObservableObject {
         firstDayOfUnitOnTheScreenDate = date
     }
     
-    func swipeAndGoTo(_ reminderDict: Dictionary<DayModel.ID, [Reminder]>.Element) {
+    func swipeAndGoTo(_ dayModel: DayModel) {
         Task {
-            if !Calendar.gregorianWithSunAsFirstWeekday.isDate(firstDayOfUnitOnTheScreenDate, equalTo: reminderDict.key, toGranularity: .month) {
+            if !Calendar.gregorianWithSunAsFirstWeekday.isDate(firstDayOfUnitOnTheScreenDate, equalTo: dayModel.id, toGranularity: .month) {
                 await MainActor.run {
-                    goTo(reminderDict.key)
+                    goTo(dayModel.id)
                 }
                 
                 
                 try await Task.sleep(for: .seconds(DevPrefs.monthSlidingAnimationDuration + DevPrefs.monthAppearingAfterSlidingAnimationDuration))
             }
             
-            guard let dayModel = days.first(where: { $0.id == reminderDict.key }) else { return }
+            guard let dayViewModel = days.first(where: { $0.id == dayModel.id }) else { return }
 
             await MainActor.run {
-                select(dayModel)
+                select(dayViewModel)
             }
         }
     }
     
-    func isDaySelected(_ day: DayModel) -> Bool {
+    func checkTagsOnExistence(in tags: [Tag]) {
+
+        let daysOfMonth = dayModels.filter({ Calendar.gregorianWithSunAsFirstWeekday.isDate($0.id, equalTo: firstDayOfUnitOnTheScreenDate, toGranularity: .month) })
+        
+        daysOfMonth.forEach { dayModel in
+            let fixedReminders = dayModel.reminders.map { reminder in
+                if let tagId = reminder.tagId, !tags.contains(where: { $0.id == tagId}) {
+                    var reminder = reminder
+                    reminder.tagId = nil
+                    return reminder
+                }
+                return reminder
+            }
+            
+            if dayModel.reminders != fixedReminders, let index = dayModels.firstIndex(of: dayModel) {
+                dayModels[index].reminders = fixedReminders
+            }
+        }
+    }
+    
+    func isDaySelected(_ day: DayViewModel) -> Bool {
         if let selectedDay = selectedDay {
             return selectedDay.id == day.id
         }
         return false
     }
         
-    func isToday(_ day: DayModel) -> Bool {
+    func isToday(_ day: DayViewModel) -> Bool {
         Calendar.gregorianWithSunAsFirstWeekday.isDate(day.id, equalTo: .now, toGranularity: .day)
     }
 
@@ -139,7 +168,7 @@ final class CalendarViewModel: ObservableObject {
         firstDayOfUnitOnTheScreenDate = firstDayOfUnitOnTheScreenDate.startOfMonth
     }
     
-    func select(_ day: DayModel) {
+    func select(_ day: DayViewModel) {
         Task {
             await MainActor.run {
                 withAnimation(DevPrefs.daySelectingAnimation) {

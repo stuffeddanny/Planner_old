@@ -33,10 +33,10 @@ extension Date {
         return formatter.string(from: self)
     }
 
-    func getDayModelsForMonth() -> [DayModel] {
+    func getDayModelsForMonth() -> [DayViewModel] {
         let calendar = Calendar.gregorianWithSunAsFirstWeekday
 
-        var result: [DayModel] = []
+        var result: [DayViewModel] = []
 
         let startOfCurrentMonth = self.startOfMonth
         let startOfPrevMonth = self.monthAgo().startOfMonth
@@ -47,12 +47,12 @@ extension Date {
             let lastDayOfPrevMonth = startOfPrevMonth.endOfMonth.startOfDay
             
             for index in -(firstWeekDay-2)...0 {
-                result.append(DayModel(id: calendar.date(byAdding: .day, value: index, to: lastDayOfPrevMonth)!, secondary: true))
+                result.append(DayViewModel(id: calendar.date(byAdding: .day, value: index, to: lastDayOfPrevMonth)!, secondary: true))
             }
         }
 
         for day in calendar.range(of: .day, in: .month, for: startOfCurrentMonth)! {
-            result.append(DayModel(id: calendar.date(byAdding: .day, value: day - 1, to: startOfCurrentMonth)!))
+            result.append(DayViewModel(id: calendar.date(byAdding: .day, value: day - 1, to: startOfCurrentMonth)!))
         }
         
         let endOfCurrentMonth = self.endOfMonth
@@ -64,17 +64,17 @@ extension Date {
             let firstDayOfFollowingMonth = startOfFollowingMonth.startOfDay
             
             for index in 0...6-(lastWeekDay) {
-                result.append(DayModel(id: calendar.date(byAdding: .day, value: index, to: firstDayOfFollowingMonth)!, secondary: true))
+                result.append(DayViewModel(id: calendar.date(byAdding: .day, value: index, to: firstDayOfFollowingMonth)!, secondary: true))
             }
         }
         
         return result
     }
     
-    func getDayModelsForWeek() -> [DayModel] {
+    func getDayModelsForWeek() -> [DayViewModel] {
         let calendar = Calendar.gregorianWithSunAsFirstWeekday
 
-        var result: [DayModel] = []
+        var result: [DayViewModel] = []
         
         
 
@@ -85,17 +85,17 @@ extension Date {
                 let lastDayOfPrevMonth = self.monthAgo().endOfMonth.startOfDay
                 
                 for index in -(firstWeekdayNum-2)...0 {
-                    result.append(DayModel(id: calendar.date(byAdding: .day, value: index, to: lastDayOfPrevMonth)!, secondary: true))
+                    result.append(DayViewModel(id: calendar.date(byAdding: .day, value: index, to: lastDayOfPrevMonth)!, secondary: true))
                 }
             }
             for index in 0...7-firstWeekdayNum {
-                result.append(DayModel(id: calendar.date(byAdding: .day, value: index, to: self.startOfMonth)!, secondary: false))
+                result.append(DayViewModel(id: calendar.date(byAdding: .day, value: index, to: self.startOfMonth)!, secondary: false))
             }
         } else if calendar.isDate(self, equalTo: self.endOfMonth, toGranularity: .weekOfYear) { // Last week
             let lastWeekdayNum = calendar.component(.weekday, from: self.endOfMonth)
             
             for index in -(lastWeekdayNum-1)...0 {
-                result.append(DayModel(id: calendar.date(byAdding: .day, value: index, to: self.endOfMonth.startOfDay)!, secondary: false))
+                result.append(DayViewModel(id: calendar.date(byAdding: .day, value: index, to: self.endOfMonth.startOfDay)!, secondary: false))
             }
 
             
@@ -103,12 +103,12 @@ extension Date {
                 let firstDayOfFollowingMonth = self.monthFurther().startOfMonth
                 
                 for index in 0...6-lastWeekdayNum {
-                    result.append(DayModel(id: calendar.date(byAdding: .day, value: index, to: firstDayOfFollowingMonth)!, secondary: true))
+                    result.append(DayViewModel(id: calendar.date(byAdding: .day, value: index, to: firstDayOfFollowingMonth)!, secondary: true))
                 }
             }
         } else { // In the middle
             for day in 0...6 {
-                result.append(DayModel(id: calendar.date(byAdding: .day, value: day, to: self.startOfWeekInYear)!))
+                result.append(DayViewModel(id: calendar.date(byAdding: .day, value: day, to: self.startOfWeekInYear)!))
             }
         }
         

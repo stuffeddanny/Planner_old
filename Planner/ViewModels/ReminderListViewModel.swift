@@ -10,9 +10,9 @@ import SwiftUI
 final class ReminderListViewModel: ObservableObject {
     
     @Binding var reminders: [Reminder]
-    let dayModel: DayModel
+    let dayModel: DayViewModel
     
-    init(_ reminders: Binding<[Reminder]>, _ day: DayModel) {
+    init(_ reminders: Binding<[Reminder]>, _ day: DayViewModel) {
         self._reminders = reminders.projectedValue
         dayModel = day
     }

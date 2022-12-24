@@ -48,13 +48,14 @@ struct CalendarView: View {
                 url.scheme == "planner",
                 url.host == "reminder",
                 let id = UUID(uuidString: url.pathComponents[1]),
-                let reminder = vm.reminders.filter({ $0.value.contains(where: { $0.id == id }) }).first
+                let dayModel = vm.dayModels.first(where: { $0.reminders.contains(where: { $0.id == id }) })
+//                let reminder = vm.dayModels.flatMap({ $0.reminders }).first(where: { $0.id == id })
                     
             else {
                 return
             }
             
-            vm.swipeAndGoTo(reminder)
+            vm.swipeAndGoTo(dayModel)
         }
     }
     
@@ -90,21 +91,12 @@ struct CalendarView: View {
             }
     }
 
-    private func getTagsColors(for day: DayModel) -> [Color] {
+    private func getTagsColors(for day: DayViewModel) -> [Color] {
         if vm.weekView {
             return []
         }
         
-        vm.reminders[day.id] = vm.reminders[day.id]?.map { reminder in
-            if let tagId = reminder.tagId, !settingManager.settings.tags.contains(where: { $0.id == tagId}) {
-                var reminder = reminder
-                reminder.tagId = nil
-                return reminder
-            }
-            return reminder
-        }
-        
-        let reminders = vm.reminders[day.id] ?? []
+        let reminders = vm.dayModels.first(where: { $0.id == day.id })?.reminders ?? []
         let ids = reminders.compactMap({ $0.tagId })
         
         if !reminders.isEmpty && ids.isEmpty {
@@ -128,6 +120,12 @@ struct CalendarView: View {
                         
                     }
                 }
+                .onAppear {
+                    vm.checkTagsOnExistence(in: settingManager.settings.tags)
+                }
+                .onChange(of: vm.firstDayOfUnitOnTheScreenDate) { _ in
+                    vm.checkTagsOnExistence(in: settingManager.settings.tags)
+                }
                 .background(
                     GeometryReader { actualProxy in
                         Color.clear
@@ -145,7 +143,7 @@ struct CalendarView: View {
         }
     }
     
-    private func onTapFunc(_ day: DayModel) {
+    private func onTapFunc(_ day: DayViewModel) {
         if day.secondary {
             vm.goTo(day.id)
         } else if vm.selectedDay == day {

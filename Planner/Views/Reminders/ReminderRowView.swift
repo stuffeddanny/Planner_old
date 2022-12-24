@@ -254,6 +254,6 @@ struct ReminderRowView_Previews: PreviewProvider {
     static var previews: some View {
         ReminderRowView(reminder: reminder)
             .environmentObject(SettingManager())
-            .environmentObject(ReminderListViewModel(.constant([reminder]), DayModel(id: .now)))
+            .environmentObject(ReminderListViewModel(.constant([reminder]), DayViewModel(id: .now)))
     }
 }

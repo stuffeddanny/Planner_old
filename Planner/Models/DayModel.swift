@@ -2,17 +2,18 @@
 //  DayModel.swift
 //  Planner
 //
-//  Created by Danny on 11/26/22.
+//  Created by Danny on 12/24/22.
 //
 
-import Foundation
+import SwiftUI
 
-struct DayModel: Identifiable, Equatable {
-    let id: Date
-    let secondary: Bool
+struct DayModel: Identifiable, Equatable, Codable {
     
-    init(id: Date, secondary: Bool = false) {
-        self.id = id
-        self.secondary = secondary
-    }
+    let id: Date
+    var reminders: [Reminder]
+    
+}
+
+struct DayModelsHolder: Codable {
+    let models: [DayModel]
 }
