@@ -27,9 +27,9 @@ class SettingManager: ObservableObject {
                         
         DayModelManager.instance.dayModels = DayModelManager.instance.dayModels.map { dayModel in
             var newDayModel = dayModel
-            newDayModel.reminders = dayModel.reminders.filter({$0.tagId != nil}).map { reminder in
+            newDayModel.reminders = dayModel.reminders.map { reminder in
                 
-                if !tags.map({$0.id}).contains(reminder.tagId) {
+                if let tagId = reminder.tagId, !tags.map({$0.id}).contains(tagId) {
                     var newReminder = reminder
                     newReminder.tagId = nil
                     return newReminder

@@ -103,7 +103,8 @@ struct CalendarView: View {
         }
         
         return ids.compactMap({ id in
-            settingManager.settings.tags.first(where: { $0.id == id })?.color }).uniqueElements()
+            settingManager.settings.tags.first(where: { $0.id == id })?.color
+        }).uniqueElements()
     }
 
     private var DaysGrid: some View {
