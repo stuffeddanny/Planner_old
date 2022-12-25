@@ -48,6 +48,9 @@ struct ReminderList: View {
                 }
                 .scrollDismissesKeyboard(.interactively)
                 .listStyle(.plain)
+                .refreshable {
+                    await vm.refresh()
+                }
         } else {
             ZStack {
 

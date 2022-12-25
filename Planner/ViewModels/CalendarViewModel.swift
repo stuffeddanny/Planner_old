@@ -61,6 +61,9 @@ final class CalendarViewModel: ObservableObject {
         }
     }
     
+    @Published private var syncPublisher: [DayModel] = []
+    
+    
     var dayModels: [DayModel] {
         get {
             let data = UserDefaults(suiteName: "group.plannerapp")?.data(forKey: "dayModels") ?? .init()
@@ -71,8 +74,7 @@ final class CalendarViewModel: ObservableObject {
         }
         set {
             
-            
-            
+            syncPublisher = newValue
             
             if let defaults = UserDefaults(suiteName: "group.plannerapp"),
                let encoded = try? JSONEncoder().encode(DayModelsHolder(models: newValue)) {
@@ -83,12 +85,67 @@ final class CalendarViewModel: ObservableObject {
         }
     }
     
+    private var cancellables = Set<AnyCancellable>()
  
     init() {
                 
         let date = Date().startOfMonth
         
         firstDayOfUnitOnTheScreenDate = date
+        
+        $syncPublisher
+            .dropFirst()
+            .debounce(for: .seconds(DevPrefs.syncDebounce), scheduler: DispatchQueue.main)
+            .sink { newValue in
+                Task {
+                    await self.syncToCloud(newValue)
+                }
+
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func syncFromCloud() async -> Result<Void, Never> {
+        await withCheckedContinuation { continuation in
+            let predicate = NSPredicate(value: true)
+            let query = CKQuery(recordType: "DayModel", predicate: predicate)
+            
+            CKContainer.default().privateCloudDatabase.fetch(withQuery: query) { result in
+                switch result {
+                case .success(let returnedValue):
+                    let records = returnedValue.matchResults.compactMap { value in
+                        switch value.1 {
+                        case .success(let record):
+                            return record
+                        case .failure(_):
+                            return nil
+                        }
+                    }
+                    
+                    let dayModels = records.compactMap { record in
+                        if let id = Date.dateFromId(record.recordID.recordName),
+                           let encodedReminders = record["reminders"] as? [Data] {
+                            let reminders = encodedReminders.compactMap({ try? JSONDecoder().decode(Reminder.self, from: $0)})
+                            return DayModel(id: id, reminders: reminders)
+                        } else {
+                            return nil
+                        }
+                    }
+                    
+                    self.dayModels = dayModels
+                                        
+                    continuation.resume(returning: .success(()))
+                    
+                case .failure(_):
+                    break
+                }
+            }
+        }
+    }
+    
+    private func syncToCloud(_ value: [DayModel]) async {
+        try? await CKContainer.default().privateCloudDatabase.modifyRecords(saving: value.filter({ !$0.reminders.isEmpty }).map({ $0.record }), deleting: value.filter({ $0.reminders.isEmpty }).map({ $0.record.recordID }), savePolicy: .changedKeys, atomically: false)
+
     }
     
     func swipeAndGoTo(_ dayModel: DayModel) {

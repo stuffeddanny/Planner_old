@@ -158,6 +158,20 @@ extension Date {
         return Calendar.gregorianWithSunAsFirstWeekday.date(byAdding: components, to: startOfMonth)!
     }
     
+    var idFromDate: String {
+        let formatter = DateFormatter()
+        formatter.calendar = .gregorianWithSunAsFirstWeekday
+        formatter.dateFormat = "dd/MM/yyyy"
+        return formatter.string(from: self)
+    }
+    
+    static func dateFromId(_ id: String) -> Date? {
+        let formatter = DateFormatter()
+        formatter.calendar = .gregorianWithSunAsFirstWeekday
+        formatter.dateFormat = "dd/MM/yyyy"
+        return formatter.date(from: id)?.startOfDay
+    }
+    
     var month: String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMMM"

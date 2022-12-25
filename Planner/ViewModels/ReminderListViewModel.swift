@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CloudKit
 
 final class ReminderListViewModel: ObservableObject {
     
@@ -15,6 +16,8 @@ final class ReminderListViewModel: ObservableObject {
     init(_ reminders: Binding<[Reminder]>, _ day: DayViewModel) {
         self._reminders = reminders.projectedValue
         dayModel = day
+        print("init \(dayModel.id)")
+
     }
     
 //    func delete(_ reminder: Reminder) {
@@ -22,6 +25,43 @@ final class ReminderListViewModel: ObservableObject {
 //            reminders.removeAll(where: { $0.id == reminder.id })
 //        }
 //    }
+    
+    
+    func refresh() async {
+        print("ref \(dayModel.id)")
+        switch await getInManager(id: dayModel.id) {
+        case .success(let reminders):
+            if let reminders = reminders {
+                await MainActor.run {
+                    self.reminders = reminders
+                }
+            }
+        case .failure(_):
+            #warning("Handle")
+            break
+        }
+    }
+    
+    #warning("Put in the manager")
+    private func getInManager(id: Date) async -> Result<[Reminder]?, Error> {
+        print("get \(id)")
+
+        return await withCheckedContinuation { continuation in
+            CKContainer.default().privateCloudDatabase.fetch(withRecordID: .init(recordName: id.idFromDate)) { returnedRecord, error in
+                if let error = error {
+                    continuation.resume(returning: .failure(error))
+                } else if let record = returnedRecord,
+                          let encodedReminders = record["reminders"] as? [Data] {
+                    continuation.resume(returning: .success(encodedReminders.compactMap({ try? JSONDecoder().decode(Reminder.self, from: $0) })))
+                } else {
+                    #warning("Fix")
+                    continuation.resume(returning: .success(nil))
+                }
+            }
+        }
+    }
+    
+    
 
     func delete(in set: IndexSet) {
         let idsToDelete = set.map { reminders[$0].id }

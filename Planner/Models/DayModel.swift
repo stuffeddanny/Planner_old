@@ -6,12 +6,24 @@
 //
 
 import SwiftUI
+import CloudKit
 
 struct DayModel: Identifiable, Equatable, Codable {
     
     let id: Date
     var reminders: [Reminder]
     
+}
+
+extension DayModel {
+    var record: CKRecord {
+        let record = CKRecord(recordType: "DayModel", recordID: CKRecord.ID(recordName: self.id.idFromDate))
+        record["reminders"] = self.reminders.map({
+            guard let data = try? JSONEncoder().encode($0) else { return Data() }
+            return data
+        })
+        return record
+    }
 }
 
 struct DayModelsHolder: Codable {
