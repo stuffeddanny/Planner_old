@@ -12,16 +12,14 @@ struct SettingsView: View {
     
     @FocusState private var focusedTag: Tag?
         
-    @StateObject private var vm: SettingsViewModel
+    @StateObject private var vm = SettingsViewModel()
             
     @State private var showApplyConfDialog: Bool = false
     @State private var showResetConfDialog: Bool = false
     
     @Environment(\.presentationMode) private var presentationMode
 
-    init(_ manager: SettingManager) {
-        _vm = .init(wrappedValue: SettingsViewModel(manager))
-    }
+    init() {}
             
     var body: some View {
         List {
@@ -176,7 +174,7 @@ struct SettingsView: View {
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
-            SettingsView(SettingManager())
+            SettingsView()
         }
     }
 }

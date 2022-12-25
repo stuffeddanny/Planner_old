@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ReminderList: View {
     
-    @EnvironmentObject private var settingManager: SettingManager
+    @StateObject private var settingManager = SettingManager.instance
 
     @ObservedObject private var vm: ReminderListViewModel
     

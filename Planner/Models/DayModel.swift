@@ -18,10 +18,7 @@ struct DayModel: Identifiable, Equatable, Codable, Sendable {
 extension DayModel {
     var record: CKRecord {
         let record = CKRecord(recordType: "DayModel", recordID: CKRecord.ID(recordName: self.id.idFromDate))
-        record["reminders"] = self.reminders.map({
-            guard let data = try? JSONEncoder().encode($0) else { return Data() }
-            return data
-        })
+        record["reminders"] = self.reminders.compactMap({ try? JSONEncoder().encode($0) })
         return record
     }
 }

@@ -62,27 +62,6 @@ final class CalendarViewModel: ObservableObject {
         }
     }
     
-    func checkTagsOnExistence(in tags: [Tag]) {
-
-        #warning("manager")
-        let daysOfMonth = CloudKitManager.instance.dayModels.filter({ Calendar.gregorianWithSunAsFirstWeekday.isDate($0.id, equalTo: firstDayOfUnitOnTheScreenDate, toGranularity: .month) })
-        
-        daysOfMonth.forEach { dayModel in
-            let fixedReminders = dayModel.reminders.map { reminder in
-                if let tagId = reminder.tagId, !tags.contains(where: { $0.id == tagId}) {
-                    var reminder = reminder
-                    reminder.tagId = nil
-                    return reminder
-                }
-                return reminder
-            }
-            
-            if dayModel.reminders != fixedReminders, let index = CloudKitManager.instance.dayModels.firstIndex(of: dayModel) {
-                CloudKitManager.instance.dayModels[index].reminders = fixedReminders
-            }
-        }
-    }
-    
     func isDaySelected(_ day: DayViewModel) -> Bool {
         if let selectedDay = selectedDay {
             return selectedDay.id == day.id

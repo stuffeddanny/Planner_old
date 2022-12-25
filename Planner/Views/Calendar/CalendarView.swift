@@ -9,8 +9,8 @@ import SwiftUI
 
 struct CalendarView: View {
     
-    @EnvironmentObject private var settingManager: SettingManager
-    
+    @StateObject private var settingManager = SettingManager.instance
+
     @StateObject private var vm = CalendarViewModel()
     
     @State private var scrollIsDisabled: Bool = false
@@ -44,13 +44,11 @@ struct CalendarView: View {
             UIApplication.shared.applicationIconBadgeNumber = 0
         }
         .onOpenURL { url in
-    #warning("manager")
-
             guard
                 url.scheme == "planner",
                 url.host == "reminder",
                 let id = UUID(uuidString: url.pathComponents[1]),
-                let dayModel = CloudKitManager.instance.dayModels.first(where: { $0.reminders.contains(where: { $0.id == id }) })
+                let dayModel = DayModelManager.instance.dayModels.first(where: { $0.reminders.contains(where: { $0.id == id }) })
 //                let reminder = vm.dayModels.flatMap({ $0.reminders }).first(where: { $0.id == id })
             else {
                 return
@@ -97,8 +95,7 @@ struct CalendarView: View {
             return []
         }
         
-        #warning("manager")
-        let reminders = CloudKitManager.instance.dayModels.first(where: { $0.id == day.id })?.reminders ?? []
+        let reminders = DayModelManager.instance.dayModels.first(where: { $0.id == day.id })?.reminders ?? []
         let ids = reminders.compactMap({ $0.tagId })
         
         if !reminders.isEmpty && ids.isEmpty {
@@ -121,12 +118,6 @@ struct CalendarView: View {
                             .padding(.top, 5)
                         
                     }
-                }
-                .onAppear {
-                    vm.checkTagsOnExistence(in: settingManager.settings.tags)
-                }
-                .onChange(of: vm.firstDayOfUnitOnTheScreenDate) { _ in
-                    vm.checkTagsOnExistence(in: settingManager.settings.tags)
                 }
                 .background(
                     GeometryReader { actualProxy in
@@ -213,6 +204,5 @@ struct CalendarView: View {
 struct CalendarView_Previews: PreviewProvider {
     static var previews: some View {
         CalendarView()
-            .environmentObject(SettingManager())
     }
 }

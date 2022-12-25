@@ -9,41 +9,94 @@ import SwiftUI
 import Combine
 import WidgetKit
 
-#warning("Make an instance")
-
 class SettingManager: ObservableObject {
     
-    @Published var settings: UserSettings
+    @Published var settings: UserSettingsModel {
+        didSet {
+            
+            if settings.tags != oldValue.tags {
+                checkForDeletedTags()
+            }
+            
+            saveSettings()
+        }
+    }
     
-    private var cancellables = Set<AnyCancellable>()
-    
-    private func saveSettings(_ settings: UserSettings) {
-        guard let data = try? JSONEncoder().encode(settings) else { return }
-        UserDefaults(suiteName: "group.plannerapp")?.set(data, forKey: "userSettings")
+    private func checkForDeletedTags() {
+        let tags = settings.tags
+                        
+        DayModelManager.instance.dayModels = DayModelManager.instance.dayModels.map { dayModel in
+            var newDayModel = dayModel
+            newDayModel.reminders = dayModel.reminders.filter({$0.tagId != nil}).map { reminder in
                 
-        WidgetCenter.shared.reloadAllTimelines()
-
-        UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor(settings.accentColor)]
-        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor(settings.accentColor)]
-        UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = UIColor(settings.accentColor)
+                if !tags.map({$0.id}).contains(reminder.tagId) {
+                    var newReminder = reminder
+                    newReminder.tagId = nil
+                    return newReminder
+                }
+                
+                return reminder
+                
+            }
+            return newDayModel
+        }
 
     }
     
-    init() {
-                
-        let data = UserDefaults(suiteName: "group.plannerapp")?.data(forKey: "userSettings") ?? .init()
+    private let cloudManager = CloudManager.instance
+    
+    static let instance = SettingManager()
         
-        let decoded = try? JSONDecoder().decode(UserSettings.self, from: data)
+    private func saveSettings() {
+        guard let userDefaults = UserDefaults(suiteName: "group.plannerapp"),
+            let encodedSettings = try? JSONEncoder().encode(settings) else { return }
         
-        settings = decoded ?? UserSettings()
-                
-        saveSettings(settings)
+        userDefaults.set(encodedSettings, forKey: "userSettings")
         
-        $settings
-            .sink { newValue in
-                self.saveSettings(newValue)
+        Task {
+            switch await cloudManager.syncToCloud(settings) {
+            case .success(let record):
+                print("Settings were successfully saved \(record)")
+            case .failure(let error):
+                print("Error while saving settings to cloud \(error.localizedDescription)")
             }
-            .store(in: &cancellables)
+        }
+        
+        applySettings()
+    }
+    
+    private func applySettings() {
+        // Reloads Widgets
+        WidgetCenter.shared.reloadAllTimelines()
 
+        // Updating
+        UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor(settings.accentColor)]
+        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor(settings.accentColor)]
+        UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = UIColor(settings.accentColor)
+    }
+    
+    private init() {
+        
+        if let encodedSettings = UserDefaults(suiteName: "group.plannerapp")?.data(forKey: "userSettings"),
+           let settings = try? JSONDecoder().decode(UserSettingsModel.self, from: encodedSettings) {
+            self.settings = settings
+        } else {
+            self.settings = UserSettingsModel()
+        }
+        
+        Task {
+            switch await cloudManager.syncSettingsFromCloud() {
+            case .success(let settings):
+                if !(settings.modifiedDate < self.settings.modifiedDate) {
+                    await MainActor.run {
+                        self.settings = settings
+                    }
+                }
+
+            case .failure(let error):
+                print("Error while getting settings from cloud \(error.localizedDescription)")
+            }
+            
+        }
     }
 }

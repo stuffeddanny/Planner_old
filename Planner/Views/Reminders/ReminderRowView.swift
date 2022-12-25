@@ -18,7 +18,7 @@ struct ReminderRowView: View {
     
     @FocusState private var focused: FocusedField?
     
-    @EnvironmentObject private var settingManager: SettingManager
+    @StateObject private var settingManager = SettingManager.instance
     @EnvironmentObject private var vm: ReminderListViewModel
     
     @State private var showClockSheet: Bool = false
@@ -253,7 +253,6 @@ struct ReminderRowView_Previews: PreviewProvider {
     static let reminder = Reminder(headline: "Reminder", note: "With note", date: .now)
     static var previews: some View {
         ReminderRowView(reminder: reminder)
-            .environmentObject(SettingManager())
             .environmentObject(ReminderListViewModel(DayViewModel(id: .now)))
     }
 }

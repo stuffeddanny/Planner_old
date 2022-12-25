@@ -9,8 +9,8 @@ import SwiftUI
 
 struct DayView: View {
     
-    @EnvironmentObject private var settingManager: SettingManager
-    
+    @StateObject private var settingManager = SettingManager.instance
+
     let dayModel: DayViewModel
     let isSelected: Bool
     let isToday: Bool
@@ -107,6 +107,5 @@ struct DayView: View {
 struct DayView_Previews: PreviewProvider {
     static var previews: some View {
         DayView(for: DayViewModel(id: .now), isSelected: false, isToday: false, with: [.red, .blue])
-            .environmentObject(SettingManager())
     }
 }

@@ -13,10 +13,10 @@ final class ReminderListViewModel: ObservableObject {
     
     @Published var reminders: [Reminder] {
         didSet {
-            if let index = CloudKitManager.instance.dayModels.firstIndex(where: { $0.id == dayModel.id }) {
-                CloudKitManager.instance.dayModels[index].reminders = reminders
+            if let index = DayModelManager.instance.dayModels.firstIndex(where: { $0.id == dayModel.id }) {
+                DayModelManager.instance.dayModels[index].reminders = reminders
             } else {
-                CloudKitManager.instance.dayModels.append(DayModel(id: dayModel.id, reminders: reminders))
+                DayModelManager.instance.dayModels.append(DayModel(id: dayModel.id, reminders: reminders))
             }
         }
     }
@@ -26,23 +26,19 @@ final class ReminderListViewModel: ObservableObject {
     init(_ day: DayViewModel) {
         dayModel = day
         
-        reminders = CloudKitManager.instance.dayModels.first(where: { $0.id == day.id })?.reminders ?? []
+        reminders = DayModelManager.instance.dayModels.first(where: { $0.id == day.id })?.reminders ?? []
     }
     
     func refresh() async {
-        print("\(dayModel.id)")
-        
-            switch await CloudKitManager.instance.getFromCloudWith(id: dayModel.id) {
-            case .success(let dayModel):
-                if let reminders = dayModel?.reminders {
-                    await MainActor.run {
-                        self.reminders = reminders
-                    }
-                }
-            case .failure(_):
-    #warning("Handle")
-                break
+        switch await CloudManager.instance.getFromCloudWith(id: dayModel.id) {
+        case .success(let dayModel):
+            await MainActor.run {
+                reminders = dayModel.reminders
             }
+        case .failure(_):
+            #warning("Handle")
+            break
+        }
     }
 
     func delete(in set: IndexSet) {

@@ -14,7 +14,7 @@ final class SettingsViewModel: ObservableObject {
     @Published var applyButtonIsDisabled: Bool = true
     @Published var isSyncAvailable: Bool = false
     
-    private let manager: SettingManager
+    private let manager: SettingManager = SettingManager.instance
     
     // Pickers
     @Published var accentColorPicker: Color
@@ -34,9 +34,7 @@ final class SettingsViewModel: ObservableObject {
     // Tags
     @Published var tags: [Tag]
     
-    init(_ manager: SettingManager) {
-                
-        self.manager = manager
+    init() {
         
         accentColorPicker = manager.settings.accentColor
         selectedDayColorPicker = manager.settings.selectedDayColor
@@ -60,7 +58,7 @@ final class SettingsViewModel: ObservableObject {
     }
     
     private func checkICloudStatus() async {
-        switch await CloudKitManager.instance.getICloudStatus() {
+        switch await CloudManager.instance.getICloudStatus() {
         case .success(let status):
             switch status {
             case .available:
@@ -129,25 +127,24 @@ final class SettingsViewModel: ObservableObject {
     }
     
     func resetToDefault() {
-        manager.settings = UserSettings()
+        manager.settings = UserSettingsModel()
         getAllFieldsFromSettings()
         
     }
     
     func apply() {
-        var newSettings = UserSettings()
-        
-        newSettings.accentColor = accentColorPicker
-        newSettings.selectedDayColor = selectedDayColorPicker
-        newSettings.todaysDayColor = todaysDayColorPicker
-        newSettings.weekendsColor = weekendsColorPicker
-        newSettings.backgroundColor = backgroundColorPicker
-        newSettings.isTodayInverted = isTodayInvertedToggle
-        newSettings.isSelectedDayInverted = isSelectedDayInvertedToggle
-        newSettings.gapBetweenDays = gapsBetweenDays
-        newSettings.tags = tags
-        
-        manager.settings = newSettings
+        manager.settings = UserSettingsModel(
+            accentColor: accentColorPicker,
+            selectedDayColor: selectedDayColorPicker,
+            weekendsColor: weekendsColorPicker,
+            backgroundColor: backgroundColorPicker,
+            todaysDayColor: todaysDayColorPicker,
+            isTodayInverted: isTodayInvertedToggle,
+            isSelectedDayInverted: isSelectedDayInvertedToggle,
+            syncThroughICloudEnabled: syncThroughICloudEnabledToggle,
+            gapBetweenDays: gapsBetweenDays,
+            tags: tags
+        )
         
         applyButtonIsDisabled = true
     }

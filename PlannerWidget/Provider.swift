@@ -11,7 +11,7 @@ import SwiftUI
 struct Provider: TimelineProvider {
         
     func placeholder(in context: Context) -> SimpleEntry {
-        SimpleEntry(date: Date(), reminders: Reminder.SnapshotReminders(), settingManager: SettingManager())
+        SimpleEntry(date: Date(), reminders: Reminder.SnapshotReminders(), settingManager: SettingManager.instance)
     }
 
     func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> ()) {
@@ -24,7 +24,7 @@ struct Provider: TimelineProvider {
             result = Array(reminders)
         }
                 
-        let entry = SimpleEntry(date: .now, reminders: result, settingManager: SettingManager())
+        let entry = SimpleEntry(date: .now, reminders: result, settingManager: SettingManager.instance)
         completion(entry)
     }
 
@@ -39,7 +39,7 @@ struct Provider: TimelineProvider {
             result = Array(reminders)
         }
                 
-        let entry = SimpleEntry(date: .now.endOfDay, reminders: result, settingManager: SettingManager())
+        let entry = SimpleEntry(date: .now.endOfDay, reminders: result, settingManager: SettingManager.instance)
         let timeline = Timeline(entries: [entry], policy: .atEnd)
         completion(timeline)
     }

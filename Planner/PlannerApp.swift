@@ -11,7 +11,6 @@ import SwiftUI
 struct PlannerApp: App {
     
     @State private var showLaunchView: Bool = true
-    @StateObject private var settingManager = SettingManager()
         
     var body: some Scene {
         WindowGroup {
@@ -24,7 +23,6 @@ struct PlannerApp: App {
                         .zIndex(2.0)
                 }
             }
-            .environmentObject(settingManager)
         }
     }
 }
