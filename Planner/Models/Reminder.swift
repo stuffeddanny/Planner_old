@@ -18,6 +18,11 @@ struct Reminder: Identifiable, Codable, Equatable, Hashable {
     var date: Date? = nil
 }
 
+
+struct ReminderHolder: Codable {
+    let reminders: [Reminder]
+}
+
 extension Reminder {
     static func SnapshotReminders() -> [Reminder] {
         [

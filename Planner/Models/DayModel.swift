@@ -8,7 +8,7 @@
 import SwiftUI
 import CloudKit
 
-struct DayModel: Identifiable, Equatable, Codable {
+struct DayModel: Identifiable, Equatable, Codable, Sendable {
     
     let id: Date
     var reminders: [Reminder]
@@ -26,6 +26,6 @@ extension DayModel {
     }
 }
 
-struct DayModelsHolder: Codable {
+struct DayModelHolder: Codable {
     let models: [DayModel]
 }

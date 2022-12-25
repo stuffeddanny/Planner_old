@@ -7,61 +7,43 @@
 
 import SwiftUI
 import CloudKit
+import WidgetKit
 
 final class ReminderListViewModel: ObservableObject {
     
-    @Binding var reminders: [Reminder]
+    @Published var reminders: [Reminder] {
+        didSet {
+            if let index = CloudKitManager.instance.dayModels.firstIndex(where: { $0.id == dayModel.id }) {
+                CloudKitManager.instance.dayModels[index].reminders = reminders
+            } else {
+                CloudKitManager.instance.dayModels.append(DayModel(id: dayModel.id, reminders: reminders))
+            }
+        }
+    }
+    
     let dayModel: DayViewModel
     
-    init(_ reminders: Binding<[Reminder]>, _ day: DayViewModel) {
-        self._reminders = reminders.projectedValue
+    init(_ day: DayViewModel) {
         dayModel = day
-        print("init \(dayModel.id)")
-
+        
+        reminders = CloudKitManager.instance.dayModels.first(where: { $0.id == day.id })?.reminders ?? []
     }
-    
-//    func delete(_ reminder: Reminder) {
-//        withAnimation {
-//            reminders.removeAll(where: { $0.id == reminder.id })
-//        }
-//    }
-    
     
     func refresh() async {
-        print("ref \(dayModel.id)")
-        switch await getInManager(id: dayModel.id) {
-        case .success(let reminders):
-            if let reminders = reminders {
-                await MainActor.run {
-                    self.reminders = reminders
+        print("\(dayModel.id)")
+        
+            switch await CloudKitManager.instance.getFromCloudWith(id: dayModel.id) {
+            case .success(let dayModel):
+                if let reminders = dayModel?.reminders {
+                    await MainActor.run {
+                        self.reminders = reminders
+                    }
                 }
+            case .failure(_):
+    #warning("Handle")
+                break
             }
-        case .failure(_):
-            #warning("Handle")
-            break
-        }
     }
-    
-    #warning("Put in the manager")
-    private func getInManager(id: Date) async -> Result<[Reminder]?, Error> {
-        print("get \(id)")
-
-        return await withCheckedContinuation { continuation in
-            CKContainer.default().privateCloudDatabase.fetch(withRecordID: .init(recordName: id.idFromDate)) { returnedRecord, error in
-                if let error = error {
-                    continuation.resume(returning: .failure(error))
-                } else if let record = returnedRecord,
-                          let encodedReminders = record["reminders"] as? [Data] {
-                    continuation.resume(returning: .success(encodedReminders.compactMap({ try? JSONDecoder().decode(Reminder.self, from: $0) })))
-                } else {
-                    #warning("Fix")
-                    continuation.resume(returning: .success(nil))
-                }
-            }
-        }
-    }
-    
-    
 
     func delete(in set: IndexSet) {
         let idsToDelete = set.map { reminders[$0].id }

@@ -21,133 +21,28 @@ final class CalendarViewModel: ObservableObject {
     @Published var firstDayOfUnitOnTheScreenDate: Date
     @Published var weekView: Bool = false
     
-    @Published var showReminder: Bool = false
+    @Published var showReminderList: Bool = false
     
     var days: [DayViewModel] {
-        get {
-            if weekView {
-                return firstDayOfUnitOnTheScreenDate.getDayModelsForWeek()
-            } else {
-                return firstDayOfUnitOnTheScreenDate.getDayModelsForMonth()
-            }
-        }
-        
-        set { }
+        if weekView {
+            return firstDayOfUnitOnTheScreenDate.getDayModelsForWeek()
+        } else {
+            return firstDayOfUnitOnTheScreenDate.getDayModelsForMonth()
+        }    
     }
     @Published var offset = CGSize()
     @Published var opacity: Double = 1
     
     
-    @Published var selectedDay: DayViewModel? = nil {
-        didSet {
-            if let id = selectedDay?.id {
-                remindersOnTheScreen = dayModels.first(where: { $0.id == id })?.reminders ?? []
-            } else {
-                remindersOnTheScreen = []
-            }
-            
-        }
-    }
+    @Published var selectedDay: DayViewModel? = nil
     
-    @Published var remindersOnTheScreen: [Reminder] = [] {
-        didSet {
-            if let id = selectedDay?.id {
-                if let index = dayModels.firstIndex(where: { $0.id == id }) {
-                    dayModels[index].reminders = remindersOnTheScreen
-                } else {
-                    dayModels.append(DayModel(id: id, reminders: remindersOnTheScreen))
-                }
-            }
-        }
-    }
-    
-    @Published private var syncPublisher: [DayModel] = []
-    
-    
-    var dayModels: [DayModel] {
-        get {
-            let data = UserDefaults(suiteName: "group.plannerapp")?.data(forKey: "dayModels") ?? .init()
-            
-            let holder = try? JSONDecoder().decode(DayModelsHolder.self, from: data)
-            
-            return holder?.models ?? []
-        }
-        set {
-            
-            syncPublisher = newValue
-            
-            if let defaults = UserDefaults(suiteName: "group.plannerapp"),
-               let encoded = try? JSONEncoder().encode(DayModelsHolder(models: newValue)) {
-                defaults.set(encoded, forKey: "dayModels")
-            }
-            
-            WidgetCenter.shared.reloadAllTimelines()
-        }
-    }
-    
-    private var cancellables = Set<AnyCancellable>()
- 
     init() {
                 
         let date = Date().startOfMonth
         
         firstDayOfUnitOnTheScreenDate = date
+    }
         
-        $syncPublisher
-            .dropFirst()
-            .debounce(for: .seconds(DevPrefs.syncDebounce), scheduler: DispatchQueue.main)
-            .sink { newValue in
-                Task {
-                    await self.syncToCloud(newValue)
-                }
-
-            }
-            .store(in: &cancellables)
-    }
-    
-    private func syncFromCloud() async -> Result<Void, Never> {
-        await withCheckedContinuation { continuation in
-            let predicate = NSPredicate(value: true)
-            let query = CKQuery(recordType: "DayModel", predicate: predicate)
-            
-            CKContainer.default().privateCloudDatabase.fetch(withQuery: query) { result in
-                switch result {
-                case .success(let returnedValue):
-                    let records = returnedValue.matchResults.compactMap { value in
-                        switch value.1 {
-                        case .success(let record):
-                            return record
-                        case .failure(_):
-                            return nil
-                        }
-                    }
-                    
-                    let dayModels = records.compactMap { record in
-                        if let id = Date.dateFromId(record.recordID.recordName),
-                           let encodedReminders = record["reminders"] as? [Data] {
-                            let reminders = encodedReminders.compactMap({ try? JSONDecoder().decode(Reminder.self, from: $0)})
-                            return DayModel(id: id, reminders: reminders)
-                        } else {
-                            return nil
-                        }
-                    }
-                    
-                    self.dayModels = dayModels
-                                        
-                    continuation.resume(returning: .success(()))
-                    
-                case .failure(_):
-                    break
-                }
-            }
-        }
-    }
-    
-    private func syncToCloud(_ value: [DayModel]) async {
-        try? await CKContainer.default().privateCloudDatabase.modifyRecords(saving: value.filter({ !$0.reminders.isEmpty }).map({ $0.record }), deleting: value.filter({ $0.reminders.isEmpty }).map({ $0.record.recordID }), savePolicy: .changedKeys, atomically: false)
-
-    }
-    
     func swipeAndGoTo(_ dayModel: DayModel) {
         Task {
             if !Calendar.gregorianWithSunAsFirstWeekday.isDate(firstDayOfUnitOnTheScreenDate, equalTo: dayModel.id, toGranularity: .month) {
@@ -169,7 +64,8 @@ final class CalendarViewModel: ObservableObject {
     
     func checkTagsOnExistence(in tags: [Tag]) {
 
-        let daysOfMonth = dayModels.filter({ Calendar.gregorianWithSunAsFirstWeekday.isDate($0.id, equalTo: firstDayOfUnitOnTheScreenDate, toGranularity: .month) })
+        #warning("manager")
+        let daysOfMonth = CloudKitManager.instance.dayModels.filter({ Calendar.gregorianWithSunAsFirstWeekday.isDate($0.id, equalTo: firstDayOfUnitOnTheScreenDate, toGranularity: .month) })
         
         daysOfMonth.forEach { dayModel in
             let fixedReminders = dayModel.reminders.map { reminder in
@@ -181,8 +77,8 @@ final class CalendarViewModel: ObservableObject {
                 return reminder
             }
             
-            if dayModel.reminders != fixedReminders, let index = dayModels.firstIndex(of: dayModel) {
-                dayModels[index].reminders = fixedReminders
+            if dayModel.reminders != fixedReminders, let index = CloudKitManager.instance.dayModels.firstIndex(of: dayModel) {
+                CloudKitManager.instance.dayModels[index].reminders = fixedReminders
             }
         }
     }
@@ -206,7 +102,7 @@ final class CalendarViewModel: ObservableObject {
                     withAnimation(DevPrefs.daySelectingAnimation) {
                         selectedDay = nil
                     }
-                    showReminder = false
+                    showReminderList = false
                 }
             }
             
@@ -247,7 +143,7 @@ final class CalendarViewModel: ObservableObject {
               
             await MainActor.run {
                 withAnimation(DevPrefs.noteAppearingAnimation) {
-                    showReminder = true
+                    showReminderList = true
                     
                 }
             }

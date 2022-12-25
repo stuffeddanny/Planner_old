@@ -16,7 +16,7 @@ struct Provider: TimelineProvider {
 
     func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> ()) {
         let data = UserDefaults(suiteName: "group.plannerapp")?.data(forKey: "dayModels") ?? .init()
-        let holder = try? JSONDecoder().decode(DayModelsHolder.self, from: data)
+        let holder = try? JSONDecoder().decode(DayModelHolder.self, from: data)
         
         var result = Reminder.SnapshotReminders()
         
@@ -31,7 +31,7 @@ struct Provider: TimelineProvider {
     func getTimeline(in context: Context, completion: @escaping (Timeline<SimpleEntry>) -> ()) {
         
         let data = UserDefaults(suiteName: "group.plannerapp")?.data(forKey: "dayModels") ?? .init()
-        let holder = try? JSONDecoder().decode(DayModelsHolder.self, from: data)
+        let holder = try? JSONDecoder().decode(DayModelHolder.self, from: data)
         
         var result: [Reminder] = []
         

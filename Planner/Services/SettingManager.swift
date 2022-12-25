@@ -9,6 +9,8 @@ import SwiftUI
 import Combine
 import WidgetKit
 
+#warning("Make an instance")
+
 class SettingManager: ObservableObject {
     
     @Published var settings: UserSettings

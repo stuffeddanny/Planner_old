@@ -29,11 +29,11 @@ struct CalendarView: View {
                 .gesture(swipeGesture)
                 .frame(maxHeight: vm.weekView ? 50 : .infinity)
             
-            if let day = vm.selectedDay, vm.showReminder {
+            if let day = vm.selectedDay, vm.showReminderList {
                 
                 Divider()
 
-                ReminderList(reminders: $vm.remindersOnTheScreen, for: day)
+                ReminderList(for: day)
             }
             
             Spacer(minLength: 0)
@@ -44,13 +44,14 @@ struct CalendarView: View {
             UIApplication.shared.applicationIconBadgeNumber = 0
         }
         .onOpenURL { url in
+    #warning("manager")
+
             guard
                 url.scheme == "planner",
                 url.host == "reminder",
                 let id = UUID(uuidString: url.pathComponents[1]),
-                let dayModel = vm.dayModels.first(where: { $0.reminders.contains(where: { $0.id == id }) })
+                let dayModel = CloudKitManager.instance.dayModels.first(where: { $0.reminders.contains(where: { $0.id == id }) })
 //                let reminder = vm.dayModels.flatMap({ $0.reminders }).first(where: { $0.id == id })
-                    
             else {
                 return
             }
@@ -96,7 +97,8 @@ struct CalendarView: View {
             return []
         }
         
-        let reminders = vm.dayModels.first(where: { $0.id == day.id })?.reminders ?? []
+        #warning("manager")
+        let reminders = CloudKitManager.instance.dayModels.first(where: { $0.id == day.id })?.reminders ?? []
         let ids = reminders.compactMap({ $0.tagId })
         
         if !reminders.isEmpty && ids.isEmpty {
@@ -157,7 +159,6 @@ struct CalendarView: View {
         scrollIsDisabled = actualHeight < safeHeight
     }
 
-    
     private var WeekNames: some View {
         LazyVGrid(columns: .init(repeating: GridItem(alignment: .center), count: 7)) {
             ForEach(Calendar.gregorianWithSunAsFirstWeekday.shortWeekdaySymbols, id: \.self) { weekDay in
@@ -184,12 +185,15 @@ struct CalendarView: View {
                         Button(monthName) {
                             let form = DateFormatter()
                             form.dateFormat = "MMMM"
+                            let calendar = Calendar.gregorianWithSunAsFirstWeekday
                             
-                            vm.goTo(Calendar.gregorianWithSunAsFirstWeekday.date(from: DateComponents(
-                                year: Calendar.gregorianWithSunAsFirstWeekday.component(.year, from: vm.firstDayOfUnitOnTheScreenDate),
-                                month: Calendar.gregorianWithSunAsFirstWeekday.component(.month, from: form.date(from: monthName) ?? .now)
-                            ))!)
+                            guard let monthDate = form.date(from: monthName) else { return }
+                            let components = DateComponents(year: calendar.component(.year, from: vm.firstDayOfUnitOnTheScreenDate), month: calendar.component(.month, from: monthDate))
                             
+                            if let fullDate = calendar.date(from: components) {
+                                vm.goTo(fullDate)
+                            }
+
                         }
                     }
                 }

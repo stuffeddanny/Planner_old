@@ -13,8 +13,8 @@ struct ReminderList: View {
 
     @ObservedObject private var vm: ReminderListViewModel
     
-    init(reminders: Binding<[Reminder]>, for day: DayViewModel) {
-        _vm = .init(wrappedValue: ReminderListViewModel(reminders, day))
+    init(for day: DayViewModel) {
+        _vm = .init(wrappedValue: ReminderListViewModel(day))
     }
     
     var body: some View {
@@ -24,6 +24,10 @@ struct ReminderList: View {
                 .navigationTitle("Reminders (\(vm.reminders.count))")
                 .navigationBarTitleDisplayMode(.inline)
                 .background(settingManager.settings.backgroundColor)
+                .refreshable {
+                    await vm.refresh()
+                }
+
         }
     }
     
@@ -48,9 +52,6 @@ struct ReminderList: View {
                 }
                 .scrollDismissesKeyboard(.interactively)
                 .listStyle(.plain)
-                .refreshable {
-                    await vm.refresh()
-                }
         } else {
             ZStack {
 
