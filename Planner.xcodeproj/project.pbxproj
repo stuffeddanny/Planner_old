@@ -27,6 +27,7 @@
 		BB6B01482941167D0027FF90 /* ReminderList.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6B01472941167D0027FF90 /* ReminderList.swift */; };
 		BB6B014C294118D70027FF90 /* ReminderRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6B014B294118D70027FF90 /* ReminderRowView.swift */; };
 		BB6B014E29411F920027FF90 /* ReminderListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6B014D29411F920027FF90 /* ReminderListViewModel.swift */; };
+		BB7317E4295A14060072BFB3 /* DevPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBAAD6CE29327C0600D78380 /* DevPrefs.swift */; };
 		BB7C453929469DBE0054B4B5 /* SettingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB9F7C6F2936422400D3DA74 /* SettingManager.swift */; };
 		BB9557362942301C00918D6C /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB955718294227D300918D6C /* WidgetKit.framework */; };
 		BB9557372942301C00918D6C /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB95571A294227D300918D6C /* SwiftUI.framework */; };
@@ -461,6 +462,7 @@
 				BB19EA46294630B300D98B86 /* Date.swift in Sources */,
 				BB19EA442946308100D98B86 /* DayViewModel.swift in Sources */,
 				BBF98DD52948F95500844556 /* Calendar.swift in Sources */,
+				BB7317E4295A14060072BFB3 /* DevPrefs.swift in Sources */,
 				BB1393092958CB9200E71171 /* CloudManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

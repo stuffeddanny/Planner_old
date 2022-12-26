@@ -12,6 +12,7 @@ struct DayModel: Identifiable, Equatable, Codable, Sendable {
     
     let id: Date
     var reminders: [Reminder]
+    var dateModified: Date
     
 }
 

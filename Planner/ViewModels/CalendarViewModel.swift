@@ -43,21 +43,25 @@ final class CalendarViewModel: ObservableObject {
         firstDayOfUnitOnTheScreenDate = date
     }
         
-    func swipeAndGoTo(_ dayModel: DayModel) {
+    func swipeAndGoTo(_ id: DayModel.ID) {
         Task {
-            if !Calendar.gregorianWithSunAsFirstWeekday.isDate(firstDayOfUnitOnTheScreenDate, equalTo: dayModel.id, toGranularity: .month) {
-                await MainActor.run {
-                    goTo(dayModel.id)
+            if weekView {
+                
+            } else {
+                if !Calendar.gregorianWithSunAsFirstWeekday.isDate(firstDayOfUnitOnTheScreenDate, equalTo: id, toGranularity: .month) {
+                    await MainActor.run {
+                        goTo(id)
+                    }
+                    
+                    
+                    try await Task.sleep(for: .seconds(DevPrefs.monthSlidingAnimationDuration + DevPrefs.monthAppearingAfterSlidingAnimationDuration))
                 }
                 
+                guard let dayViewModel = days.first(where: { $0.id == id }) else { return }
                 
-                try await Task.sleep(for: .seconds(DevPrefs.monthSlidingAnimationDuration + DevPrefs.monthAppearingAfterSlidingAnimationDuration))
-            }
-            
-            guard let dayViewModel = days.first(where: { $0.id == dayModel.id }) else { return }
-
-            await MainActor.run {
-                select(dayViewModel)
+                await MainActor.run {
+                    select(dayViewModel)
+                }
             }
         }
     }
@@ -110,20 +114,24 @@ final class CalendarViewModel: ObservableObject {
             
             try? await Task.sleep(for: .seconds(DevPrefs.daySelectingAnimationDuration))
               
-            await MainActor.run {
-                withAnimation(DevPrefs.weekHighlightingAnimation) {
-                    firstDayOfUnitOnTheScreenDate = day.id.startOfDay
-                    weekView = true
-                    
+            if !weekView {
+                await MainActor.run {
+                    withAnimation(DevPrefs.weekHighlightingAnimation) {
+                        firstDayOfUnitOnTheScreenDate = day.id.startOfWeekInMonth
+                        weekView = true
+                        
+                    }
                 }
+                
+                try? await Task.sleep(for: .seconds(DevPrefs.weekHighlightingAnimationDuration))
             }
-            
-            try? await Task.sleep(for: .seconds(DevPrefs.weekHighlightingAnimationDuration))
               
-            await MainActor.run {
-                withAnimation(DevPrefs.noteAppearingAnimation) {
-                    showReminderList = true
-                    
+            if !showReminderList {
+                await MainActor.run {
+                    withAnimation(DevPrefs.noteAppearingAnimation) {
+                        showReminderList = true
+                        
+                    }
                 }
             }
         }
@@ -137,7 +145,7 @@ final class CalendarViewModel: ObservableObject {
 
             DispatchQueue.main.asyncAfter(deadline: .now() + (DevPrefs.monthSlidingAnimationDuration)) {
 
-                self.firstDayOfUnitOnTheScreenDate = self.weekView ? date.startOfDay : date.startOfMonth
+                self.firstDayOfUnitOnTheScreenDate = self.weekView ? date.startOfWeekInMonth : date.startOfMonth
                 self.selectedDay = nil
 
                 self.opacity = 0

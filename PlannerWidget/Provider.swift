@@ -11,35 +11,35 @@ import SwiftUI
 struct Provider: TimelineProvider {
         
     func placeholder(in context: Context) -> SimpleEntry {
-        SimpleEntry(date: Date(), reminders: Reminder.SnapshotReminders(), settingManager: SettingManager.instance)
+        SimpleEntry(date: Date(), reminders: Reminder.SnapshotReminders(), settings: SettingManager.getFromUserDefaults())
     }
 
     func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> ()) {
-        let data = UserDefaults(suiteName: "group.plannerapp")?.data(forKey: "dayModels") ?? .init()
-        let holder = try? JSONDecoder().decode(DayModelHolder.self, from: data)
-        
+        let dayModelManager = DayModelManager.instance
+        let settings = SettingManager.getFromUserDefaults()
+
         var result = Reminder.SnapshotReminders()
         
-        if let reminders = holder?.models.first(where: { $0.id == Date().startOfDay })?.reminders, !reminders.isEmpty {
+        if let reminders = dayModelManager.dayModels.first(where: { $0.id == Date().startOfDay })?.reminders, !reminders.isEmpty {
             result = Array(reminders)
         }
                 
-        let entry = SimpleEntry(date: .now, reminders: result, settingManager: SettingManager.instance)
+        let entry = SimpleEntry(date: .now, reminders: result, settings: settings)
         completion(entry)
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<SimpleEntry>) -> ()) {
         
-        let data = UserDefaults(suiteName: "group.plannerapp")?.data(forKey: "dayModels") ?? .init()
-        let holder = try? JSONDecoder().decode(DayModelHolder.self, from: data)
+        let manager = DayModelManager.instance
+        let settings = SettingManager.getFromUserDefaults()
         
         var result: [Reminder] = []
         
-        if let reminders = holder?.models.first(where: { $0.id == Date().startOfDay })?.reminders {
+        if let reminders = manager.dayModels.first(where: { $0.id == Date().startOfDay })?.reminders {
             result = Array(reminders)
         }
                 
-        let entry = SimpleEntry(date: .now.endOfDay, reminders: result, settingManager: SettingManager.instance)
+        let entry = SimpleEntry(date: .now.endOfDay, reminders: result, settings: settings)
         let timeline = Timeline(entries: [entry], policy: .atEnd)
         completion(timeline)
     }

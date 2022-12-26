@@ -58,8 +58,8 @@ actor CloudManager {
     
     func syncToCloud(_ value: [DayModel]) async -> Result<[CKRecord.ID : Result<CKRecord, Error>], Error> {
         switch try? await privateDatabase.modifyRecords(
-            saving: value.filter({ !$0.reminders.isEmpty }).map({ $0.record }),
-            deleting: value.filter({ $0.reminders.isEmpty }).map({ $0.record.recordID }),
+            saving: value.map({ $0.record }),
+            deleting: [],
             savePolicy: .changedKeys,
             atomically: false) {
             
@@ -82,9 +82,10 @@ actor CloudManager {
                     let dayModels = result.matchResults.compactMap { result in
                         if let record = try? result.1.get(),
                            let id = Date.dateFromId(record.recordID.recordName),
-                           let encodedReminders = record["reminders"] as? [Data] {
+                           let encodedReminders = record["reminders"] as? [Data],
+                           let dateModified = record["dateModified"] as? Date {
                             let reminders = encodedReminders.compactMap({ try? JSONDecoder().decode(Reminder.self, from: $0)})
-                            return DayModel(id: id, reminders: reminders)
+                            return DayModel(id: id, reminders: reminders, dateModified: dateModified)
                         } else {
                             return nil
                         }
@@ -105,9 +106,10 @@ actor CloudManager {
                     continuation.resume(returning: .failure(error))
                 } else if let record = returnedRecord,
                           let id = Date.dateFromId(record.recordID.recordName),
-                          let encodedReminders = record["reminders"] as? [Data] {
+                          let encodedReminders = record["reminders"] as? [Data],
+                          let dateModified = record["dateModified"] as? Date {
                     let reminders = encodedReminders.compactMap({ try? JSONDecoder().decode(Reminder.self, from: $0)})
-                    continuation.resume(returning: .success(DayModel(id: id, reminders: reminders)))
+                    continuation.resume(returning: .success(DayModel(id: id, reminders: reminders, dateModified: dateModified)))
                 } else {
                     continuation.resume(returning: .failure(CloudManagerError.errorDecodingDayModel))
                 }

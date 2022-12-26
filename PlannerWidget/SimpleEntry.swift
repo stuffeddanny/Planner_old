@@ -11,5 +11,5 @@ import SwiftUI
 struct SimpleEntry: TimelineEntry {
     let date: Date
     let reminders: [Reminder]
-    let settingManager: SettingManager
+    let settings: UserSettingsModel
 }

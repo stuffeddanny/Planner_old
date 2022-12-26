@@ -22,7 +22,7 @@ struct UserSettingsModel: Codable {
         Tag(text: "Work", color: .blue),
         Tag(text: "Study", color: .green)
     ]
-    var modifiedDate: Date = .now
+    var modifiedDate: Date
 }
 
 extension UserSettingsModel {

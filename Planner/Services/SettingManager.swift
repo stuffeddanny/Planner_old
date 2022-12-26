@@ -75,13 +75,19 @@ class SettingManager: ObservableObject {
         UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = UIColor(settings.accentColor)
     }
     
+    static func getFromUserDefaults() -> UserSettingsModel {
+        let encodedSettings = UserDefaults(suiteName: "group.plannerapp")?.data(forKey: "userSettings")
+        let settings = try? JSONDecoder().decode(UserSettingsModel.self, from: encodedSettings ?? Data())
+        return settings ?? UserSettingsModel(modifiedDate: .now)
+    }
+    
     private init() {
         
         if let encodedSettings = UserDefaults(suiteName: "group.plannerapp")?.data(forKey: "userSettings"),
            let settings = try? JSONDecoder().decode(UserSettingsModel.self, from: encodedSettings) {
             self.settings = settings
         } else {
-            self.settings = UserSettingsModel()
+            self.settings = UserSettingsModel(modifiedDate: .now)
         }
         
         Task {

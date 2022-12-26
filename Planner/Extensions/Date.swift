@@ -131,6 +131,14 @@ extension Date {
         return Calendar.gregorianWithSunAsFirstWeekday.date(from: components)!
     }
     
+    var startOfWeekInMonth: Date {
+        if Calendar.gregorianWithSunAsFirstWeekday.isDate(self, equalTo: self.startOfMonth, toGranularity: .weekOfYear) {
+            return self.startOfMonth
+        }
+        
+        return self.startOfWeekInYear
+    }
+    
     var startOfWeekInYear: Date {
         let components = Calendar.gregorianWithSunAsFirstWeekday.dateComponents([.year, .yearForWeekOfYear, .weekOfYear], from: self)
         

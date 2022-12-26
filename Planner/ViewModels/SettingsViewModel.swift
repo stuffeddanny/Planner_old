@@ -127,7 +127,7 @@ final class SettingsViewModel: ObservableObject {
     }
     
     func resetToDefault() {
-        manager.settings = UserSettingsModel()
+        manager.settings = UserSettingsModel(modifiedDate: .now)
         getAllFieldsFromSettings()
         
     }
@@ -143,7 +143,8 @@ final class SettingsViewModel: ObservableObject {
             isSelectedDayInverted: isSelectedDayInvertedToggle,
             syncThroughICloudEnabled: syncThroughICloudEnabledToggle,
             gapBetweenDays: gapsBetweenDays,
-            tags: tags
+            tags: tags,
+            modifiedDate: .now
         )
         
         applyButtonIsDisabled = true

@@ -16,6 +16,7 @@ struct Reminder: Identifiable, Codable, Equatable, Hashable {
     var justCreated = true
     var tagId: UUID? = nil
     var date: Date? = nil
+    var dateModified: Date = .now
 }
 
 
@@ -24,6 +25,7 @@ struct ReminderHolder: Codable {
 }
 
 extension Reminder {
+
     static func SnapshotReminders() -> [Reminder] {
         [
             Reminder(headline: "Buy chicken", note: "120g chicken breast", date: .now.advanced(by: 60 * 60 * 30)),

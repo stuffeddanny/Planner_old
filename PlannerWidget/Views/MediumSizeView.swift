@@ -19,6 +19,7 @@ struct MediumSizeView: View {
         } label: {
             days
         }
+        .widgetURL(URL(string: "planner://day"))
     }
     
     @ViewBuilder
@@ -33,9 +34,9 @@ struct MediumSizeView: View {
                     Link(destination: URL(string: "planner://reminder/\(reminder.id.uuidString)")!) {
                         HStack {
                             Circle()
-                                .strokeBorder(reminder.completed ? entry.settingManager.settings.accentColor : Color.secondary, lineWidth: 1.5)
+                                .strokeBorder(reminder.completed ? entry.settings.accentColor : Color.secondary, lineWidth: 1.5)
                                 .background(
-                                    Circle().foregroundColor(reminder.completed ? entry.settingManager.settings.accentColor : Color.clear)
+                                    Circle().foregroundColor(reminder.completed ? entry.settings.accentColor : Color.clear)
                                         .padding(4)
                                 )
                                 .frame(width: 17, height: 17)
@@ -73,7 +74,7 @@ struct MediumSizeView: View {
     }
     
     private func getTagColor(for id: UUID) -> Color {
-        entry.settingManager.settings.tags.first(where: { $0.id == id })?.color ?? .clear
+        entry.settings.tags.first(where: { $0.id == id })?.color ?? .clear
     }
     
     @ViewBuilder
@@ -82,15 +83,15 @@ struct MediumSizeView: View {
             ForEach(daysForCurrentWeek) { day in
                 VStack(spacing: 0) {
                     Text(day.id.weekdaySymbol())
-                        .foregroundColor(day.id.weekdaySymbol() == "Sat" || day.id.weekdaySymbol() == "Sun" ? entry.settingManager.settings.weekendsColor : .secondary)
+                        .foregroundColor(day.id.weekdaySymbol() == "Sat" || day.id.weekdaySymbol() == "Sun" ? entry.settings.weekendsColor : .secondary)
                     
                     Text(day.id.day)
-                        .foregroundColor(day.id.isToday() ? entry.settingManager.settings.isTodayInverted ? .primary : .theme.primaryOpposite : .primary)
+                        .foregroundColor(day.id.isToday() ? entry.settings.isTodayInverted ? .primary : .theme.primaryOpposite : .primary)
                         .padding(7)
                         .background {
                             if day.id.isToday() {
                                 Circle()
-                                    .foregroundColor(entry.settingManager.settings.todaysDayColor)
+                                    .foregroundColor(entry.settings.todaysDayColor)
                             }
                         }
                 }
@@ -98,5 +99,12 @@ struct MediumSizeView: View {
                 .font(.caption.weight(.semibold))
             }
         }
+    }
+}
+
+struct MediumSizeView_Previews: PreviewProvider {
+    static var previews: some View {
+        MediumSizeView(entry: .init(date: .now, reminders: [], settings: SettingManager.getFromUserDefaults()))
+            .previewContext(WidgetPreviewContext(family: .systemMedium))
     }
 }

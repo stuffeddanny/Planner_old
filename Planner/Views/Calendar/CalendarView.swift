@@ -44,17 +44,24 @@ struct CalendarView: View {
             UIApplication.shared.applicationIconBadgeNumber = 0
         }
         .onOpenURL { url in
-            guard
-                url.scheme == "planner",
-                url.host == "reminder",
-                let id = UUID(uuidString: url.pathComponents[1]),
-                let dayModel = DayModelManager.instance.dayModels.first(where: { $0.reminders.contains(where: { $0.id == id }) })
-//                let reminder = vm.dayModels.flatMap({ $0.reminders }).first(where: { $0.id == id })
-            else {
+            guard url.scheme == "planner" else { return }
+            
+            switch url.host {
+            case "reminder":
+                guard let reminderId = UUID(uuidString: url.pathComponents[1]),
+                      let dayModel = DayModelManager.instance.dayModels.first(where: {$0.reminders.contains(where: {$0.id == reminderId})})
+//                        , let reminder = dayModel.reminders.first(where: { $0.id == reminderId })
+                else { fallthrough }
+                
+                let id = dayModel.id
+                vm.swipeAndGoTo(id)
+                
+            case "day":
+                let id = Date().startOfDay
+                vm.swipeAndGoTo(id)
+            default:
                 return
             }
-            
-            vm.swipeAndGoTo(dayModel)
         }
     }
     

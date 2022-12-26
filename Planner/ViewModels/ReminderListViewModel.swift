@@ -15,8 +15,9 @@ final class ReminderListViewModel: ObservableObject {
         didSet {
             if let index = DayModelManager.instance.dayModels.firstIndex(where: { $0.id == dayModel.id }) {
                 DayModelManager.instance.dayModels[index].reminders = reminders
+                DayModelManager.instance.dayModels[index].dateModified = .now
             } else {
-                DayModelManager.instance.dayModels.append(DayModel(id: dayModel.id, reminders: reminders))
+                DayModelManager.instance.dayModels.append(DayModel(id: dayModel.id, reminders: reminders, dateModified: .now))
             }
         }
     }
@@ -53,7 +54,7 @@ final class ReminderListViewModel: ObservableObject {
     }
     
     func createNewReminder(after reminder: Reminder? = nil) {
-        let newReminder = Reminder()
+        let newReminder = Reminder(dateModified: .now)
 
         withAnimation {
             if let reminder = reminder, let index = reminders.firstIndex(of: reminder) {
@@ -70,6 +71,8 @@ final class ReminderListViewModel: ObservableObject {
     
     func update(_ newValue: Reminder) {
         if let index = reminders.firstIndex(where: { $0.id == newValue.id }) {
+            var newValueUpdated = newValue
+            newValueUpdated.dateModified = .now
             reminders[index] = newValue
         }
     }

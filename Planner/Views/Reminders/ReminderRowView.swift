@@ -250,7 +250,7 @@ struct ReminderRowView: View {
 }
 
 struct ReminderRowView_Previews: PreviewProvider {
-    static let reminder = Reminder(headline: "Reminder", note: "With note", date: .now)
+    static let reminder = Reminder(headline: "Reminder", note: "With note", date: .now, dateModified: .now)
     static var previews: some View {
         ReminderRowView(reminder: reminder)
             .environmentObject(ReminderListViewModel(DayViewModel(id: .now)))
