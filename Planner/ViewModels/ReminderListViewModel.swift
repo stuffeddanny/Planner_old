@@ -31,12 +31,33 @@ final class ReminderListViewModel: ObservableObject {
         }
     }
     
+    @Published var isSyncing: Bool = false
+    @Published var syncError: LocalizedAlertError? = nil
+
     let dayModel: DayViewModel
+    
+    private var cancellables = Set<AnyCancellable>()
     
     init(_ day: DayViewModel) {
         dayModel = day
         
         reminders = dayModelManager.dayModels.first(where: { $0.id == day.id })?.reminders ?? []
+        
+        dayModelManager.$isSyncing
+            .sink { isSyncing in
+                DispatchQueue.main.async {
+                    self.isSyncing = isSyncing
+                }
+            }
+            .store(in: &cancellables)
+        
+        dayModelManager.$syncError
+            .sink { syncError in
+                DispatchQueue.main.async {
+                    self.syncError = syncError
+                }
+            }
+            .store(in: &cancellables)
     }
     
     func refresh() async {
@@ -44,12 +65,14 @@ final class ReminderListViewModel: ObservableObject {
         case .success(let dayModel):
             await MainActor.run {
                 withAnimation {
+                    syncError = nil
                     self.reminders = dayModel.reminders
                 }
             }
         case .failure(_):
-            #warning("Handle")
-            break
+            await MainActor.run {
+                syncError = .init(error: CustomError.noInternet)
+            }
         }
     }
 

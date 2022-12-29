@@ -17,8 +17,10 @@ class DayModelManager {
     
     private var cancellables = Set<AnyCancellable>()
     
-    #warning("Sync with iCloud with debounce using publisher + refresh reminderList + no need sync button in settings")
     @Published var dayModels: [DayModel]
+    
+    @Published var isSyncing: Bool = false
+    @Published var syncError: LocalizedAlertError? = nil
     
     private init() {
         
@@ -63,10 +65,16 @@ class DayModelManager {
     
     private func getFromCloud() {
         Task {
+            await MainActor.run {
+                self.isSyncing = true
+            }
             switch await cloudManager.syncDayModelsFromCloud() {
             case .success(let cloudDayModels):
                 
-                print("Got data from cloud \(cloudDayModels)")
+                await MainActor.run {
+                    self.syncError = nil
+                    self.isSyncing = false
+                }
                                                 
                 dayModels = cloudDayModels.map({ cloudDayModel in
                     if let userDayModel = dayModels.first(where: { $0.id == cloudDayModel.id }) {
@@ -111,21 +119,32 @@ class DayModelManager {
                 })
                 
                 
-            case .failure(let error):
-                print("Error fetching dayModels from cloud \(error.localizedDescription)")
+            case .failure(_):
+                await MainActor.run {
+                    self.syncError = LocalizedAlertError(error: CustomError.getFromCloud)
+                    self.isSyncing = false
+                }
             }
         }
     }
 
     private func setToCloud(_ value: [DayModel]) {
         Task {
-            switch await cloudManager.syncToCloud(value) {
-            case .success(_):
-                print("successfully saved to cloud")
-            case .failure(let error):
-                print("error syncing to cloud \(error.localizedDescription)")
+            await MainActor.run {
+                self.isSyncing = true
             }
-            
+            switch await CloudManager.instance.syncToCloud(value) {
+            case .success(_):
+                await MainActor.run {
+                    self.syncError = nil
+                    self.isSyncing = false
+                }
+            case .failure(_):
+                await MainActor.run {
+                    self.syncError = LocalizedAlertError(error: CustomError.setToCloud)
+                    self.isSyncing = false
+                }
+            }
         }
     }
     

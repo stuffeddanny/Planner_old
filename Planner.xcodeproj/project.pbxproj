@@ -51,6 +51,10 @@
 		BBCD3F75295726EC00F49B51 /* DayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCD3F73295721F400F49B51 /* DayModel.swift */; };
 		BBCDE098293BA589008FA36B /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCDE097293BA589008FA36B /* Tag.swift */; };
 		BBCDE09A293BA5A7008FA36B /* TagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBCDE099293BA5A7008FA36B /* TagView.swift */; };
+		BBD2BC8E295E49D900456E48 /* LocalizedAlertError.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBD2BC8D295E49D900456E48 /* LocalizedAlertError.swift */; };
+		BBD2BC8F295E4D6200456E48 /* LocalizedAlertError.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBD2BC8D295E49D900456E48 /* LocalizedAlertError.swift */; };
+		BBD2BC91295E4DF700456E48 /* CustomError.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBD2BC90295E4DF700456E48 /* CustomError.swift */; };
+		BBD2BC92295E4DF700456E48 /* CustomError.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBD2BC90295E4DF700456E48 /* CustomError.swift */; };
 		BBDED458295663FE00256B0A /* DayModelManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBDED457295663FE00256B0A /* DayModelManager.swift */; };
 		BBEAC2352944DBD2005F1BB8 /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBEAC2342944DBD2005F1BB8 /* Provider.swift */; };
 		BBEAC2372944DC7B005F1BB8 /* SimpleEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBEAC2362944DC7B005F1BB8 /* SimpleEntry.swift */; };
@@ -129,6 +133,8 @@
 		BBCD3F73295721F400F49B51 /* DayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayModel.swift; sourceTree = "<group>"; };
 		BBCDE097293BA589008FA36B /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
 		BBCDE099293BA5A7008FA36B /* TagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagView.swift; sourceTree = "<group>"; };
+		BBD2BC8D295E49D900456E48 /* LocalizedAlertError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedAlertError.swift; sourceTree = "<group>"; };
+		BBD2BC90295E4DF700456E48 /* CustomError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomError.swift; sourceTree = "<group>"; };
 		BBDED457295663FE00256B0A /* DayModelManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayModelManager.swift; sourceTree = "<group>"; };
 		BBEAC2342944DBD2005F1BB8 /* Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Provider.swift; sourceTree = "<group>"; };
 		BBEAC2362944DC7B005F1BB8 /* SimpleEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleEntry.swift; sourceTree = "<group>"; };
@@ -301,6 +307,8 @@
 			isa = PBXGroup;
 			children = (
 				BBAAD6CE29327C0600D78380 /* DevPrefs.swift */,
+				BBD2BC8D295E49D900456E48 /* LocalizedAlertError.swift */,
+				BBD2BC90295E4DF700456E48 /* CustomError.swift */,
 			);
 			path = Other;
 			sourceTree = "<group>";
@@ -451,9 +459,11 @@
 				BBEAC23F2944E34B005F1BB8 /* Reminder.swift in Sources */,
 				BB7C453929469DBE0054B4B5 /* SettingManager.swift in Sources */,
 				BB95573C2942301C00918D6C /* PlannerWidget.swift in Sources */,
+				BBD2BC92295E4DF700456E48 /* CustomError.swift in Sources */,
 				BB19EA452946309B00D98B86 /* Color.swift in Sources */,
 				BBCD3F75295726EC00F49B51 /* DayModel.swift in Sources */,
 				BBEAC23B2944DDE0005F1BB8 /* MediumSizeView.swift in Sources */,
+				BBD2BC8F295E4D6200456E48 /* LocalizedAlertError.swift in Sources */,
 				BBEAC23D2944DDEE005F1BB8 /* LargeSizeView.swift in Sources */,
 				BB13930A2959011E00E71171 /* DayModelManager.swift in Sources */,
 				BBEAC2392944DCA1005F1BB8 /* WidgetView.swift in Sources */,
@@ -484,6 +494,7 @@
 				BB1921CE29412D9D00E35441 /* Array.swift in Sources */,
 				BBAAD6C2293272CD00D78380 /* Color.swift in Sources */,
 				BB6B01482941167D0027FF90 /* ReminderList.swift in Sources */,
+				BBD2BC8E295E49D900456E48 /* LocalizedAlertError.swift in Sources */,
 				BB1921D0294137FC00E35441 /* NotificationManager.swift in Sources */,
 				BB588DD729352E6D0092582B /* String.swift in Sources */,
 				BBDED458295663FE00256B0A /* DayModelManager.swift in Sources */,
@@ -499,6 +510,7 @@
 				BB9814A12934F3F0004B7302 /* SettingsView.swift in Sources */,
 				BBF07F04293923BA005B1705 /* HapticManager.swift in Sources */,
 				BBAAD6A62931240800D78380 /* PlannerApp.swift in Sources */,
+				BBD2BC91295E4DF700456E48 /* CustomError.swift in Sources */,
 				BB6B01462940F9340027FF90 /* CalendarViewModel.swift in Sources */,
 				BB588DD9293534610092582B /* UserSettingsModel.swift in Sources */,
 				BBF98DD42948F82900844556 /* Calendar.swift in Sources */,

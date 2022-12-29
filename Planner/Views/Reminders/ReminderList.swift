@@ -10,6 +10,7 @@ import SwiftUI
 struct ReminderList: View {
     
     @StateObject private var settingManager = SettingManager.instance
+    @State private var showSyncErrorAlert: Bool = false
 
     @ObservedObject private var vm: ReminderListViewModel
     
@@ -24,8 +25,14 @@ struct ReminderList: View {
                 .navigationTitle("Reminders (\(vm.reminders.count))")
                 .navigationBarTitleDisplayMode(.inline)
                 .background(settingManager.settings.backgroundColor)
-
+            
         }
+        .alert(isPresented: $showSyncErrorAlert, error: vm.syncError) { _ in
+            Button("OK") {}
+        } message: { error in
+            Text(error.recoverySuggestion ?? "")
+        }
+
     }
     
     @ViewBuilder
@@ -73,6 +80,19 @@ struct ReminderList: View {
     
     @ToolbarContentBuilder
     private func getToolbar() -> some ToolbarContent {
+        ToolbarItem(placement: .navigationBarLeading) {
+            if vm.isSyncing {
+                ProgressView()
+            }
+            if vm.syncError != nil {
+                Button {
+                    showSyncErrorAlert = true
+                } label: {
+                    Image(systemName: "exclamationmark.icloud")
+                        .foregroundColor(.red)
+                }
+            }
+        }
         ToolbarItemGroup(placement: .navigationBarTrailing) {
             Button {
                 vm.createNewReminder()
@@ -87,3 +107,8 @@ struct ReminderList: View {
     }
 }
 
+struct ReminderList_Previews: PreviewProvider {
+    static var previews: some View {
+        ReminderList(for: DayViewModel(id: .now.startOfDay))
+    }
+}
