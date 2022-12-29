@@ -10,15 +10,15 @@ import Combine
 import WidgetKit
 
 class SettingManager: ObservableObject {
+    private let cloudManager = CloudManager.instance
+    static let instance = SettingManager()
+    private var cancellables = Set<AnyCancellable>()
+        
+
     
     @Published var settings: UserSettingsModel {
         didSet {
-            
-            if settings.tags != oldValue.tags {
-                checkForDeletedTags()
-            }
-            
-            saveSettings()
+            applySettings()
         }
     }
     
@@ -43,18 +43,14 @@ class SettingManager: ObservableObject {
 
     }
     
-    private let cloudManager = CloudManager.instance
-    
-    static let instance = SettingManager()
-        
-    private func saveSettings() {
+    private func saveSettings(_ value: UserSettingsModel) {
         guard let userDefaults = UserDefaults(suiteName: "group.plannerapp"),
-            let encodedSettings = try? JSONEncoder().encode(settings) else { return }
+            let encodedSettings = try? JSONEncoder().encode(value) else { return }
         
         userDefaults.set(encodedSettings, forKey: "userSettings")
         
         Task {
-            switch await cloudManager.syncToCloud(settings) {
+            switch await cloudManager.syncToCloud(value) {
             case .success(let record):
                 print("Settings were successfully saved \(record)")
             case .failure(let error):
@@ -62,7 +58,6 @@ class SettingManager: ObservableObject {
             }
         }
         
-        applySettings()
     }
     
     private func applySettings() {
@@ -78,7 +73,7 @@ class SettingManager: ObservableObject {
     static func getFromUserDefaults() -> UserSettingsModel {
         let encodedSettings = UserDefaults(suiteName: "group.plannerapp")?.data(forKey: "userSettings")
         let settings = try? JSONDecoder().decode(UserSettingsModel.self, from: encodedSettings ?? Data())
-        return settings ?? UserSettingsModel(modifiedDate: .now)
+        return settings ?? UserSettingsModel()
     }
     
     private init() {
@@ -87,22 +82,39 @@ class SettingManager: ObservableObject {
            let settings = try? JSONDecoder().decode(UserSettingsModel.self, from: encodedSettings) {
             self.settings = settings
         } else {
-            self.settings = UserSettingsModel(modifiedDate: .now)
+            self.settings = UserSettingsModel()
         }
         
         Task {
             switch await cloudManager.syncSettingsFromCloud() {
             case .success(let settings):
-                if !(settings.modifiedDate < self.settings.modifiedDate) {
-                    await MainActor.run {
-                        self.settings = settings
-                    }
+                if let ownModifiedDate = self.settings.modifiedDate,
+                   let cloudModifiedDate = settings.modifiedDate,
+                   cloudModifiedDate <= ownModifiedDate {
+                    break
                 }
-
+                
+                await MainActor.run {
+                    self.settings = settings
+                }
+                
             case .failure(let error):
                 print("Error while getting settings from cloud \(error.localizedDescription)")
             }
             
         }
+        
+        $settings
+            .sink { newValue in
+                if newValue.tags != self.settings.tags {
+                    self.checkForDeletedTags()
+                }
+                
+                if self.settings != newValue {
+                    self.saveSettings(newValue)
+                }
+
+            }
+            .store(in: &cancellables)
     }
 }

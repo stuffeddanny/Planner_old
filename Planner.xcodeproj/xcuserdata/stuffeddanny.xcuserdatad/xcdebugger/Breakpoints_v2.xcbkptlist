@@ -7,64 +7,64 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "7920D9FC-322B-4CE0-95B4-0BB3D54995B3"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Planner/Services/CloudManager.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "31"
-            endingLineNumber = "31"
-            landmarkName = "syncSettingsFromCloud()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "B772E3F8-BC6C-4465-BBD5-12B597694CE1"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "PlannerWidget/Views/MediumSizeView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "53"
-            endingLineNumber = "53"
-            landmarkName = "Content"
-            landmarkType = "24">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "57957A88-076E-4461-83C1-31FA6D4C5B12"
+            uuid = "0E27D142-6845-4072-8931-BA60C87D0547"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Planner/Services/SettingManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "70"
-            endingLineNumber = "70"
-            landmarkName = "applySettings()"
+            startingLineNumber = "91"
+            endingLineNumber = "91"
+            landmarkName = "init()"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "0E27D142-6845-4072-8931-BA60C87D0547 - 688af0c94fb5117"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for closure #1 @Sendable () async -&gt; () in Planner.SettingManager.() -&gt; Planner.SettingManager.init() -&gt; Planner.SettingManager"
+                  moduleName = "Planner"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/stuffeddanny/Developer/Planner/Planner/Services/SettingManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "88"
+                  endingLineNumber = "88"
+                  offsetFromSymbolStart = "340">
+               </Location>
+               <Location
+                  uuid = "0E27D142-6845-4072-8931-BA60C87D0547 - 688af0c94fb5117"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for closure #1 @Sendable () async -&gt; () in Planner.SettingManager.() -&gt; Planner.SettingManager.init() -&gt; Planner.SettingManager"
+                  moduleName = "Planner"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/stuffeddanny/Developer/Planner/Planner/Services/SettingManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "88"
+                  endingLineNumber = "88"
+                  offsetFromSymbolStart = "1036">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "2010D89B-F937-4359-B165-3BC40D14760C"
+            uuid = "E78746F1-1B7E-4AF4-B5C4-E3AE29E36D01"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Planner/Extensions/Date.swift"
+            filePath = "Planner/Services/SettingManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "218"
-            endingLineNumber = "218"
-            landmarkName = "weekFurther()"
+            startingLineNumber = "113"
+            endingLineNumber = "113"
+            landmarkName = "init()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

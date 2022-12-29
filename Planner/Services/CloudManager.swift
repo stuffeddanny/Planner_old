@@ -87,6 +87,7 @@ actor CloudManager {
                             let reminders = encodedReminders.compactMap({ try? JSONDecoder().decode(Reminder.self, from: $0)})
                             return DayModel(id: id, reminders: reminders, dateModified: dateModified)
                         } else {
+                            #warning("FIX")
                             return nil
                         }
                     }

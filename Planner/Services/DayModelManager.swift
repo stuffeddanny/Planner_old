@@ -17,9 +17,10 @@ class DayModelManager {
     
     private let reloadWidgetsSubject = PassthroughSubject<Void, Never>()
     private var cancellable: AnyCancellable
-    private var syncTask: Task<Void, Never>? = nil
-            
-    #warning("Sync with iCloud with debounce using publisher + refresh reminderList")
+    private var getTask: Task<Void, Never>? = nil
+    private var setTask: Task<Void, Never>? = nil
+
+    #warning("Sync with iCloud with debounce using publisher + refresh reminderList + no need sync button in settings")
     var dayModels: [DayModel] {
         get {
             syncFromUserDefaults()
@@ -27,8 +28,11 @@ class DayModelManager {
         set {
             syncToUserDefaults(newValue)
             
-            checkCloud()
-            
+            Task {
+                print("Syncing new user defs to cloud")
+                await cloudManager.syncToCloud(newValue)
+            }
+                        
             reloadWidgetsSubject.send()
         }
     }
@@ -41,17 +45,75 @@ class DayModelManager {
                 WidgetCenter.shared.reloadAllTimelines()
             }
         
-        checkCloud()
-
+        getFromCloud()
     }
     
-    private func checkCloud() {
-        syncTask?.cancel()
+    private func getFromCloud() {
+        getTask?.cancel()
         
-        syncTask = Task {
+        getTask = Task {
             switch await cloudManager.syncDayModelsFromCloud() {
             case .success(let cloudDayModels):
-                guard let task = syncTask, !task.isCancelled else { return }
+                guard let task = getTask, !task.isCancelled else { return }
+                
+                print("Got data from cloud \(cloudDayModels)")
+                                                
+                dayModels = cloudDayModels.map({ cloudDayModel in
+                    if let userDayModel = dayModels.first(where: { $0.id == cloudDayModel.id }) {
+                        if cloudDayModel.dateModified > userDayModel.dateModified {
+                            
+                            let icloudReminders = cloudDayModel.reminders.compactMap { cloudReminder in
+                                if cloudReminder.dateModified > userDayModel.dateModified {
+                                    return cloudReminder
+                                } else {
+                                    return nil
+                                }
+                            }
+                            
+                            var userReminders = userDayModel.reminders
+                            
+                            icloudReminders.forEach { reminder in
+                                if let index = userReminders.firstIndex(where: {$0.id == reminder.id}) {
+                                    userReminders[index] = reminder
+                                } else {
+                                    userReminders.append(reminder)
+                                }
+                            }
+                            
+                            var newUserDayModel = userDayModel
+                            
+                            newUserDayModel.reminders = userReminders
+                            
+                            if let lastDate = userReminders.map({$0.dateModified}).sorted(by: {$0 > $1}).first {
+                                newUserDayModel.dateModified = lastDate
+                            }
+                            
+                            return newUserDayModel
+                            
+                        } else {
+                            // Update cloud
+                            return userDayModel
+                        }
+                    } else {
+                        
+                        return cloudDayModel
+                    }
+                })
+                
+                
+            case .failure(let error):
+                print("Error fetching dayModels from cloud \(error.localizedDescription)")
+            }
+        }
+    }
+
+    private func setToCloud() {
+        setTask?.cancel()
+        
+        setTask = Task {
+            switch await cloudManager.syncDayModelsFromCloud() {
+            case .success(let cloudDayModels):
+                guard let task = setTask, !task.isCancelled else { return }
                 
                 print("Got data from cloud")
                                                 
@@ -61,6 +123,8 @@ class DayModelManager {
                         
                         var newDayModel = dayModel
                         
+//                        let cloudArray = dayModelFromCloud.reminders
+//                        let defsArray = dayModel.reminders
                         
                         
                         newDayModel.reminders = dayModel.reminders.compactMap({ reminder in // going through reminders in user defs

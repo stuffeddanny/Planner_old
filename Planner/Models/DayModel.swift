@@ -20,6 +20,7 @@ extension DayModel {
     var record: CKRecord {
         let record = CKRecord(recordType: "DayModel", recordID: CKRecord.ID(recordName: self.id.idFromDate))
         record["reminders"] = self.reminders.compactMap({ try? JSONEncoder().encode($0) })
+        record["dateModified"] = self.dateModified
         return record
     }
 }
