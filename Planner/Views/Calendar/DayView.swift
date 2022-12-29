@@ -16,11 +16,26 @@ struct DayView: View {
     let isToday: Bool
     let colors: [Color]
     
-    init(for day: DayViewModel, isSelected: Bool, isToday: Bool, with colors: [Color]) {
+    init(for day: DayViewModel, isSelected: Bool, isToday: Bool, withTags: Bool) {
         dayModel = day
         self.isSelected = isSelected
         self.isToday = isToday
-        self.colors = colors
+        colors = {
+            if !withTags {
+                return []
+            }
+            
+            let reminders = DayModelManager.instance.dayModels.first(where: { $0.id == day.id })?.reminders ?? []
+            let ids = reminders.compactMap({ $0.tagId })
+            
+            if !reminders.isEmpty && ids.isEmpty {
+                return [.secondary]
+            }
+            
+            return ids.compactMap({ id in
+                SettingManager.instance.settings.tags.first(where: { $0.id == id })?.color
+            }).uniqueElements()
+        }()
     }
     
     var body: some View {
@@ -106,6 +121,6 @@ struct DayView: View {
 
 struct DayView_Previews: PreviewProvider {
     static var previews: some View {
-        DayView(for: DayViewModel(id: .now), isSelected: false, isToday: false, with: [.red, .blue])
+        DayView(for: DayViewModel(id: .now), isSelected: false, isToday: false, withTags: false)
     }
 }

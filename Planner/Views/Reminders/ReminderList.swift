@@ -24,9 +24,6 @@ struct ReminderList: View {
                 .navigationTitle("Reminders (\(vm.reminders.count))")
                 .navigationBarTitleDisplayMode(.inline)
                 .background(settingManager.settings.backgroundColor)
-                .refreshable {
-                    await vm.refresh()
-                }
 
         }
     }
@@ -47,6 +44,10 @@ struct ReminderList: View {
                     }
                     .listRowBackground(settingManager.settings.backgroundColor)
                 }
+                .refreshable {
+                    await vm.refresh()
+                }
+
                 .onAppear {
                     NotificationManager.instance.removeDeliveredNotificationsFromNotificationCenter(with: vm.reminders.map({ $0.id }))
                 }

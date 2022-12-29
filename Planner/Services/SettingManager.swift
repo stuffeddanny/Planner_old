@@ -52,9 +52,9 @@ class SettingManager: ObservableObject {
         Task {
             switch await cloudManager.syncToCloud(value) {
             case .success(let record):
-                print("Settings were successfully saved \(record)")
+                #warning("Save")
             case .failure(let error):
-                print("Error while saving settings to cloud \(error.localizedDescription)")
+                #warning("Save")
             }
         }
         
@@ -99,7 +99,7 @@ class SettingManager: ObservableObject {
                 }
                 
             case .failure(let error):
-                print("Error while getting settings from cloud \(error.localizedDescription)")
+                #warning("Save")
             }
             
         }

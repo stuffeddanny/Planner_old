@@ -15,46 +15,56 @@ class DayModelManager {
     static let instance = DayModelManager()
     private let cloudManager = CloudManager.instance
     
-    private let reloadWidgetsSubject = PassthroughSubject<Void, Never>()
-    private var cancellable: AnyCancellable
-    private var getTask: Task<Void, Never>? = nil
-    private var setTask: Task<Void, Never>? = nil
-
+    private var cancellables = Set<AnyCancellable>()
+    
     #warning("Sync with iCloud with debounce using publisher + refresh reminderList + no need sync button in settings")
-    var dayModels: [DayModel] {
-        get {
-            syncFromUserDefaults()
-        }
-        set {
-            syncToUserDefaults(newValue)
-            
-            Task {
-                print("Syncing new user defs to cloud")
-                await cloudManager.syncToCloud(newValue)
-            }
-                        
-            reloadWidgetsSubject.send()
-        }
-    }
+    @Published var dayModels: [DayModel]
     
     private init() {
-        cancellable = reloadWidgetsSubject
+        
+        if let encodedHolder = UserDefaults(suiteName: "group.plannerapp")?.data(forKey: "DayModelHolder"),
+           let holder = try? JSONDecoder().decode(DayModelHolder.self, from: encodedHolder) {
+            
+            self.dayModels = holder.models
+        } else {
+            self.dayModels = []
+        }
+                
+        getFromCloud()
+                
+        let sharedPublisher = $dayModels.share().dropFirst()
+        
+        sharedPublisher
+            .removeDuplicates()
+            .sink { newValue in
+                print("user sink")
+                self.syncToUserDefaults(newValue)
+            }
+            .store(in: &cancellables)
+                
+        sharedPublisher
             .debounce(for: .seconds(DevPrefs.widgetReloadDebounce), scheduler: RunLoop.main)
             .sink { _ in
-                print("Widgets Reloading")
+                print("widget sink")
                 WidgetCenter.shared.reloadAllTimelines()
             }
-        
-        getFromCloud()
+            .store(in: &cancellables)
+
+        sharedPublisher
+            .debounce(for: .seconds(DevPrefs.syncToCloudAfterChangeDebounce), scheduler: RunLoop.main)
+            .sink { newValue in
+                print("set sink")
+                self.setToCloud(newValue)
+            }
+            .store(in: &cancellables)
+
     }
     
+    
     private func getFromCloud() {
-        getTask?.cancel()
-        
-        getTask = Task {
+        Task {
             switch await cloudManager.syncDayModelsFromCloud() {
             case .success(let cloudDayModels):
-                guard let task = getTask, !task.isCancelled else { return }
                 
                 print("Got data from cloud \(cloudDayModels)")
                                                 
@@ -107,61 +117,15 @@ class DayModelManager {
         }
     }
 
-    private func setToCloud() {
-        setTask?.cancel()
-        
-        setTask = Task {
-            switch await cloudManager.syncDayModelsFromCloud() {
-            case .success(let cloudDayModels):
-                guard let task = setTask, !task.isCancelled else { return }
-                
-                print("Got data from cloud")
-                                                
-                self.dayModels = self.dayModels.map({ dayModel in // Going through day models in user defs
-                        
-                    if let dayModelFromCloud = cloudDayModels.first(where: { $0.id == dayModel.id }) { // If day model from user defs exists in cloud
-                        
-                        var newDayModel = dayModel
-                        
-//                        let cloudArray = dayModelFromCloud.reminders
-//                        let defsArray = dayModel.reminders
-                        
-                        
-                        newDayModel.reminders = dayModel.reminders.compactMap({ reminder in // going through reminders in user defs
-                            
-                            if let reminderFromCloud = dayModelFromCloud.reminders.first(where: {$0.id == reminder.id}) { // If reminder from user defs exists in cloud
-                                
-                                if reminderFromCloud.dateModified > reminder.dateModified { // Reminder in cloud is newer than in user default
-                                    return reminderFromCloud
-                                } else { // Reminder in cloud is outdated
-                                    // Upload new version of reminder to cloud
-                                    return reminder
-                                }
-                                
-                            } else { // Reminder which exists in user defs doesnt exist in cloud
-                                if dayModelFromCloud.dateModified > dayModel.dateModified { // If day model in cloud is newer
-                                    return nil // we delete reminder from user defs since it doesnt exist in newer version of day model in cloud
-                                } else { // If day model in user defs is newer than it is in cloud
-                                    
-                                    // Upload new version of reminder to cloud
-                                    
-                                    return reminder
-                                }
-                            }
-                            
-                        })
-                        
-                        return newDayModel
-                        
-                    }
-                    
-                    // upload day model to cloud
-                    
-                    return dayModel
-                })
+    private func setToCloud(_ value: [DayModel]) {
+        Task {
+            switch await cloudManager.syncToCloud(value) {
+            case .success(_):
+                print("successfully saved to cloud")
             case .failure(let error):
-                print("Error fetching dayModels from cloud \(error.localizedDescription)")
+                print("error syncing to cloud \(error.localizedDescription)")
             }
+            
         }
     }
     

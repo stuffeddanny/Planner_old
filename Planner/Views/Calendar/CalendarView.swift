@@ -14,7 +14,7 @@ struct CalendarView: View {
     @StateObject private var vm = CalendarViewModel()
     
     @State private var scrollIsDisabled: Bool = false
-
+    
     var body: some View {
         VStack(spacing: 0) {
             
@@ -97,29 +97,12 @@ struct CalendarView: View {
             }
     }
 
-    private func getTagsColors(for day: DayViewModel) -> [Color] {
-        if vm.weekView {
-            return []
-        }
-        
-        let reminders = DayModelManager.instance.dayModels.first(where: { $0.id == day.id })?.reminders ?? []
-        let ids = reminders.compactMap({ $0.tagId })
-        
-        if !reminders.isEmpty && ids.isEmpty {
-            return [.secondary]
-        }
-        
-        return ids.compactMap({ id in
-            settingManager.settings.tags.first(where: { $0.id == id })?.color
-        }).uniqueElements()
-    }
-
     private var DaysGrid: some View {
         GeometryReader { safeProxy in
             ScrollView(showsIndicators: false) {
                 LazyVGrid(columns: .init(repeating: GridItem(alignment: .top), count: 7)) {
                     ForEach(vm.days) { day in
-                        DayView(for: day, isSelected: vm.isDaySelected(day), isToday: vm.isToday(day), with: getTagsColors(for: day))
+                        DayView(for: day, isSelected: vm.isDaySelected(day), isToday: vm.isToday(day), withTags: !vm.weekView)
                             .onTapGesture { onTapFunc(day) }
                             .frame(maxWidth: .infinity)
                             .frame(height: 45 + CGFloat(settingManager.settings.gapBetweenDays), alignment: .top) // Gaps betweenDays

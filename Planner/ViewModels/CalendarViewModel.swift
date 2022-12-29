@@ -41,6 +41,7 @@ final class CalendarViewModel: ObservableObject {
         let date = Date().startOfMonth
         
         firstDayOfUnitOnTheScreenDate = date
+        
     }
         
     func swipeAndGoTo(_ id: DayModel.ID) {

@@ -7,43 +7,49 @@
 
 import SwiftUI
 
+class ReminderRowViewModel: ObservableObject {
+    @Published var reminder: Reminder
+    @Published var notificationsAllowed: Bool? = nil
+    @Published var toggle: Bool
+    
+    init(reminder: Reminder) {
+        self.reminder = reminder
+        toggle = reminder.date != nil
+    }
+}
+
 struct ReminderRowView: View {
     
     @State private var selectedDate: Date = .now
-    @State private var toggle: Bool
-    
-    @State private var notificationsAllowed: Bool? = nil
-    
+        
     private let notificationManager = NotificationManager.instance
     
     @FocusState private var focused: FocusedField?
     
     @StateObject private var settingManager = SettingManager.instance
-    @EnvironmentObject private var vm: ReminderListViewModel
+    @EnvironmentObject private var listVm: ReminderListViewModel
     
     @State private var showClockSheet: Bool = false
-    
     @State private var showTags: Bool = false
     
     enum FocusedField {
         case headline, note
     }
-    
-    @State var reminder: Reminder
+        
+    @ObservedObject private var vm: ReminderRowViewModel
     
     init(reminder: Reminder) {
-        _reminder = .init(initialValue: reminder)
-        _toggle = .init(initialValue: reminder.date != nil)
+        _vm = .init(wrappedValue: ReminderRowViewModel(reminder: reminder))
     }
     
     
     var body: some View {
         HStack(spacing: 13) {
-            ReminderCompletionCircleView(completed: $reminder.completed, color: settingManager.settings.accentColor)
+            ReminderCompletionCircleView(completed: $vm.reminder.completed, color: settingManager.settings.accentColor)
                 .frame(width: 25, height: 25) // Circle size
                 .onTapGesture {
                     withAnimation(.easeInOut(duration: 0.06)) {
-                        reminder.completed.toggle()
+                        vm.reminder.completed.toggle()
                         HapticManager.instance.impact(style: .light)
                     }
                 }
@@ -51,34 +57,34 @@ struct ReminderRowView: View {
             
             // Text column
             VStack(alignment: .leading, spacing: 0) {
-                TextField("", text: $reminder.headline, axis: .horizontal)
+                TextField("", text: $vm.reminder.headline, axis: .horizontal)
                     .focused($focused, equals: .headline)
                     .onSubmit {
-                        if !reminder.headline.isEmpty {
-                            vm.createNewReminder(after: reminder)
+                        if !vm.reminder.headline.isEmpty {
+                            listVm.createNewReminder(after: vm.reminder)
                         }
                     }
-                    .foregroundColor(reminder.completed && focused == nil ? .secondary : .primary)
+                    .foregroundColor(vm.reminder.completed && focused == nil ? .secondary : .primary)
                 
-                if focused != nil || !reminder.note.isEmpty {
-                    TextField("Note", text: $reminder.note, axis: .vertical)
+                if focused != nil || !vm.reminder.note.isEmpty {
+                    TextField("Note", text: $vm.reminder.note, axis: .vertical)
                         .focused($focused, equals: .note)
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                         .submitLabel(.return)
                 }
                 
-                if let date = reminder.date {
+                if let date = vm.reminder.date {
                     
                     Text(date.formattedToTimeFormat())
-                        .foregroundColor(Date.compareDates(date1: .now, date2: date) && !reminder.completed ? .red : .secondary)
+                        .foregroundColor(Date.compareDates(date1: .now, date2: date) && !vm.reminder.completed ? .red : .secondary)
                         .font(.caption)
                     
                 }
                 
             }
 
-            if let tagId = reminder.tagId {
+            if let tagId = vm.reminder.tagId {
                 Circle()
                     .frame(width: 10, height: 10)
                     .foregroundColor(settingManager.settings.tags.first(where: { $0.id == tagId })?.color ?? .clear)
@@ -90,9 +96,9 @@ struct ReminderRowView: View {
                     NotificationManager.instance.requestAuthorization { result in
                         switch result {
                         case .success(let success):
-                            notificationsAllowed = success
+                            vm.notificationsAllowed = success
                         case .failure(_):
-                            notificationsAllowed = false
+                            vm.notificationsAllowed = false
                         }
                     }
                 }
@@ -104,53 +110,51 @@ struct ReminderRowView: View {
             }
         }
         .onChange(of: focused) { newValue in
-            if newValue == nil && reminder.headline.isEmpty {
-                reminder.headline = "New reminder"
+            if newValue == nil && vm.reminder.headline.isEmpty {
+                vm.reminder.headline = "New reminder"
             }
         }
-        .onChange(of: reminder) { newValue in
-            vm.update(newValue)
+        .onChange(of: vm.reminder) { newValue in
+            listVm.update(newValue)
         }
         .task {
-            if reminder.justCreated {
+            if vm.reminder.justCreated {
                 focused = .headline
-                reminder.justCreated = false
+                vm.reminder.justCreated = false
             }
             
-            if !Calendar.gregorianWithSunAsFirstWeekday.isDate(vm.dayModel.id, equalTo: .now, toGranularity: .day) {
-                selectedDate = vm.dayModel.id
-            }
+            selectedDate = listVm.dayModel.id
         }
     }
     
     private func setNotification() {
         
-        if toggle {
+        if vm.toggle {
             let content = UNMutableNotificationContent()
-            content.title = reminder.headline
-            content.subtitle = reminder.note
+            content.title = vm.reminder.headline
+            content.subtitle = vm.reminder.note
             content.sound = .default
             content.badge = 1
             
             let components = Calendar.gregorianWithSunAsFirstWeekday.dateComponents([.hour, .minute, .day, .year, .month], from: selectedDate)
             
-            notificationManager.scheduleNotification(with: content, identifier: reminder.id, dateComponents: components)
+            notificationManager.scheduleNotification(with: content, identifier: vm.reminder.id, dateComponents: components)
             
-            reminder.date = Calendar.gregorianWithSunAsFirstWeekday.date(from: components)
+            vm.reminder.date = Calendar.gregorianWithSunAsFirstWeekday.date(from: components)
         } else {
-            notificationManager.removePendingNotification(with: [reminder.id])
+            notificationManager.removePendingNotification(with: [vm.reminder.id])
             
-            reminder.date = nil
+            vm.reminder.date = nil
         }
     }
     
     @ViewBuilder
     private var SetNotificationView: some View {
-        if let allowed = notificationsAllowed {
+        if let allowed = vm.notificationsAllowed {
             if allowed {
                 VStack {
                     
-                    Toggle(isOn: $toggle) {
+                    Toggle(isOn: $vm.toggle) {
                         HStack {
                             ZStack {
                                 Rectangle()
@@ -166,7 +170,7 @@ struct ReminderRowView: View {
                             VStack(alignment: .leading) {
                                 Text("Time")
                                 
-                                if toggle {
+                                if vm.toggle {
                                     Text(selectedDate.formattedToTimeFormat())
                                         .font(.caption)
                                         .foregroundColor(.blue)
@@ -179,7 +183,7 @@ struct ReminderRowView: View {
                     DatePicker("", selection: $selectedDate, displayedComponents: .hourAndMinute)
                         .labelsHidden()
                         .datePickerStyle(.wheel)
-                        .disabled(!toggle)
+                        .disabled(!vm.toggle)
                 }
                 .padding()
                 .padding(.top)
@@ -220,20 +224,21 @@ struct ReminderRowView: View {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
                             ForEach(settingManager.settings.tags) { tag in
-                                TagView(tag: tag, isSelected: tag.id == reminder.tagId)
+                                TagView(tag: tag, isSelected: tag.id == vm.reminder.tagId)
                                     .frame(height: 27)
                                     .onTapGesture {
                                         withAnimation(.easeInOut(duration: 0.2)) {
-                                            if tag.id == reminder.tagId {
-                                                reminder.tagId = nil
+                                            if tag.id == vm.reminder.tagId {
+                                                vm.reminder.tagId = nil
                                             } else {
-                                                reminder.tagId = tag.id
+                                                vm.reminder.tagId = tag.id
                                             }
                                         }
                                     }
                             }
                         }
                     }
+                    
                     .scrollDismissesKeyboard(.never)
                 } else {
                     Button {

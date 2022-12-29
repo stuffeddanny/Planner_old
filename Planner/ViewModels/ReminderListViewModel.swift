@@ -8,16 +8,25 @@
 import SwiftUI
 import CloudKit
 import WidgetKit
+import Combine
 
 final class ReminderListViewModel: ObservableObject {
     
+    private let dayModelManager = DayModelManager.instance
+    
     @Published var reminders: [Reminder] {
         didSet {
-            if let index = DayModelManager.instance.dayModels.firstIndex(where: { $0.id == dayModel.id }) {
-                DayModelManager.instance.dayModels[index].reminders = reminders
-                DayModelManager.instance.dayModels[index].dateModified = .now
-            } else {
-                DayModelManager.instance.dayModels.append(DayModel(id: dayModel.id, reminders: reminders, dateModified: .now))
+            if reminders != oldValue {
+                if let index = DayModelManager.instance.dayModels.firstIndex(where: { $0.id == dayModel.id }) {
+                    var newDayModels = dayModelManager.dayModels[index]
+                    newDayModels.reminders = reminders
+                    newDayModels.dateModified = .now
+
+                    dayModelManager.dayModels[index] = newDayModels
+
+                } else {
+                    DayModelManager.instance.dayModels.append(DayModel(id: dayModel.id, reminders: reminders, dateModified: .now))
+                }
             }
         }
     }
@@ -27,14 +36,16 @@ final class ReminderListViewModel: ObservableObject {
     init(_ day: DayViewModel) {
         dayModel = day
         
-        reminders = DayModelManager.instance.dayModels.first(where: { $0.id == day.id })?.reminders ?? []
+        reminders = dayModelManager.dayModels.first(where: { $0.id == day.id })?.reminders ?? []
     }
     
     func refresh() async {
         switch await CloudManager.instance.getFromCloudWith(id: dayModel.id) {
         case .success(let dayModel):
             await MainActor.run {
-                reminders = dayModel.reminders
+                withAnimation {
+                    self.reminders = dayModel.reminders
+                }
             }
         case .failure(_):
             #warning("Handle")
