@@ -15,13 +15,13 @@ struct Provider: TimelineProvider {
     }
 
     func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> ()) {
-        let dayModelManager = DayModelManager.instance
+        let dayModels = DayModelManager.syncFromUserDefaults()
         let settings = SettingManager.getFromUserDefaults()
 
         var result = Reminder.SnapshotReminders()
         
-        if let reminders = dayModelManager.dayModels.first(where: { $0.id == Date().startOfDay })?.reminders, !reminders.isEmpty {
-            result = Array(reminders)
+        if let reminders = dayModels.first(where: { $0.id == Date().startOfDay })?.reminders, !reminders.isEmpty {
+            result = reminders
         }
                 
         let entry = SimpleEntry(date: .now, reminders: result, settings: settings)
@@ -30,13 +30,13 @@ struct Provider: TimelineProvider {
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<SimpleEntry>) -> ()) {
         
-        let manager = DayModelManager.instance
+        let dayModels = DayModelManager.syncFromUserDefaults()
         let settings = SettingManager.getFromUserDefaults()
         
         var result: [Reminder] = []
         
-        if let reminders = manager.dayModels.first(where: { $0.id == Date().startOfDay })?.reminders {
-            result = Array(reminders)
+        if let reminders = dayModels.first(where: { $0.id == Date().startOfDay })?.reminders {
+            result = reminders
         }
                 
         let entry = SimpleEntry(date: .now.endOfDay, reminders: result, settings: settings)

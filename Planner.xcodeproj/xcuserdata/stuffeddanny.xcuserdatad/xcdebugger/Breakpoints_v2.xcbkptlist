@@ -62,8 +62,8 @@
             filePath = "Planner/Services/DayModelManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "30"
-            endingLineNumber = "30"
+            startingLineNumber = "35"
+            endingLineNumber = "35"
             landmarkName = "init()"
             landmarkType = "7">
          </BreakpointContent>
@@ -98,6 +98,209 @@
             endingLineNumber = "42"
             landmarkName = "init(reminder:)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E257656C-AC28-4935-9A34-5AD6193696FC"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Planner/PlannerApp.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "21"
+            endingLineNumber = "21"
+            landmarkName = "application(_:didReceiveRemoteNotification:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E09CA451-7A2C-4CFB-9243-6A402210B25A"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Planner/ViewModels/ReminderListViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "73"
+            endingLineNumber = "73"
+            landmarkName = "refresh()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "E09CA451-7A2C-4CFB-9243-6A402210B25A - ffbe6bafc3054c23"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for Planner.ReminderListViewModel.refresh() async -&gt; ()"
+                  moduleName = "Planner"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/stuffeddanny/Developer/Planner/Planner/ViewModels/ReminderListViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "77"
+                  endingLineNumber = "77"
+                  offsetFromSymbolStart = "868">
+               </Location>
+               <Location
+                  uuid = "E09CA451-7A2C-4CFB-9243-6A402210B25A - 838a0281a5c79b10"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(4) await resume partial function for Planner.ReminderListViewModel.refresh() async -&gt; ()"
+                  moduleName = "Planner"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/stuffeddanny/Developer/Planner/Planner/ViewModels/ReminderListViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "77"
+                  endingLineNumber = "77"
+                  offsetFromSymbolStart = "464">
+               </Location>
+               <Location
+                  uuid = "E09CA451-7A2C-4CFB-9243-6A402210B25A - 84b694c5ea8a2ae8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(6) await resume partial function for Planner.ReminderListViewModel.refresh() async -&gt; ()"
+                  moduleName = "Planner"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/stuffeddanny/Developer/Planner/Planner/ViewModels/ReminderListViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "67"
+                  endingLineNumber = "67"
+                  offsetFromSymbolStart = "20">
+               </Location>
+               <Location
+                  uuid = "E09CA451-7A2C-4CFB-9243-6A402210B25A - 84b694c5ea8a2516"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(6) await resume partial function for Planner.ReminderListViewModel.refresh() async -&gt; ()"
+                  moduleName = "Planner"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/stuffeddanny/Developer/Planner/Planner/ViewModels/ReminderListViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "77"
+                  endingLineNumber = "77"
+                  offsetFromSymbolStart = "88">
+               </Location>
+               <Location
+                  uuid = "E09CA451-7A2C-4CFB-9243-6A402210B25A - 406cf8a9e32dfd9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(7) suspend resume partial function for Planner.ReminderListViewModel.refresh() async -&gt; ()"
+                  moduleName = "Planner"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/stuffeddanny/Developer/Planner/Planner/ViewModels/ReminderListViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "67"
+                  endingLineNumber = "67"
+                  offsetFromSymbolStart = "20">
+               </Location>
+               <Location
+                  uuid = "E09CA451-7A2C-4CFB-9243-6A402210B25A - 406cf8a9e32d027"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(7) suspend resume partial function for Planner.ReminderListViewModel.refresh() async -&gt; ()"
+                  moduleName = "Planner"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/stuffeddanny/Developer/Planner/Planner/ViewModels/ReminderListViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "77"
+                  endingLineNumber = "77"
+                  offsetFromSymbolStart = "48">
+               </Location>
+               <Location
+                  uuid = "E09CA451-7A2C-4CFB-9243-6A402210B25A - 3abde2f7ab30afbb"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #2 @Swift.MainActor @Sendable () -&gt; () in Planner.ReminderListViewModel.refresh() async -&gt; ()"
+                  moduleName = "Planner"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/stuffeddanny/Developer/Planner/Planner/ViewModels/ReminderListViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "78"
+                  endingLineNumber = "78"
+                  offsetFromSymbolStart = "72">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "033AC041-FBBB-4144-B1EC-1EDAA1F62A32"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Planner/Services/CloudManager.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "134"
+            endingLineNumber = "134"
+            landmarkName = "getFromCloudWith(id:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9C59BAAA-AB49-4E69-B9B7-879EA838289E"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Planner/Services/DayModelManager.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "97"
+            endingLineNumber = "97"
+            landmarkName = "getFromCloud()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "9C59BAAA-AB49-4E69-B9B7-879EA838289E - 23a60b74cce7b3b3"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(7) suspend resume partial function for closure #1 @Sendable () async -&gt; () in Planner.DayModelManager.getFromCloud() -&gt; ()"
+                  moduleName = "Planner"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/stuffeddanny/Developer/Planner/Planner/Services/DayModelManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "97"
+                  endingLineNumber = "97"
+                  offsetFromSymbolStart = "148">
+               </Location>
+               <Location
+                  uuid = "9C59BAAA-AB49-4E69-B9B7-879EA838289E - 2d10942f7c8b81a1"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #3 (Planner.DayModel) -&gt; Planner.DayModel in closure #1 @Sendable () async -&gt; () in Planner.DayModelManager.getFromCloud() -&gt; ()"
+                  moduleName = "Planner"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/stuffeddanny/Developer/Planner/Planner/Services/DayModelManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "98"
+                  endingLineNumber = "98"
+                  offsetFromSymbolStart = "764">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

@@ -23,7 +23,32 @@ actor CloudManager {
     
     private let privateDatabase = CKContainer.default().privateCloudDatabase
     
-    private init() {}
+    private init() {
+        addSubscriptionIfNeeded()
+    }
+    
+    nonisolated private func addSubscriptionIfNeeded() {
+        guard let userDefaults = UserDefaults(suiteName: "group.plannerapp") else { return }
+        
+        if !userDefaults.bool(forKey: "subscribed") {
+            let predicate = NSPredicate(value: true)
+            let subscription = CKQuerySubscription(recordType: "DayModel", predicate: predicate, subscriptionID: "dayModelsChanged", options: [.firesOnRecordUpdate, .firesOnRecordDeletion, .firesOnRecordCreation])
+            
+            let notificationInfo = CKSubscription.NotificationInfo()
+            notificationInfo.alertLocalizationKey = "changeInCloud"
+            
+            subscription.notificationInfo = notificationInfo
+            
+            privateDatabase.save(subscription) { subscription, error in
+                if let error = error {
+                    #warning("Handle")
+                    print("Error while subbing \(error.localizedDescription)")
+                } else {
+                    userDefaults.set(true, forKey: "subscribed")
+                }
+            }
+        }
+    }
     
     func syncSettingsFromCloud() async -> Result<UserSettingsModel, Error> {
         await withCheckedContinuation { continuation in
@@ -107,10 +132,13 @@ actor CloudManager {
                     continuation.resume(returning: .failure(error))
                 } else if let record = returnedRecord,
                           let id = Date.dateFromId(record.recordID.recordName),
-                          let encodedReminders = record["reminders"] as? [Data],
                           let dateModified = record["dateModified"] as? Date {
-                    let reminders = encodedReminders.compactMap({ try? JSONDecoder().decode(Reminder.self, from: $0)})
-                    continuation.resume(returning: .success(DayModel(id: id, reminders: reminders, dateModified: dateModified)))
+                    var reminders: [Reminder] = []
+                    if let encodedReminders = record["reminders"] as? [Data] {
+                        reminders = encodedReminders.compactMap({ try? JSONDecoder().decode(Reminder.self, from: $0)})
+                    }
+                        continuation.resume(returning: .success(DayModel(id: id, reminders: reminders, dateModified: dateModified)))
+                    
                 } else {
                     continuation.resume(returning: .failure(CloudManagerError.errorDecodingDayModel))
                 }

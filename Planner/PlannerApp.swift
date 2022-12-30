@@ -6,10 +6,27 @@
 //
 
 import SwiftUI
+import CloudKit
+import UserNotifications
+
+class AppDelegate: NSObject, UIApplicationDelegate {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        UIApplication.shared.registerForRemoteNotifications()
+        return true
+    }
+    
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
+        let cloudKitNotification = CKNotification(fromRemoteNotificationDictionary: userInfo as! [String : NSObject])
+        
+        if cloudKitNotification?.alertLocalizationKey == "changeInCloud" {
+            NotificationCenter.default.post(name: .init("performCloudSyncing"), object: nil)
+        }
+    }
+}
 
 @main
 struct PlannerApp: App {
-    
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @State private var showLaunchView: Bool = true
         
     var body: some Scene {

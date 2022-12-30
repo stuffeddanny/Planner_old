@@ -15,8 +15,13 @@ class DayModelManager {
     static let instance = DayModelManager()
     private let cloudManager = CloudManager.instance
     
+    private let getFromCloudSubject: PassthroughSubject<Void, Never> = .init()
+    let setToCloudSubject: PassthroughSubject<Void, Never> = .init()
+
     private var cancellables = Set<AnyCancellable>()
-    
+    private var getSubjectCancellable: AnyCancellable? = nil
+    private var setSubjectCancellable: AnyCancellable? = nil
+
     @Published var dayModels: [DayModel]
     
     @Published var isSyncing: Bool = false
@@ -31,13 +36,28 @@ class DayModelManager {
         } else {
             self.dayModels = []
         }
-                
+                        
         getFromCloud()
+        
+        getSubjectCancellable = getFromCloudSubject
+            .debounce(for: .seconds(DevPrefs.syncFromAfterChangeReceiving), scheduler: RunLoop.main)
+            .sink { _ in
+                print("get sink")
+                self.getFromCloud()
+            }
+        
+        setSubjectCancellable = setToCloudSubject
+            .debounce(for: .seconds(DevPrefs.syncToCloudAfterChangeDebounce), scheduler: RunLoop.main)
+            .sink { _ in
+                print("set sink")
+                self.setToCloud(self.dayModels)
+            }
+
                 
-        let sharedPublisher = $dayModels.share().dropFirst()
+        let sharedPublisher = $dayModels.share()
         
         sharedPublisher
-            .removeDuplicates()
+            .dropFirst()
             .sink { newValue in
                 print("user sink")
                 self.syncToUserDefaults(newValue)
@@ -51,18 +71,16 @@ class DayModelManager {
                 WidgetCenter.shared.reloadAllTimelines()
             }
             .store(in: &cancellables)
-
-        sharedPublisher
-            .debounce(for: .seconds(DevPrefs.syncToCloudAfterChangeDebounce), scheduler: RunLoop.main)
-            .sink { newValue in
-                print("set sink")
-                self.setToCloud(newValue)
-            }
-            .store(in: &cancellables)
+        
+                
+        NotificationCenter.default.addObserver(self, selector: #selector(self.sendSubject), name: .init("performCloudSyncing"), object: nil)
 
     }
     
-    
+    @objc private func sendSubject() {
+        getFromCloudSubject.send()
+    }
+        
     private func getFromCloud() {
         Task {
             await MainActor.run {
@@ -154,8 +172,8 @@ class DayModelManager {
         
         userDefaults.set(encodedHolder, forKey: "DayModelHolder")
     }
-    
-    private func syncFromUserDefaults() -> [DayModel] {
+        
+    static func syncFromUserDefaults() -> [DayModel] {
         let encodedHolder = UserDefaults(suiteName: "group.plannerapp")?.data(forKey: "DayModelHolder") ?? .init()
         
         let holder = try? JSONDecoder().decode(DayModelHolder.self, from: encodedHolder)

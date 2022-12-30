@@ -18,11 +18,11 @@ final class ReminderListViewModel: ObservableObject {
         didSet {
             if reminders != oldValue {
                 if let index = DayModelManager.instance.dayModels.firstIndex(where: { $0.id == dayModel.id }) {
-                    var newDayModels = dayModelManager.dayModels[index]
-                    newDayModels.reminders = reminders
-                    newDayModels.dateModified = .now
+                    var newDayModel = dayModelManager.dayModels[index]
+                    newDayModel.reminders = reminders
+                    newDayModel.dateModified = .now
 
-                    dayModelManager.dayModels[index] = newDayModels
+                    dayModelManager.dayModels[index] = newDayModel
 
                 } else {
                     DayModelManager.instance.dayModels.append(DayModel(id: dayModel.id, reminders: reminders, dateModified: .now))
@@ -83,6 +83,7 @@ final class ReminderListViewModel: ObservableObject {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
                 NotificationManager.instance.removePendingNotification(with: idsToDelete)
                 self?.reminders.removeAll(where: { $0.id == id })
+                self?.dayModelManager.setToCloudSubject.send()
             }
         }
     }
@@ -96,11 +97,13 @@ final class ReminderListViewModel: ObservableObject {
             } else {
                 reminders.append(newReminder)
             }
+            dayModelManager.setToCloudSubject.send()
         }
     }
 
     func moveReminder(fromOffsets: IndexSet, toOffset: Int) {
         reminders.move(fromOffsets: fromOffsets, toOffset: toOffset)
+        dayModelManager.setToCloudSubject.send()
     }
     
     func update(_ newValue: Reminder) {
@@ -108,6 +111,7 @@ final class ReminderListViewModel: ObservableObject {
             var newValueUpdated = newValue
             newValueUpdated.dateModified = .now
             reminders[index] = newValue
+            dayModelManager.setToCloudSubject.send()
         }
     }
 }
