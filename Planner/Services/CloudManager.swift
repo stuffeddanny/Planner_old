@@ -32,7 +32,7 @@ actor CloudManager {
         
         if !userDefaults.bool(forKey: "subscribed") {
             let predicate = NSPredicate(value: true)
-            let subscription = CKQuerySubscription(recordType: "DayModel", predicate: predicate, subscriptionID: "dayModelsChanged", options: [.firesOnRecordUpdate, .firesOnRecordDeletion, .firesOnRecordCreation])
+            let subscription = CKQuerySubscription(recordType: "DayModel", predicate: predicate, options: [.firesOnRecordUpdate, .firesOnRecordDeletion, .firesOnRecordCreation])
             
             let notificationInfo = CKSubscription.NotificationInfo()
             notificationInfo.alertLocalizationKey = "changeInCloud"
@@ -41,7 +41,7 @@ actor CloudManager {
             
             privateDatabase.save(subscription) { subscription, error in
                 if let error = error {
-                    #warning("Handle")
+
                     print("Error while subbing \(error.localizedDescription)")
                 } else {
                     userDefaults.set(true, forKey: "subscribed")

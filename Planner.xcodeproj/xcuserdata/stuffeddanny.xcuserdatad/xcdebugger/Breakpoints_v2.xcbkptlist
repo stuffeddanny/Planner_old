@@ -14,8 +14,8 @@
             filePath = "Planner/Services/SettingManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "91"
-            endingLineNumber = "91"
+            startingLineNumber = "112"
+            endingLineNumber = "112"
             landmarkName = "init()"
             landmarkType = "7">
             <Locations>
@@ -71,22 +71,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "F74F5511-1F1D-427C-BFE9-9C131134ACD8"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Planner/ViewModels/ReminderListViewModel.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "19"
-            endingLineNumber = "19"
-            landmarkName = "reminders"
-            landmarkType = "24">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "EA028260-6964-43BD-BFA4-DF7D11F69F8C"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -94,8 +78,8 @@
             filePath = "Planner/Views/Reminders/ReminderRowView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "42"
-            endingLineNumber = "42"
+            startingLineNumber = "43"
+            endingLineNumber = "43"
             landmarkName = "init(reminder:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -110,8 +94,8 @@
             filePath = "Planner/PlannerApp.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "21"
-            endingLineNumber = "21"
+            startingLineNumber = "22"
+            endingLineNumber = "22"
             landmarkName = "application(_:didReceiveRemoteNotification:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -126,9 +110,9 @@
             filePath = "Planner/ViewModels/ReminderListViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "73"
-            endingLineNumber = "73"
-            landmarkName = "refresh()"
+            startingLineNumber = "89"
+            endingLineNumber = "89"
+            landmarkName = "delete(in:)"
             landmarkType = "7">
             <Locations>
                <Location
@@ -258,8 +242,176 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "9C59BAAA-AB49-4E69-B9B7-879EA838289E"
-            shouldBeEnabled = "Yes"
+            uuid = "2C21AEF0-E5FC-4C29-85F5-EADFCC257342"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Planner/ViewModels/CalendarViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "37"
+            endingLineNumber = "37"
+            landmarkName = "CalendarViewModel"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  uuid = "2C21AEF0-E5FC-4C29-85F5-EADFCC257342 - e6034642ac44b5eb"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "property wrapper backing initializer of Planner.CalendarViewModel.selectedDay : Swift.Optional&lt;Planner.DayViewModel&gt;"
+                  moduleName = "Planner"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/stuffeddanny/Developer/Planner/Planner/ViewModels/CalendarViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "37"
+                  endingLineNumber = "37"
+                  offsetFromSymbolStart = "148">
+               </Location>
+               <Location
+                  uuid = "2C21AEF0-E5FC-4C29-85F5-EADFCC257342 - 4b857ffb766f1df5"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Planner.CalendarViewModel.selectedDay.getter : Swift.Optional&lt;Planner.DayViewModel&gt;"
+                  moduleName = "Planner"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/stuffeddanny/Developer/Planner/Planner/ViewModels/CalendarViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "37"
+                  endingLineNumber = "37"
+                  offsetFromSymbolStart = "136">
+               </Location>
+               <Location
+                  uuid = "2C21AEF0-E5FC-4C29-85F5-EADFCC257342 - 7a6d9fdcf9350df9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Planner.CalendarViewModel.selectedDay.setter : Swift.Optional&lt;Planner.DayViewModel&gt;"
+                  moduleName = "Planner"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/stuffeddanny/Developer/Planner/Planner/ViewModels/CalendarViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "37"
+                  endingLineNumber = "37"
+                  offsetFromSymbolStart = "272">
+               </Location>
+               <Location
+                  uuid = "2C21AEF0-E5FC-4C29-85F5-EADFCC257342 - 6fe7ec5334ca89c8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Planner.CalendarViewModel.selectedDay.modify : Swift.Optional&lt;Planner.DayViewModel&gt;"
+                  moduleName = "Planner"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/stuffeddanny/Developer/Planner/Planner/ViewModels/CalendarViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "37"
+                  endingLineNumber = "37"
+                  offsetFromSymbolStart = "0">
+               </Location>
+               <Location
+                  uuid = "2C21AEF0-E5FC-4C29-85F5-EADFCC257342 - f767f65810e77b32"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Planner.CalendarViewModel.selectedDay.modify : Swift.Optional&lt;Planner.DayViewModel&gt; with unmangled suffix &quot;.resume.0&quot;"
+                  moduleName = "Planner"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/stuffeddanny/Developer/Planner/Planner/ViewModels/CalendarViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "37"
+                  endingLineNumber = "37"
+                  offsetFromSymbolStart = "52">
+               </Location>
+               <Location
+                  uuid = "2C21AEF0-E5FC-4C29-85F5-EADFCC257342 - 1ac4606dad04ab84"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Planner.CalendarViewModel.$selectedDay.getter : Combine.Published&lt;Swift.Optional&lt;Planner.DayViewModel&gt;&gt;.Publisher"
+                  moduleName = "Planner"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/stuffeddanny/Developer/Planner/Planner/ViewModels/CalendarViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "37"
+                  endingLineNumber = "37"
+                  offsetFromSymbolStart = "164">
+               </Location>
+               <Location
+                  uuid = "2C21AEF0-E5FC-4C29-85F5-EADFCC257342 - 1ac4606dad04ab84"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Planner.CalendarViewModel.$selectedDay.setter : Combine.Published&lt;Swift.Optional&lt;Planner.DayViewModel&gt;&gt;.Publisher"
+                  moduleName = "Planner"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/stuffeddanny/Developer/Planner/Planner/ViewModels/CalendarViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "37"
+                  endingLineNumber = "37"
+                  offsetFromSymbolStart = "324">
+               </Location>
+               <Location
+                  uuid = "2C21AEF0-E5FC-4C29-85F5-EADFCC257342 - a79fb9ec91f87477"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Planner.CalendarViewModel.$selectedDay.modify : Combine.Published&lt;Swift.Optional&lt;Planner.DayViewModel&gt;&gt;.Publisher"
+                  moduleName = "Planner"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/stuffeddanny/Developer/Planner/%3Ccompiler-generated%3E"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "120">
+               </Location>
+               <Location
+                  uuid = "2C21AEF0-E5FC-4C29-85F5-EADFCC257342 - 91073490eacbc0a5"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Planner.CalendarViewModel.$selectedDay.modify : Combine.Published&lt;Swift.Optional&lt;Planner.DayViewModel&gt;&gt;.Publisher with unmangled suffix &quot;.resume.0&quot;"
+                  moduleName = "Planner"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/stuffeddanny/Developer/Planner/Planner/ViewModels/CalendarViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "37"
+                  endingLineNumber = "37"
+                  offsetFromSymbolStart = "56">
+               </Location>
+               <Location
+                  uuid = "2C21AEF0-E5FC-4C29-85F5-EADFCC257342 - 7dbe8c66851c52f4"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Planner.CalendarViewModel.init() -&gt; Planner.CalendarViewModel"
+                  moduleName = "Planner"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/stuffeddanny/Developer/Planner/Planner/ViewModels/CalendarViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "37"
+                  endingLineNumber = "37"
+                  offsetFromSymbolStart = "1056">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E110E8AF-5A19-43F4-96C2-A51B09158309"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Planner/Services/DayModelManager.swift"
@@ -269,38 +421,6 @@
             endingLineNumber = "97"
             landmarkName = "getFromCloud()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "9C59BAAA-AB49-4E69-B9B7-879EA838289E - 23a60b74cce7b3b3"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(7) suspend resume partial function for closure #1 @Sendable () async -&gt; () in Planner.DayModelManager.getFromCloud() -&gt; ()"
-                  moduleName = "Planner"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/stuffeddanny/Developer/Planner/Planner/Services/DayModelManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "97"
-                  endingLineNumber = "97"
-                  offsetFromSymbolStart = "148">
-               </Location>
-               <Location
-                  uuid = "9C59BAAA-AB49-4E69-B9B7-879EA838289E - 2d10942f7c8b81a1"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #3 (Planner.DayModel) -&gt; Planner.DayModel in closure #1 @Sendable () async -&gt; () in Planner.DayModelManager.getFromCloud() -&gt; ()"
-                  moduleName = "Planner"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/stuffeddanny/Developer/Planner/Planner/Services/DayModelManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "98"
-                  endingLineNumber = "98"
-                  offsetFromSymbolStart = "764">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

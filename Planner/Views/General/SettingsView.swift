@@ -16,7 +16,8 @@ struct SettingsView: View {
             
     @State private var showApplyConfDialog: Bool = false
     @State private var showResetConfDialog: Bool = false
-    
+    @State private var showSyncErrorAlert: Bool = false
+
     @Environment(\.presentationMode) private var presentationMode
 
     init() {}
@@ -24,26 +25,26 @@ struct SettingsView: View {
     var body: some View {
         List {
             
-            Section {
-                Toggle("Sync reminders through iCloud", isOn: vm.isSyncAvailable ? $vm.syncThroughICloudEnabledToggle : .constant(false))
-                    .disabled(!vm.isSyncAvailable)
-            } footer: {
-                if !vm.isSyncAvailable {
-                    Text("You must be signed in your Apple ID account to use iCloud")
-                }
-            }
-            
-            Section(footer: Text("Accent color of whole app")) {
-                ColorPicker("Accent color", selection: $vm.accentColorPicker, supportsOpacity: false)
-            }
-            Section(footer: Text("Color of calendar background. Clear by default")) {
-                ColorPicker("Background color", selection: $vm.backgroundColorPicker, supportsOpacity: true)
-            }
-            
-            Section(footer: Text("Color of selected day and todays day highlight")) {
-                ColorPicker("Selected day highlight color", selection: $vm.selectedDayColorPicker, supportsOpacity: false)
-                ColorPicker("Today highlight color", selection: $vm.todaysDayColorPicker, supportsOpacity: false)
-            }
+//            Section {
+//                Toggle("Sync reminders through iCloud", isOn: vm.isSyncAvailable ? $vm.syncThroughICloudEnabledToggle : .constant(false))
+//                    .disabled(!vm.isSyncAvailable)
+//            } footer: {
+//                if !vm.isSyncAvailable {
+//                    Text("You must be signed in your Apple ID account to use iCloud")
+//                }
+//            }
+//
+//            Section(footer: Text("Accent color of whole app")) {
+//                ColorPicker("Accent color", selection: $vm.accentColorPicker, supportsOpacity: false)
+//            }
+//            Section(footer: Text("Color of calendar background. Clear by default")) {
+//                ColorPicker("Background color", selection: $vm.backgroundColorPicker, supportsOpacity: true)
+//            }
+//
+//            Section(footer: Text("Color of selected day and todays day highlight")) {
+//                ColorPicker("Selected day highlight color", selection: $vm.selectedDayColorPicker, supportsOpacity: false)
+//                ColorPicker("Today highlight color", selection: $vm.todaysDayColorPicker, supportsOpacity: false)
+//            }
             
             Section(header: Text("Tags (\(vm.tags.count))")) {
                 if !vm.tags.isEmpty {
@@ -144,6 +145,29 @@ struct SettingsView: View {
             
             presentationMode.wrappedValue.dismiss()
 
+        }
+        .alert(isPresented: $showSyncErrorAlert, error: vm.syncError) { _ in
+            Button("OK") {}
+            Button("Try again") {
+                SettingManager.instance.retrySyncing()
+            }
+        } message: { error in
+            Text(error.recoverySuggestion ?? "")
+        }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                if vm.isSyncing {
+                    ProgressView()
+                }
+                if vm.syncError != nil {
+                    Button {
+                        showSyncErrorAlert = true
+                    } label: {
+                        Image(systemName: "exclamationmark.icloud")
+                            .foregroundColor(.red)
+                    }
+                }
+            }
         }
 
     }

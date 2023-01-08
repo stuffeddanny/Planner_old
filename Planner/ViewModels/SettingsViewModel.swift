@@ -34,6 +34,10 @@ final class SettingsViewModel: ObservableObject {
     // Tags
     @Published var tags: [Tag]
     
+    @Published var isSyncing: Bool = false
+    @Published var syncError: LocalizedAlertError? = nil
+
+    
     init() {
         
         accentColorPicker = manager.settings.accentColor
@@ -121,6 +125,22 @@ final class SettingsViewModel: ObservableObject {
                 self.applyButtonIsDisabled = !(
                     tags != self.manager.settings.tags
                 )
+            }
+            .store(in: &cancellables)
+        
+        manager.$isSyncing
+            .sink { isSyncing in
+                DispatchQueue.main.async {
+                    self.isSyncing = isSyncing
+                }
+            }
+            .store(in: &cancellables)
+        
+        manager.$syncError
+            .sink { syncError in
+                DispatchQueue.main.async {
+                    self.syncError = syncError
+                }
             }
             .store(in: &cancellables)
         

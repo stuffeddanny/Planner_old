@@ -51,9 +51,9 @@ struct ReminderList: View {
                     }
                     .listRowBackground(settingManager.settings.backgroundColor)
                 }
-                .refreshable {
-                    await vm.refresh()
-                }
+//                .refreshable {
+//                    await vm.refresh()
+//                }
 
                 .onAppear {
                     NotificationManager.instance.removeDeliveredNotificationsFromNotificationCenter(with: vm.reminders.map({ $0.id }))

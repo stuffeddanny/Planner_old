@@ -22,6 +22,10 @@ class SettingManager: ObservableObject {
         }
     }
     
+    @Published var isSyncing: Bool = false
+    @Published var syncError: LocalizedAlertError? = nil
+
+    
     private func checkForDeletedTags() {
         let tags = settings.tags
                         
@@ -43,18 +47,35 @@ class SettingManager: ObservableObject {
 
     }
     
-    private func saveSettings(_ value: UserSettingsModel) {
+    func retrySyncing() {
+        saveSettings()
+    }
+    
+    private func saveSettings(_ value: UserSettingsModel? = nil) {
         guard let userDefaults = UserDefaults(suiteName: "group.plannerapp"),
             let encodedSettings = try? JSONEncoder().encode(value) else { return }
         
         userDefaults.set(encodedSettings, forKey: "userSettings")
         
         Task {
-            switch await cloudManager.syncToCloud(value) {
-            case .success(let record):
-                #warning("Save")
-            case .failure(let error):
-                #warning("Save")
+            
+            await MainActor.run {
+                self.isSyncing = true
+            }
+            
+            switch await cloudManager.syncToCloud(value ?? settings) {
+            case .success(_):
+                
+                await MainActor.run {
+                    self.syncError = nil
+                    self.isSyncing = false
+                }
+                
+            case .failure(_):
+                await MainActor.run {
+                    self.syncError = LocalizedAlertError(error: CustomError.setSettingsToCloud)
+                    self.isSyncing = false
+                }
             }
         }
         
@@ -91,6 +112,8 @@ class SettingManager: ObservableObject {
                 if let ownModifiedDate = self.settings.modifiedDate,
                    let cloudModifiedDate = settings.modifiedDate,
                    cloudModifiedDate <= ownModifiedDate {
+                    saveSettings(settings)
+                    
                     break
                 }
                 
@@ -98,7 +121,7 @@ class SettingManager: ObservableObject {
                     self.settings = settings
                 }
                 
-            case .failure(let error):
+            case .failure(_):
                 #warning("Save")
             }
             

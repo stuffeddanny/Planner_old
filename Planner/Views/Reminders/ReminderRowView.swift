@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 class ReminderRowViewModel: ObservableObject {
     @Published var reminder: Reminder
@@ -96,9 +97,13 @@ struct ReminderRowView: View {
                     NotificationManager.instance.requestAuthorization { result in
                         switch result {
                         case .success(let success):
-                            vm.notificationsAllowed = success
+                            DispatchQueue.main.async {
+                                vm.notificationsAllowed = success
+                            }
                         case .failure(_):
-                            vm.notificationsAllowed = false
+                            DispatchQueue.main.async {
+                                vm.notificationsAllowed = false
+                            }
                         }
                     }
                 }

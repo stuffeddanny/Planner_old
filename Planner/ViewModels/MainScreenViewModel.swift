@@ -10,5 +10,8 @@ import Combine
 
 final class MainScreenViewModel: ObservableObject {
     
+    init() {
+        
+    }
     
 }

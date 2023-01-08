@@ -15,7 +15,7 @@ class NotificationManager {
     
     func requestAuthorization(completionHandler: @escaping (Result<Bool, Error>) -> Void) {
         
-        let options: UNAuthorizationOptions = [.alert, .badge, .sound]
+        let options: UNAuthorizationOptions = [.alert]
         
         UNUserNotificationCenter.current().requestAuthorization(options: options) { success, error in
             if let error = error {
